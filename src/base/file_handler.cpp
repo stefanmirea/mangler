@@ -7,17 +7,17 @@ bool open(std::string& filename)
     return false;
 }
 
-bool close(ElfFile* file)
+bool close(FileUnit* file)
 {
     return false;
 }
 
-bool save(ElfFile* file)
+bool save(FileUnit* file)
 {
     return false;
 }
 
-bool save(ElfFile* file, std::string& newName)
+bool save(FileUnit* file, std::string& newName)
 {
     return false;
 }
