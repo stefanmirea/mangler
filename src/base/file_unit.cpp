@@ -1,5 +1,10 @@
 #include "file_unit.h"
+#include "elfio/elfio.hpp"
 
-FileUnit::FileUnit(std::string& filename) {}
+template <typename T>
+FileUnit<T>::FileUnit(std::string& filename) {}
 
-FileUnit::~FileUnit() {}
+template <typename T>
+FileUnit<T>::~FileUnit() {}
+
+template class FileUnit<ELFIO::elfio>;
