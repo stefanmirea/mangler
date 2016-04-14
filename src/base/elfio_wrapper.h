@@ -8,11 +8,13 @@ class ElfioWrapper
 {
 public:
     ElfioWrapper(std::string& filename);
-
+    bool getOpenStatus();
+    bool save(std::string& filename);
     virtual ~ElfioWrapper();
 
 private:
     ELFIO::elfio *file;
+    bool open;
 };
 
 #endif
