@@ -13,8 +13,6 @@ public:
     FileUnit(std::string& filename);
 
     virtual ~FileUnit();
-
-    
 };
 
 #endif
