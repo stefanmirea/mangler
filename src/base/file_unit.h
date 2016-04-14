@@ -7,12 +7,13 @@ template <typename T>
 class FileUnit
 {
 public:
-    std::string filename;
-    T *file;
-
     FileUnit(std::string& filename);
 
     virtual ~FileUnit();
+
+private:
+    std::string filename;
+    T *file;
 };
 
 #endif
