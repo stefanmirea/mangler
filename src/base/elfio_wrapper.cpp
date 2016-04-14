@@ -1,6 +1,6 @@
 #include "elfio_wrapper.h"
 
-ElfioWrapper::ElfioWrapper(std::string& filename)
+ElfioWrapper::ElfioWrapper(std::string &filename)
 {
     file = new ELFIO::elfio();
     open = file->load(filename);
@@ -16,7 +16,7 @@ bool ElfioWrapper::getOpenStatus()
     return open;
 }
 
-bool ElfioWrapper::save(std::string& filename)
+bool ElfioWrapper::save(std::string &filename)
 {
     return file->save(filename);
 }

@@ -8,10 +8,10 @@ template <typename T>
 class FileUnit
 {
 public:
-    FileUnit(std::string& filename);
+    FileUnit(std::string &filename);
     bool getOpenStatus();
-    bool save(std::string& filename);
-    std::string& getName();
+    bool save(std::string &filename);
+    std::string &getName();
     virtual ~FileUnit();
 
 private:

@@ -2,7 +2,7 @@
 #include "elfio/elfio.hpp"
 
 template <typename T>
-FileUnit<T>::FileUnit(std::string& filename)
+FileUnit<T>::FileUnit(std::string &filename)
 {
     fileWrapper = new T(filename);
     this->filename = filename;
@@ -21,13 +21,13 @@ bool FileUnit<T>::getOpenStatus()
 }
 
 template<typename T>
-bool FileUnit<T>::save(std::string& filename)
+bool FileUnit<T>::save(std::string &filename)
 {
     return fileWrapper->save(filename);
 }
 
 template<typename T>
-std::string& FileUnit<T>::getName()
+std::string &FileUnit<T>::getName()
 {
     return filename;
 }

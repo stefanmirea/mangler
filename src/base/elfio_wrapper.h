@@ -7,9 +7,9 @@
 class ElfioWrapper
 {
 public:
-    ElfioWrapper(std::string& filename);
+    ElfioWrapper(std::string &filename);
     bool getOpenStatus();
-    bool save(std::string& filename);
+    bool save(std::string &filename);
     virtual ~ElfioWrapper();
 
 private:
