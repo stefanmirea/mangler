@@ -7,9 +7,10 @@ class SearchEngine
 public:
     SearchEngine();
 
-    int getOffset(std::string& searchInput);
+    int getOffset(std::string &searchInput);
 
     virtual ~SearchEngine();
 };
 
 #endif
+

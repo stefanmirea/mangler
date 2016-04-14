@@ -2,9 +2,10 @@
 
 SearchEngine::SearchEngine() {}
 
-int SearchEngine::getOffset(std::string& searchInput)
+int SearchEngine::getOffset(std::string &searchInput)
 {
     return -1;
 }
 
 SearchEngine::~SearchEngine() {}
+

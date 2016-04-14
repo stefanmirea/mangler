@@ -10,10 +10,10 @@ class FileHandler
 public:
     FileHandler();
 
-    bool open(std::string& filename);
+    bool open(std::string &filename);
     bool close(FileUnit<T> *file);
     bool save(FileUnit<T> *file);
-    bool save(FileUnit<T> *file, std::string& newName);
+    bool save(FileUnit<T> *file, std::string &newName);
 
     virtual ~FileHandler();
 
