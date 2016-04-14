@@ -4,7 +4,7 @@ template <typename T>
 FileHandler<T>::FileHandler() {};
 
 template <typename T>
-bool FileHandler<T>::open(std::string& filename)
+bool FileHandler<T>::open(std::string &filename)
 {
     FileUnit<T> *newFile = new FileUnit<T>(filename);
     openedFiles.push_back(newFile);
