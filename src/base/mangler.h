@@ -13,14 +13,14 @@ private:
     public:
         Interpreter();
 
-        void* getFileHeader();
-        void* getProgramHeader();
-        void* getSectionHeader();
-        void* getSection();
-        void* getSymbol();
-        void* getString();
-        void* getVariable();
-        void* getHexa();
+        void *getFileHeader();
+        void *getProgramHeader();
+        void *getSectionHeader();
+        void *getSection();
+        void *getSymbol();
+        void *getString();
+        void *getVariable();
+        void *getHexa();
 
         virtual ~Interpreter();
     };

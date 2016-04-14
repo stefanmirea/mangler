@@ -7,42 +7,42 @@ Mangler::~Mangler() {}
 Mangler::Interpreter::Interpreter() {}
 Mangler::Interpreter::~Interpreter() {}
 
-void* Mangler::Interpreter::getFileHeader()
+void *Mangler::Interpreter::getFileHeader()
 {
     return nullptr;
 }
 
-void* Mangler::Interpreter::getProgramHeader()
+void *Mangler::Interpreter::getProgramHeader()
 {
     return nullptr;
 }
 
-void* Mangler::Interpreter::getSectionHeader()
+void *Mangler::Interpreter::getSectionHeader()
 {
     return nullptr;
 }
 
-void* Mangler::Interpreter::getSection()
+void *Mangler::Interpreter::getSection()
 {
     return nullptr;
 }
 
-void* Mangler::Interpreter::getSymbol()
+void *Mangler::Interpreter::getSymbol()
 {
     return nullptr;
 }
 
-void* Mangler::Interpreter::getString()
+void *Mangler::Interpreter::getString()
 {
     return nullptr;
 }
 
-void* Mangler::Interpreter::getVariable()
+void *Mangler::Interpreter::getVariable()
 {
     return nullptr;
 }
 
-void* Mangler::Interpreter::getHexa()
+void *Mangler::Interpreter::getHexa()
 {
     return nullptr;
 }
