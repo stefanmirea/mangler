@@ -2,9 +2,16 @@
 #include "elfio/elfio.hpp"
 
 template <typename T>
-FileUnit<T>::FileUnit(std::string& filename) {}
+FileUnit<T>::FileUnit(std::string& filename)
+{
+    fileWrapper = new T(filename);
+    this->filename = filename;
+}
 
 template <typename T>
-FileUnit<T>::~FileUnit() {}
+FileUnit<T>::~FileUnit()
+{
+    delete fileWrapper;
+}
 
-template class FileUnit<ELFIO::elfio>;
+template class FileUnit<ElfioWrapper>;
