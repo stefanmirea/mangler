@@ -1,6 +1,6 @@
 #include "elfio_wrapper.h"
 
-ElfioWrapper::ElfioWrapper(std::string &filename)
+ElfioWrapper::ElfioWrapper(std::string &filename) : FileUnit(filename)
 {
     file = new ELFIO::elfio();
     open = file->load(filename);

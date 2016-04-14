@@ -2,9 +2,10 @@
 #define ELFIO_WRAPPER_H_
 
 #include "elfio/elfio.hpp"
+#include "file_unit.h"
 #include <string>
 
-class ElfioWrapper
+class ElfioWrapper : public FileUnit
 {
 public:
     ElfioWrapper(std::string &filename);

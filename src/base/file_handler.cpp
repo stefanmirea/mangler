@@ -1,35 +1,40 @@
 #include "file_handler.h"
+#include "elfio_wrapper.h"
 
-template <typename T>
-FileHandler<T>::FileHandler() {};
+FileHandler::FileHandler() {};
 
-template <typename T>
-bool FileHandler<T>::open(std::string &filename)
+bool FileHandler::open(std::string &filename)
 {
-    FileUnit<T> *newFile = new FileUnit<T>(filename);
-    openedFiles.push_back(newFile);
-    return newFile->getOpenStatus();
+    FileUnit *file;
+
+    /* check file type
+     * TODO: use error codes instead of bool */
+    file = new ElfioWrapper(filename);
+    if (file->getOpenStatus())
+    {
+        openedFiles.push_back(file);
+        return true;
+    }
+
+    /* check other file types */
+
+    /* unknown file format */
+    return false;
 }
 
-template <typename T>
-bool FileHandler<T>::close(FileUnit<T> *file)
+bool FileHandler::close(FileUnit *file)
 {
     return false;
 }
 
-template <typename T>
-bool FileHandler<T>::save(FileUnit<T> *file)
+bool FileHandler::save(FileUnit *file)
 {
     return file->save(file->getName());
 }
 
-template <typename T>
-bool FileHandler<T>::save(FileUnit<T> *file, std::string &newName)
+bool FileHandler::save(FileUnit *file, std::string &newName)
 {
     return file->save(newName);
 }
 
-template <typename T>
-FileHandler<T>::~FileHandler() {}
-
-template class FileHandler<ElfioWrapper>;
+FileHandler::~FileHandler() {}
