@@ -1,25 +1,31 @@
 #include "file_handler.h"
 
-FileHandler::FileHandler() {};
+template <typename T>
+FileHandler<T>::FileHandler() {};
 
-bool open(std::string& filename)
+template <typename T>
+bool FileHandler<T>::open(std::string& filename)
 {
     return false;
 }
 
-bool close(FileUnit* file)
+template <typename T>
+bool FileHandler<T>::close(FileUnit<T>* file)
 {
     return false;
 }
 
-bool save(FileUnit* file)
+template <typename T>
+bool FileHandler<T>::save(FileUnit<T>* file)
 {
     return false;
 }
 
-bool save(FileUnit* file, std::string& newName)
+template <typename T>
+bool FileHandler<T>::save(FileUnit<T>* file, std::string& newName)
 {
     return false;
 }
 
-FileHandler::~FileHandler() {}
+template <typename T>
+FileHandler<T>::~FileHandler() {}

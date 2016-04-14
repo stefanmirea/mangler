@@ -4,19 +4,20 @@
 #include <string>
 #include <vector>
 
+template <typename T>
 class FileHandler
 {
 public:
     FileHandler();
 
     bool open(std::string& filename);
-    bool close(FileUnit* file);
-    bool save(FileUnit* file);
-    bool save(FileUnit* file, std::string& newName);
+    bool close(FileUnit<T> *file);
+    bool save(FileUnit<T> *file);
+    bool save(FileUnit<T> *file, std::string& newName);
 
     virtual ~FileHandler();
 
-    std::vector<FileUnit*> openedFiles;
+    std::vector<FileUnit<T>*> openedFiles;
 };
 
 #endif
