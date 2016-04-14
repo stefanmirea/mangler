@@ -1,5 +1,5 @@
 #include "file_handler.h"
-#include "elfio_wrapper.h"
+#include "elf_file.h"
 
 FileHandler::FileHandler() {};
 
@@ -9,7 +9,7 @@ bool FileHandler::open(std::string &filename)
 
     /* check file type
      * TODO: use error codes instead of bool */
-    file = new ElfioWrapper(filename);
+    file = new ELFFile(filename);
     if (file->getOpenStatus())
     {
         openedFiles.push_back(file);
