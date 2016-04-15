@@ -25,6 +25,8 @@ bool CodeEntry::doSpecialRepresentation()
         /* create Inject options in the context menu and set the injectCode
          * method to be called from inside the handler */
     }
+
+    return true;
 }
 
 /**

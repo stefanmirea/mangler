@@ -3,7 +3,7 @@
 
 FileHandler::FileHandler() {};
 
-bool FileHandler::open(std::string &filename)
+bool FileHandler::open(const std::string &filename)
 {
     FileUnit *file;
 

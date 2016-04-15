@@ -1,7 +1,7 @@
 #include "file_unit.h"
 #include "elfio/elfio.hpp"
 
-FileUnit::FileUnit(std::string &filename)
+FileUnit::FileUnit(const std::string &filename)
 {
     this->filename = filename;
 }

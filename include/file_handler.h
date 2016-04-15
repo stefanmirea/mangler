@@ -9,7 +9,7 @@ class FileHandler
 public:
     FileHandler();
 
-    bool open(std::string &filename);
+    bool open(const std::string &filename);
     bool close(FileUnit *file);
     bool save(FileUnit *file);
     bool save(FileUnit *file, std::string &newName);

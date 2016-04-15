@@ -10,7 +10,7 @@ class Entry;
 class FileUnit
 {
 public:
-    FileUnit(std::string &filename);
+    FileUnit(const std::string &filename);
     std::string &getName();
     std::vector<Entry *> &getTopLevelEntries();
 

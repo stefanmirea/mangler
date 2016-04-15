@@ -1,6 +1,6 @@
 #include "elf_file.h"
 
-ELFFile::ELFFile(std::string &filename) : FileUnit(filename)
+ELFFile::ELFFile(const std::string &filename) : FileUnit(filename)
 {
     file = new ELFIO::elfio();
     open = file->load(filename);

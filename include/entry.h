@@ -40,8 +40,8 @@ protected:
 private:
     FileUnit *file;
     std::vector<Entry *> parents;
-    std::pair<int, int> interval;
     bool expandable;
+    std::pair<int, int> interval;
     std::string name;
 };
 
