@@ -11,6 +11,7 @@ public:
     ELFFile(std::string &filename);
     bool getOpenStatus();
     bool save(std::string &filename);
+    void modifyHex(size_t offset, std::string &newContent);
     virtual ~ELFFile();
 
 private:
