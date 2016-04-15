@@ -15,12 +15,12 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-	FileHandler *fh = new FileHandler;
-	if (fh->open(std::string(argv[1])))
+    FileHandler *fh = new FileHandler;
+    if (fh->open(std::string(argv[1])))
         std::cout << "It works.\n";
     else
         std::cout << "It doesn't work.\n";
-	delete fh;
+    delete fh;
 
-	return 0;
+    return 0;
 }
