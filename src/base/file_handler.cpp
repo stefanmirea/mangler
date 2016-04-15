@@ -12,7 +12,7 @@ bool FileHandler::open(std::string &filename)
     file = new ELFFile(filename);
     if (file->getOpenStatus())
     {
-        openedFiles.push_back(file);
+        openFiles.push_back(file);
         return true;
     }
 

@@ -16,7 +16,7 @@ public:
 
     virtual ~FileHandler();
 
-    std::vector<FileUnit *> openedFiles;
+    std::vector<FileUnit *> openFiles;
 };
 
 #endif
