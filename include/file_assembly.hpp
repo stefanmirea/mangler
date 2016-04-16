@@ -14,7 +14,7 @@ public:
     public:
         Disassembler();
 
-        std::string disassembleCode(uint8_t *code);
+        static std::string disassembleCode(uint8_t *code, unsigned int length);
 
         virtual ~Disassembler();
     };
@@ -24,15 +24,12 @@ public:
     public:
         Assembler();
 
-        uint8_t *assembleCode(std::string &code);
+        static uint8_t *assembleCode(std::string &code);
 
         virtual ~Assembler();
     };
 
     virtual ~FileAssembly();
-
-    Disassembler disassembler;
-    Assembler assembler;
 };
 
 #endif
