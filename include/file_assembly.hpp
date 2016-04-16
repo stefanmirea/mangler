@@ -14,7 +14,7 @@ public:
     public:
         Disassembler();
 
-        std::string disassembleCode(uint8_t *code);
+        std::string disassembleCode(uint8_t *code, unsigned int length);
 
         virtual ~Disassembler();
     };
