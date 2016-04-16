@@ -1,7 +1,7 @@
-#ifndef CODE_CONTAINER_H_
-#define CODE_CONTAINER_H_
+#ifndef CODE_CONTAINER_HPP_
+#define CODE_CONTAINER_HPP_
 
-#include "container.h"
+#include "container.hpp"
 
 /**
  * Generic class for areas containing executable machine code.

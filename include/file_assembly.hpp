@@ -1,5 +1,5 @@
-#ifndef FILE_ASSEMBLY_H_
-#define FILE_ASSEMBLY_H_
+#ifndef FILE_ASSEMBLY_HPP_
+#define FILE_ASSEMBLY_HPP_
 
 #include <cstdint>
 #include <string>

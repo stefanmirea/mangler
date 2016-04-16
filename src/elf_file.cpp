@@ -1,4 +1,4 @@
-#include "elf_file.h"
+#include "elf_file.hpp"
 
 ELFFile::ELFFile(const std::string &filename) : FileUnit(filename)
 {

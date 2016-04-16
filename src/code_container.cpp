@@ -1,4 +1,4 @@
-#include "code_container.h"
+#include "code_container.hpp"
 
 CodeContainer::CodeContainer(FileUnit *file)
     : Container(file, false), injectionPossible(false) {}

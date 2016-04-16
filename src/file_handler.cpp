@@ -1,5 +1,5 @@
-#include "file_handler.h"
-#include "elf_file.h"
+#include "file_handler.hpp"
+#include "elf_file.hpp"
 
 FileHandler::FileHandler() {};
 

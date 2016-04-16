@@ -1,10 +1,10 @@
-#include "file_assembly.h"
-#include "search_engine.h"
-#include "container.h"
-#include "code_container.h"
-#include "file_unit.h"
-#include "elf_file.h"
-#include "file_handler.h"
+#include "file_assembly.hpp"
+#include "search_engine.hpp"
+#include "container.hpp"
+#include "code_container.hpp"
+#include "file_unit.hpp"
+#include "elf_file.hpp"
+#include "file_handler.hpp"
 #include "elfio/elfio.hpp"
 
 int main(int argc, char *argv[])
