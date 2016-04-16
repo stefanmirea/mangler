@@ -1,8 +1,8 @@
-#ifndef ELF_FILE_H_
-#define ELF_FILE_H_
+#ifndef ELF_FILE_HPP_
+#define ELF_FILE_HPP_
 
 #include "elfio/elfio.hpp"
-#include "file_unit.h"
+#include "file_unit.hpp"
 #include <string>
 
 class ELFFile : public FileUnit

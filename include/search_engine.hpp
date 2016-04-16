@@ -1,5 +1,5 @@
-#ifndef SEARCH_ENGINE_H_
-#define SEARCH_ENGINE_H_
+#ifndef SEARCH_ENGINE_HPP_
+#define SEARCH_ENGINE_HPP_
 #include <string>
 
 class SearchEngine
