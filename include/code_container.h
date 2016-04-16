@@ -1,22 +1,22 @@
-#ifndef CODE_ENTRY_H_
-#define CODE_ENTRY_H_
+#ifndef CODE_CONTAINER_H_
+#define CODE_CONTAINER_H_
 
-#include "entry.h"
+#include "container.h"
 
 /**
  * Generic class for areas containing executable machine code.
  * Can be used for any executable file format.
  */
-class CodeEntry : public Entry
+class CodeContainer : public Container
 {
 public:
-    CodeEntry(FileUnit *file);
-    CodeEntry(FileUnit *file, std::pair<int, int> &interval);
+    CodeContainer(FileUnit *file);
+    CodeContainer(FileUnit *file, std::pair<int, int> &interval);
     bool canInject();
-    virtual std::vector<Entry *> &getInnerEntries();
+    virtual std::vector<Container *> &getInnerContainers();
     virtual bool doSpecialRepresentation();
     virtual void injectCode(size_t offset, std::string &newContent);
-    virtual ~CodeEntry();
+    virtual ~CodeContainer();
 
 private:
     bool injectionPossible;

@@ -8,8 +8,8 @@ FileUnit::FileUnit(const std::string &filename)
 
 FileUnit::~FileUnit()
 {
-    for (unsigned int i = 0; i < topLevelEntries.size(); ++i)
-        delete topLevelEntries[i];
+    for (unsigned int i = 0; i < topLevelContainers.size(); ++i)
+        delete topLevelContainers[i];
 }
 
 std::string &FileUnit::getName()
@@ -17,7 +17,7 @@ std::string &FileUnit::getName()
     return filename;
 }
 
-std::vector<Entry *> &FileUnit::getTopLevelEntries()
+std::vector<Container *> &FileUnit::getTopLevelContainers()
 {
-    return topLevelEntries;
+    return topLevelContainers;
 }

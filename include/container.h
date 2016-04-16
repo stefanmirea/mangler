@@ -1,5 +1,5 @@
-#ifndef ENTRY_H_
-#define ENTRY_H_
+#ifndef CONTAINER_H_
+#define CONTAINER_H_
 
 #include "file_unit.h"
 #include <string>
@@ -13,33 +13,33 @@
 
 class FileUnit;
 
-class Entry
+class Container
 {
 public:
-    Entry(FileUnit *file, bool expandable = false);
-    Entry(FileUnit *file, bool expandable, std::pair<int, int> &interval);
+    Container(FileUnit *file, bool expandable = false);
+    Container(FileUnit *file, bool expandable, std::pair<int, int> &interval);
     FileUnit *getFile();
-    std::vector<Entry *> &getParents();
+    std::vector<Container *> &getParents();
     bool isExpandable();
     std::string &getName();
     void setName(std::string &name);
     std::pair<int, int> &getInterval();
 
-    virtual std::vector<Entry *> &getInnerEntries();
+    virtual std::vector<Container *> &getInnerContainers();
     virtual bool doSpecialRepresentation();
-    virtual ~Entry();
+    virtual ~Container();
 
     static bool isValidInterval(std::pair<int, int> &interval);
     static void invalidateInterval(std::pair<int, int> &interval);
 
 protected:
-    std::vector<Entry *> innerEntries;
-    bool addInnerEntry(Entry *entry);
-    bool addInnerEntry(Entry *entry, size_t position);
+    std::vector<Container *> innerContainers;
+    bool addInnerContainer(Container *container);
+    bool addInnerContainer(Container *container, size_t position);
 
 private:
     FileUnit *file;
-    std::vector<Entry *> parents;
+    std::vector<Container *> parents;
     bool expandable;
     std::pair<int, int> interval;
     std::string name;

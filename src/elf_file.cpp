@@ -5,7 +5,7 @@ ELFFile::ELFFile(const std::string &filename) : FileUnit(filename)
     file = new ELFIO::elfio();
     open = file->load(filename);
 
-    /* TODO: create top-level entries */
+    /* TODO: create top-level containers */
 }
 
 ELFFile::~ELFFile()

@@ -1,18 +1,18 @@
 #ifndef FILE_UNIT_H_
 #define FILE_UNIT_H_
 
-#include "entry.h"
+#include "container.h"
 #include <string>
 #include <vector>
 
-class Entry;
+class Container;
 
 class FileUnit
 {
 public:
     FileUnit(const std::string &filename);
     std::string &getName();
-    std::vector<Entry *> &getTopLevelEntries();
+    std::vector<Container *> &getTopLevelContainers();
 
     virtual bool getOpenStatus() = 0;
     virtual bool save(std::string &filename) = 0;
@@ -21,7 +21,7 @@ public:
 
 private:
     std::string filename;
-    std::vector<Entry *> topLevelEntries;
+    std::vector<Container *> topLevelContainers;
 };
 
 #endif
