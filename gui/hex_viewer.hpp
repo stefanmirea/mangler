@@ -8,7 +8,7 @@ class HexViewer : public QTableWidget
 {
     Q_OBJECT
 public:
-    explicit HexViewer(int rows, int columns, QWidget * parent = 0);
+    explicit HexViewer(int rows, int columns, QWidget *parent = 0);
 
 signals:
 

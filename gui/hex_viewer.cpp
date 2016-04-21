@@ -1,7 +1,7 @@
 #include "hex_viewer.hpp"
 #include <QHeaderView>
 
-HexViewer::HexViewer(int rows, int columns, QWidget * parent) :
+HexViewer::HexViewer(int rows, int columns, QWidget *parent) :
     QTableWidget(rows, columns, parent)
 {
     horizontalHeader()->hide();

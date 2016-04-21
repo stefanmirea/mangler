@@ -8,7 +8,7 @@
 class ASMViewer : public QTableWidget
 {
 public:
-    ASMViewer(int rows, int columns, QWidget * parent = 0);
+    ASMViewer(int rows, int columns, QWidget *parent = 0);
 };
 
 #endif // ASMVIEWER_HPP

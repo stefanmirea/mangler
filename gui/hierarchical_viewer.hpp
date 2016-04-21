@@ -11,8 +11,8 @@ class HierarchicalViewer : public QTreeWidget
     Q_OBJECT
 public:
     explicit HierarchicalViewer(QWidget *parent = 0);
-    QTreeWidgetItem *addRoot(QString name);
-    QTreeWidgetItem *addChild(QTreeWidgetItem *parent, QString name);
+    QTreeWidgetItem *addRoot(const char *name);
+    QTreeWidgetItem *addChild(QTreeWidgetItem *parent, const char *name);
 signals:
 
 public slots:

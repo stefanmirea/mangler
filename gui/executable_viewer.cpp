@@ -2,7 +2,7 @@
 #include "QDesktopWidget"
 #include "QApplication"
 
-ExecutableViewer::ExecutableViewer(QString filename, QWidget *parent) : QWidget(parent)
+ExecutableViewer::ExecutableViewer(QString &filename, QWidget *parent) : QWidget(parent)
 {
     setWindowTitle(filename);
 

@@ -43,11 +43,15 @@
 #include <QCommandLineOption>
 
 #include "executable_viewer.hpp"
+#include "main_window.hpp"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    ExecutableViewer* ex = new ExecutableViewer("hacker.out");
-    ex->show();
+   /* QString file("hacker.out");
+    ExecutableViewer* ex = new ExecutableViewer(file);
+    ex->show();*/
+    MainWindow *wn = new MainWindow();
+    wn->show();
     return app.exec();
 }
