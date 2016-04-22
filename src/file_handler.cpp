@@ -37,4 +37,11 @@ bool FileHandler::save(FileUnit *file, std::string &newName)
     return file->save(newName);
 }
 
-FileHandler::~FileHandler() {}
+FileHandler::~FileHandler()
+{
+    while (!openFiles.empty())
+    {
+        delete openFiles.back();
+        openFiles.pop_back();
+    }
+}
