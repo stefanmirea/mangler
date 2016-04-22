@@ -36,7 +36,7 @@ void MainWindow::createActions()
 void MainWindow::newFile()
 {
     QString filename("hacker.out");
-    ExecutableViewer *viewer = new ExecutableViewer(filename, mdiAresa);
+    ExecutableViewer *viewer = new ExecutableViewer(filename, mdiArea);
     mdiArea->addSubWindow(viewer);
     viewer->show();
     mdiArea->tileSubWindows();
