@@ -21,7 +21,7 @@ private:
     void createActions();
 
     QMdiArea *mdiArea;
-    QToolBar *toolBar;
+    QToolBar *fileToolBar;
     QAction *aboutAction, *newAction;
 };
 

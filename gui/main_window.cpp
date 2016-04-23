@@ -7,9 +7,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setWindowTitle(QString("Interactive Executable Mangler"));
 
     mdiArea = new QMdiArea();
+    setCentralWidget(mdiArea);
 
     QMenu *file = menuBar()->addMenu(QString("File"));
-    setCentralWidget(mdiArea);
+
+    fileToolBar = new QToolBar();
+    addToolBar(fileToolBar);
 
     createActions();
 
@@ -20,7 +23,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 void MainWindow::createActions()
 {
     newAction = new QAction(QString("New"), this);
+    newAction->setIcon(QIcon::fromTheme("document-new", QIcon(":/images/new.png")));
+    fileToolBar->addAction(newAction);
+
     aboutAction = new QAction(QString("About"), this);
+
     connect(newAction, SIGNAL(triggered()), this, SLOT(newFile()));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 }
