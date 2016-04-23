@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QLabel>
-#include <QTextEdit>
+#include <QLineEdit>
 #include <QGroupBox>
 #include <QRadioButton>
 
@@ -18,7 +18,7 @@ signals:
 public slots:
 private:
     QLabel *search;
-    QTextEdit *text;
+    QLineEdit *text;
     QGroupBox *radiobox;
     QRadioButton *hex, *dec, *string;
 };

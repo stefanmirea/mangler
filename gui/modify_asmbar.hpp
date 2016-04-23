@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QLabel>
-#include <QTextEdit>
+#include <QLineEdit>
 #include <QPushButton>
 
 class ModifyASMBar : public QWidget
@@ -18,7 +18,7 @@ public slots:
 private:
 private:
     QLabel *modify;
-    QTextEdit *text;
+    QLineEdit *text;
     QPushButton *ok;
 };
 

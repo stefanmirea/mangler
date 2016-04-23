@@ -4,13 +4,11 @@
 SearchBar::SearchBar(QWidget *parent) : QWidget(parent)
 {
     search = new QLabel(QString("Search:"), this);
-    text = new QTextEdit(this);
+    text = new QLineEdit(this);
     radiobox = new QGroupBox(this);
     hex = new QRadioButton(QString("Hex"), this);
     dec = new QRadioButton(QString("Dec"), this);
     string = new QRadioButton(QString("String"), this);
-
-    text->setMaximumHeight(40);
 
     QHBoxLayout *radio = new QHBoxLayout;
     radio->setContentsMargins(QMargins());
