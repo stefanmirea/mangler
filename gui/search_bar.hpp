@@ -6,6 +6,7 @@
 #include <QLineEdit>
 #include <QGroupBox>
 #include <QRadioButton>
+#include <QPushButton>
 
 class SearchBar : public QWidget
 {
@@ -20,6 +21,7 @@ private:
     QLabel *search;
     QLineEdit *text;
     QGroupBox *radiobox;
+    QPushButton *next, *previous;
     QRadioButton *hex, *dec, *string;
 };
 

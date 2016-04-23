@@ -9,6 +9,11 @@ SearchBar::SearchBar(QWidget *parent) : QWidget(parent)
     hex = new QRadioButton(QString("Hex"), this);
     dec = new QRadioButton(QString("Dec"), this);
     string = new QRadioButton(QString("String"), this);
+    next = new QPushButton();
+    previous = new QPushButton();
+
+    next->setIcon(QIcon::fromTheme("go-next", QIcon(":/icons/next.png")));
+    previous->setIcon(QIcon::fromTheme("go-previous", QIcon(":/icons/previous.png")));
 
     radiobox->setStyleSheet("border:0;");
 
@@ -25,6 +30,8 @@ SearchBar::SearchBar(QWidget *parent) : QWidget(parent)
     hbox->addWidget(search);
     hbox->addWidget(text);
     hbox->addWidget(radiobox);
+    hbox->addWidget(previous);
+    hbox->addWidget(next);
 
     setLayout(hbox);
     setMaximumHeight(80);

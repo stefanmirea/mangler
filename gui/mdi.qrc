@@ -6,5 +6,7 @@
     <file>icons/save.png</file>
     <file>icons/undo.png</file>
     <file>icons/redo.png</file>
+    <file>icons/next.png</file>
+    <file>icons/previous.png</file>
 </qresource>
 </RCC>
