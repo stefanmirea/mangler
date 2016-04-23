@@ -1,10 +1,30 @@
 #include "asm_viewer.hpp"
 
-ASMViewer::ASMViewer(int rows, int columns, QWidget *parent) : QTableWidget(rows, columns, parent)
+ASMViewer::ASMViewer(QWidget *parent) : QTreeView(parent)
 {
-    horizontalHeader()->hide();
-    verticalHeader()->hide();
-    setShowGrid(false);
-    horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    model = new QStandardItemModel();
+    model->setColumnCount(4);
+
+    QStringList headers;
+    headers << "Address" << "Machine code" << "Opcode" << "Arguments";
+    model->setHorizontalHeaderLabels(headers);
+
+    setModel(model);
+
+    QList<QStandardItem *> items;
+    items.append(new QStandardItem(QString("406637")));
+    items.append(new QStandardItem(QString("89 85 24 ff ff ff")));
+    items.append(new QStandardItem(QString("mov")));
+    items.append(new QStandardItem(QString("DWORD PTR [rbp-0xdc],eax")));
+    model->appendRow(items);
+
+    items.clear();
+    items.append(new QStandardItem(QString("40663d")));
+    items.append(new QStandardItem(QString("8b 85 24 ff ff ff")));
+    items.append(new QStandardItem(QString("mov")));
+    items.append(new QStandardItem(QString("eax,DWORD PTR [rbp-0xdc]")));
+    model->appendRow(items);
 }
 

@@ -30,7 +30,7 @@ ExecutableViewer::ExecutableViewer(QString &filename, QWidget *parent) : QWidget
 
     /* Right extra component */
     modifyBar = new ModifyASMBar();
-    asmView = new ASMViewer(100, 3, this);
+    asmView = new ASMViewer(this);
     QVBoxLayout *extraLayout = new QVBoxLayout;
     extraLayout->setContentsMargins(QMargins());
     extraLayout->addWidget(asmView);
