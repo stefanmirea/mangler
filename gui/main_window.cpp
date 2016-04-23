@@ -45,36 +45,36 @@ void MainWindow::createActions()
 {
     /* File menu */
     openAction = new QAction(QString("Open"), this);
-    openAction->setIcon(QIcon::fromTheme("document-open", QIcon(":/images/open.png")));
+    openAction->setIcon(QIcon::fromTheme("document-open", QIcon(":/icons/open.png")));
     connect(openAction, SIGNAL(triggered()), this, SLOT(open()));
 
     saveAction = new QAction(QString("Save"), this);
-    saveAction->setIcon(QIcon::fromTheme("document-save", QIcon(":/images/save.png")));
+    saveAction->setIcon(QIcon::fromTheme("document-save", QIcon(":/icons/save.png")));
     connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
 
     saveAsAction = new QAction(QString("Save As..."), this);
-    saveAsAction->setIcon(QIcon::fromTheme("document-save-as", QIcon(":/images/save.png")));
+    saveAsAction->setIcon(QIcon::fromTheme("document-save-as", QIcon(":/icons/save.png")));
     connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
 
     exitAction = new QAction(QString("Exit"), this);
-    exitAction->setIcon(QIcon::fromTheme("application-exit", QIcon(":/images/exit.png")));
+    exitAction->setIcon(QIcon::fromTheme("application-exit", QIcon(":/icons/exit.png")));
     connect(exitAction, SIGNAL(triggered()), this, SLOT(exit()));
 
     /* Edit menu */
     undoAction = new QAction(QString("Undo"), this);
-    undoAction->setIcon(QIcon::fromTheme("edit-undo", QIcon(":/images/undo.png")));
+    undoAction->setIcon(QIcon::fromTheme("edit-undo", QIcon(":/icons/undo.png")));
     connect(undoAction, SIGNAL(triggered()), this, SLOT(undo()));
 
     redoAction = new QAction(QString("Redo"), this);
-    redoAction->setIcon(QIcon::fromTheme("edit-redo", QIcon(":/images/redo.png")));
+    redoAction->setIcon(QIcon::fromTheme("edit-redo", QIcon(":/icons/redo.png")));
     connect(redoAction, SIGNAL(triggered()), this, SLOT(redo()));
 
     copyAction = new QAction(QString("Copy Hex"), this);
-    copyAction->setIcon(QIcon::fromTheme("edit-copy", QIcon(":/images/copy.png")));
+    copyAction->setIcon(QIcon::fromTheme("edit-copy", QIcon(":/icons/copy.png")));
     connect(copyAction, SIGNAL(triggered()), this, SLOT(copy()));
 
     pasteAction = new QAction(QString("Paste Hex"), this);
-    pasteAction->setIcon(QIcon::fromTheme("edit-paste", QIcon(":/images/paste.png")));
+    pasteAction->setIcon(QIcon::fromTheme("edit-paste", QIcon(":/icons/paste.png")));
     connect(pasteAction, SIGNAL(triggered()), this, SLOT(paste()));
 
     /* Help menu */
