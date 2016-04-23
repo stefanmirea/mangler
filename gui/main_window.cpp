@@ -8,13 +8,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     setWindowTitle(QString("Interactive Executable Mangler"));
 
     mdiArea = new QMdiArea();
-    menuBar = new QMenuBar();
 
     QVBoxLayout *layout = new QVBoxLayout();
-    layout->addWidget(menuBar);
     layout->addWidget(mdiArea);
 
-    QMenu *file = menuBar->addMenu(QString("File"));
+    QMenu *file = menuBar()->addMenu(QString("File"));
     QWidget *central = new QWidget(this);
     central->setLayout(layout);
     setCentralWidget(central);
