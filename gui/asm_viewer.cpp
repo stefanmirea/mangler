@@ -3,6 +3,9 @@
 ASMViewer::ASMViewer(QWidget *parent) : QTreeView(parent)
 {
     setEditTriggers(QAbstractItemView::NoEditTriggers);
+    setItemsExpandable(false);
+    setRootIsDecorated(false);
+    setUniformRowHeights(true);
 
     model = new QStandardItemModel();
     model->setColumnCount(4);
@@ -12,6 +15,8 @@ ASMViewer::ASMViewer(QWidget *parent) : QTreeView(parent)
     model->setHorizontalHeaderLabels(headers);
 
     setModel(model);
+    for (unsigned int column = 0; column < 4; ++column)
+        resizeColumnToContents(column);
 
     QList<QStandardItem *> items;
     items.append(new QStandardItem(QString("406637")));
