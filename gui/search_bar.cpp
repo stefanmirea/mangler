@@ -10,6 +10,8 @@ SearchBar::SearchBar(QWidget *parent) : QWidget(parent)
     dec = new QRadioButton(QString("Dec"), this);
     string = new QRadioButton(QString("String"), this);
 
+    radiobox->setStyleSheet("border:0;");
+
     QHBoxLayout *radio = new QHBoxLayout;
     radio->setContentsMargins(QMargins());
     radio->addWidget(hex);
