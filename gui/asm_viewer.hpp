@@ -2,13 +2,15 @@
 #define ASMVIEWER_HPP
 
 #include <QWidget>
-#include <QTableWidget>
-#include <QHeaderView>
+#include <QTreeView>
+#include <QStandardItemModel>
 
-class ASMViewer : public QTableWidget
+class ASMViewer : public QTreeView
 {
 public:
-    ASMViewer(int rows, int columns, QWidget *parent = 0);
+    ASMViewer(QWidget *parent = 0);
+private:
+    QStandardItemModel *model;
 };
 
 #endif // ASMVIEWER_HPP

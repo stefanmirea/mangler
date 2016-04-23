@@ -15,15 +15,22 @@ public:
 signals:
 
 public slots:
-    void newFile();
+    void open();
+    void save();
+    void saveAs();
+    void exit();
+    void undo();
+    void redo();
+    void copy();
+    void paste();
     void about();
 private:
     void createActions();
 
     QMdiArea *mdiArea;
-    QMenuBar *menuBar;
-    QToolBar *toolBar;
-    QAction *aboutAction, *newAction;
+    QAction *openAction, *saveAction, *saveAsAction, *exitAction;
+    QAction *undoAction, *redoAction, *copyAction, *pasteAction;
+    QAction *aboutAction;
 };
 
 #endif // MAINWINDOW_H

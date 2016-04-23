@@ -3,12 +3,10 @@
 HierarchicalViewer::HierarchicalViewer(QWidget *parent) : QTreeWidget(parent)
 {
     /* Placeholders for testing purposes */
-    setColumnCount(1);
-    setHeaderLabel("Executable file");
-    QTreeWidgetItem *filename = addRoot("hacker.out");
-    QTreeWidgetItem *elf_header = addChild(filename, "ELF Header");
-    QTreeWidgetItem *pht = addChild(filename, "Program Header Table");
-    QTreeWidgetItem *sht = addChild(filename, "Section Header Table");
+    headerItem()->setHidden(true);
+    QTreeWidgetItem *elf_header = addRoot("ELF Header");
+    QTreeWidgetItem *pht = addRoot("Program Header Table");
+    QTreeWidgetItem *sht = addRoot("Section Header Table");
     addChild(pht, "--------NoThIng here");
     addChild(sht, "--------NoThIng here");
 

@@ -3,9 +3,10 @@
 
 #include <QWidget>
 #include <QLabel>
-#include <QTextEdit>
+#include <QLineEdit>
 #include <QGroupBox>
 #include <QRadioButton>
+#include <QPushButton>
 
 class SearchBar : public QWidget
 {
@@ -18,8 +19,9 @@ signals:
 public slots:
 private:
     QLabel *search;
-    QTextEdit *text;
+    QLineEdit *text;
     QGroupBox *radiobox;
+    QPushButton *next, *previous;
     QRadioButton *hex, *dec, *string;
 };
 
