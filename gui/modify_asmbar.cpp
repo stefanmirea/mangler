@@ -10,6 +10,7 @@ ModifyASMBar::ModifyASMBar(QWidget *parent) : QWidget(parent)
     text->setMaximumHeight(40);
 
     QHBoxLayout *layout = new QHBoxLayout;
+    layout->setContentsMargins(QMargins());
     layout->addWidget(modify);
     layout->addWidget(text);
     layout->addWidget(ok);

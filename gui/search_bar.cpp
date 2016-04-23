@@ -13,6 +13,7 @@ SearchBar::SearchBar(QWidget *parent) : QWidget(parent)
     text->setMaximumHeight(40);
 
     QHBoxLayout *radio = new QHBoxLayout;
+    radio->setContentsMargins(QMargins());
     radio->addWidget(hex);
     radio->addWidget(dec);
     radio->addWidget(string);
@@ -20,6 +21,7 @@ SearchBar::SearchBar(QWidget *parent) : QWidget(parent)
     radiobox->setLayout(radio);
 
     QHBoxLayout *hbox = new QHBoxLayout;
+    hbox->setContentsMargins(QMargins());
     hbox->addWidget(search);
     hbox->addWidget(text);
     hbox->addWidget(radiobox);

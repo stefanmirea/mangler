@@ -14,6 +14,7 @@ ExecutableViewer::ExecutableViewer(QString &filename, QWidget *parent) : QWidget
 
     /* Left panel - hierarchy */
     QHBoxLayout *hv = new QHBoxLayout;
+    hv->setContentsMargins(QMargins());
     hierarchicalViewer = new HierarchicalViewer(this);
     hv->addWidget(hierarchicalViewer);
     left->setLayout(hv);
@@ -22,6 +23,7 @@ ExecutableViewer::ExecutableViewer(QString &filename, QWidget *parent) : QWidget
     hexViewer = new HexViewer(hierarchicalViewer, this);
     searchBar = new SearchBar();
     QVBoxLayout *hexaLayout = new QVBoxLayout;
+    hexaLayout->setContentsMargins(QMargins());
     hexaLayout->addWidget(hexViewer);
     hexaLayout->addWidget(searchBar);
     center->setLayout(hexaLayout);
@@ -30,6 +32,7 @@ ExecutableViewer::ExecutableViewer(QString &filename, QWidget *parent) : QWidget
     modifyBar = new ModifyASMBar();
     asmView = new ASMViewer(100, 3, this);
     QVBoxLayout *extraLayout = new QVBoxLayout;
+    extraLayout->setContentsMargins(QMargins());
     extraLayout->addWidget(asmView);
     extraLayout->addWidget(modifyBar);
     right->setLayout(extraLayout);
@@ -40,6 +43,7 @@ ExecutableViewer::ExecutableViewer(QString &filename, QWidget *parent) : QWidget
     split->addWidget(right);
 
     QHBoxLayout *layout = new QHBoxLayout;
+    layout->setContentsMargins(QMargins());
     layout->addWidget(split);
 
     setLayout(layout);
