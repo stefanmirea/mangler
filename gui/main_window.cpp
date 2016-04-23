@@ -1,5 +1,4 @@
 #include "main_window.hpp"
-#include <QVBoxLayout>
 #include <QMessageBox>
 #include "executable_viewer.hpp"
 
@@ -9,13 +8,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     mdiArea = new QMdiArea();
 
-    QVBoxLayout *layout = new QVBoxLayout();
-    layout->addWidget(mdiArea);
-
     QMenu *file = menuBar()->addMenu(QString("File"));
-    QWidget *central = new QWidget(this);
-    central->setLayout(layout);
-    setCentralWidget(central);
+    setCentralWidget(mdiArea);
 
     createActions();
 
