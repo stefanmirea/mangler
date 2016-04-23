@@ -2,17 +2,20 @@
 #define HEXVIEWER_HPP
 
 #include <QWidget>
-#include <QTableWidget>
+#include <QAbstractScrollArea>
+#include "hierarchical_viewer.hpp"
 
-class HexViewer : public QTableWidget
+class HexViewer : public QAbstractScrollArea
 {
     Q_OBJECT
 public:
-    explicit HexViewer(int rows, int columns, QWidget *parent = 0);
+    explicit HexViewer(HierarchicalViewer *hierarchicalViewer, QWidget *parent = 0);
 
 signals:
 
 public slots:
+private:
+    HierarchicalViewer *hierarchicalViewer;
 };
 
 #endif // HEXVIEWER_HPP

@@ -19,7 +19,7 @@ ExecutableViewer::ExecutableViewer(QString &filename, QWidget *parent) : QWidget
     left->setLayout(hv);
 
     /* Center hex viewer and search bar */
-    hexViewer = new HexViewer(100, 18, this);
+    hexViewer = new HexViewer(hierarchicalViewer, this);
     searchBar = new SearchBar();
     QVBoxLayout *hexaLayout = new QVBoxLayout;
     hexaLayout->addWidget(hexViewer);
