@@ -85,7 +85,8 @@ Container::~Container()
             if (childParents.size() == 0)
                 toDelete.push(successors[i]);
         }
-        delete first;
+        if (first != this)
+            delete first;
     }
 }
 
