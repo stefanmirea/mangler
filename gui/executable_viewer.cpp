@@ -21,11 +21,7 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
 
     std::vector<Container *> rootContainers = fileUnit->getTopLevelContainers();
     for (unsigned int i = 0; i < rootContainers.size(); ++i)
-    {
-        QTreeWidgetItem *root = hierarchicalViewer->addRoot(rootContainers[i]->getName().c_str());
-        if (rootContainers[i]->isExpandable())
-            hierarchicalViewer->addChild(root, "Will be replaced at parent expansion.");
-    }
+        hierarchicalViewer->addRoot(rootContainers[i]);
 
     hv->addWidget(hierarchicalViewer);
     left->setLayout(hv);

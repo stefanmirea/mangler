@@ -6,16 +6,19 @@
 #include <QWidget>
 #include <QTreeWidget>
 
+#include "hierarchy_node.hpp"
+
 class HierarchicalViewer : public QTreeWidget
 {
     Q_OBJECT
 public:
     explicit HierarchicalViewer(QWidget *parent = 0);
-    QTreeWidgetItem *addRoot(const char *name);
-    QTreeWidgetItem *addChild(QTreeWidgetItem *parent, const char *name);
+    HierarchyNode *addRoot(Container *container);
+    HierarchyNode *addChild(HierarchyNode *parent, Container *container);
 signals:
 
 public slots:
+    void expand(QTreeWidgetItem *item);
 };
 
 #endif // HIERACHICALVIEWER_HPP

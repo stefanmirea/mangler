@@ -3,20 +3,27 @@
 HierarchicalViewer::HierarchicalViewer(QWidget *parent) : QTreeWidget(parent)
 {
     headerItem()->setHidden(true);
+    connect(this, SIGNAL(itemExpanded(QTreeWidgetItem *)),
+            this, SLOT(expand(QTreeWidgetItem *)));
 }
 
-QTreeWidgetItem *HierarchicalViewer::addRoot(const char *name)
+HierarchyNode *HierarchicalViewer::addRoot(Container *container)
 {
-    QTreeWidgetItem *item = new QTreeWidgetItem(this);
-    item->setText(0, QString(name));
+    HierarchyNode *item = new HierarchyNode(container, this);
     addTopLevelItem(item);
     return item;
 }
 
-QTreeWidgetItem *HierarchicalViewer::addChild(QTreeWidgetItem *parent, const char *name)
+HierarchyNode *HierarchicalViewer::addChild(HierarchyNode *parent, Container *container)
 {
-    QTreeWidgetItem *item = new QTreeWidgetItem();
-    item->setText(0, QString(name));
+    HierarchyNode *item = new HierarchyNode(container, parent);
     parent->addChild(item);
     return item;
+}
+
+void HierarchicalViewer::expand(QTreeWidgetItem *item)
+{
+    HierarchyNode *node = dynamic_cast<HierarchyNode *>(item);
+    if (node)
+        node->createChildren();
 }

@@ -36,7 +36,8 @@ SOURCES +=\
     gui/hierarchical_viewer.cpp \
     gui/main_window.cpp \
     gui/modify_asmbar.cpp \
-    gui/search_bar.cpp
+    gui/search_bar.cpp \
+    gui/hierarchy_node.cpp
 
 HEADERS  += \
     core/code_container.hpp \
@@ -68,7 +69,8 @@ HEADERS  += \
     gui/hierarchical_viewer.hpp \
     gui/main_window.hpp \
     gui/modify_asmbar.hpp \
-    gui/search_bar.hpp
+    gui/search_bar.hpp \
+    gui/hierarchy_node.hpp
 
 RESOURCES += \
     gui/mangler.qrc
