@@ -5,6 +5,8 @@
 #include "file_unit.hpp"
 #include <string>
 
+namespace elf
+{
 class ELFFile : public FileUnit
 {
 public:
@@ -18,5 +20,6 @@ private:
     ELFIO::elfio *file;
     bool open;
 };
+}
 
 #endif

@@ -1,6 +1,8 @@
 #include "main_window.hpp"
-#include <QMessageBox>
 #include "executable_viewer.hpp"
+#include "elf_file.hpp"
+
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
@@ -8,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 
     mdiArea = new QMdiArea();
     setCentralWidget(mdiArea);
+    connect(mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow *)), this, SLOT(updateActions()));
 
     createActions();
 
@@ -80,15 +83,52 @@ void MainWindow::createActions()
     /* Help menu */
     aboutAction = new QAction(QString("About"), this);
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
+
+    updateActions();
 }
 
 void MainWindow::open()
 {
-    QString filename("hacker.out");
-    ExecutableViewer *viewer = new ExecutableViewer(filename, mdiArea);
+    QString filename = QFileDialog::getOpenFileName(this, QString("Open"));
+    if (filename.isEmpty())
+        return;
+    filename = QFileInfo(filename).canonicalFilePath();
+
+    foreach (QMdiSubWindow *window, mdiArea->subWindowList())
+    {
+        ExecutableViewer *ev = qobject_cast<ExecutableViewer *>(window->widget());
+        if (ev->getFileUnit()->getName() == filename.toStdString())
+        {
+            mdiArea->setActiveSubWindow(window);
+            return;
+        }
+    }
+
+    /* check read access */
+    QFile qFile(filename);
+    if (!qFile.open(QFile::ReadOnly))
+        QMessageBox::critical(this, QString("Error"), QString("Cannot read file %1:\n%2.")
+                              .arg(filename) .arg(qFile.errorString()));
+    qFile.close();
+
+    /* check file type */
+    FileUnit *file;
+    do { 
+        file = new elf::ELFFile(filename.toStdString());
+        if (file->getOpenStatus())
+            break;
+        delete file;
+
+        /* check other file types */
+
+        /* unknown file format */
+        QMessageBox::critical(this, QString("Error"), QString("Unknown file format."));
+        return;
+    } while (false);
+
+    ExecutableViewer *viewer = new ExecutableViewer(file, mdiArea);
     mdiArea->addSubWindow(viewer);
-    viewer->show();
-    mdiArea->tileSubWindows();
+    viewer->showMaximized();
 }
 
 void MainWindow::save() {}
@@ -111,4 +151,17 @@ void MainWindow::about()
         QString("<p>Ștefan Mirea & Adrian Dobrică 2016.</p><p><a "
                 "href=\"https://github.com/stefanmirea/mangler\""
                 ">Click!</a></p>"));
+}
+
+void MainWindow::updateActions()
+{
+    bool hasActiveSubWindow = mdiArea->activeSubWindow();
+
+    saveAction->setEnabled(hasActiveSubWindow);
+    saveAsAction->setEnabled(hasActiveSubWindow);
+
+    undoAction->setEnabled(false);
+    redoAction->setEnabled(false);
+    copyAction->setEnabled(false);
+    pasteAction->setEnabled(false);
 }

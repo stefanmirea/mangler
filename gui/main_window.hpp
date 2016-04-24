@@ -6,6 +6,8 @@
 #include <QAction>
 #include <QMenuBar>
 #include <QToolBar>
+#include <QFileDialog>
+#include <QMdiSubWindow>
 
 class MainWindow : public QMainWindow
 {
@@ -24,6 +26,7 @@ public slots:
     void copy();
     void paste();
     void about();
+    void updateActions();
 private:
     void createActions();
 

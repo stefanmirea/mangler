@@ -15,5 +15,5 @@
 # Vim tmp files
 *.swp
 
-# Executable name
-mangler
+# Qt Creator user-specific settings
+mangler.pro.user*

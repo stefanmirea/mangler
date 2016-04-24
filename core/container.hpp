@@ -17,12 +17,12 @@ class Container
 {
 public:
     Container(FileUnit *file, bool expandable = false);
-    Container(FileUnit *file, bool expandable, std::pair<int, int> &interval);
+    Container(FileUnit *file, bool expandable, const std::pair<int, int> &interval);
     FileUnit *getFile();
     std::vector<Container *> &getParents();
     bool isExpandable();
     std::string &getName();
-    void setName(std::string &name);
+    void setName(const std::string &name);
     std::pair<int, int> &getInterval();
 
     virtual std::vector<Container *> &getInnerContainers();
