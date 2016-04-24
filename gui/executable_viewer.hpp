@@ -7,18 +7,21 @@
 #include <QSplitter>
 #include <QWidget>
 #include <QVBoxLayout>
+
 #include "hierarchical_viewer.hpp"
 #include "hex_viewer.hpp"
 #include "search_bar.hpp"
 #include "modify_asmbar.hpp"
 #include "asm_viewer.hpp"
 
+#include "file_unit.hpp"
+
 class ExecutableViewer : public QWidget
 {
     Q_OBJECT
 public:
-    ExecutableViewer(QString &filename, QWidget *parent  = 0);
-    void newFile() {}
+    ExecutableViewer(FileUnit *fileUnit, QWidget *parent = 0);
+    FileUnit *getFileUnit();
     bool loadFile(const QString &fileName) {return true;}
     bool save() {return true;}
     bool saveAs() {return true;}
@@ -35,6 +38,7 @@ private:
     SearchBar *searchBar;
     ModifyASMBar *modifyBar;
     ASMViewer *asmView;
+    FileUnit *fileUnit;
 };
 
 #endif // EXECUTABLEVIEWER_H

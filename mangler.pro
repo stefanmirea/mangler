@@ -21,11 +21,15 @@ SOURCES +=\
     core/code_container.cpp \
     core/container.cpp \
     core/file_assembly.cpp \
-    core/file_handler.cpp \
     core/file_unit.cpp \
     core/mangler.cpp \
     core/search_engine.cpp \
     elf/elf_file.cpp \
+    elf/elf_header_container.cpp \
+    elf/program_header_table_container.cpp \
+    elf/section_header_table_container.cpp \
+    elf/segment_contents_container.cpp \
+    elf/section_contents_container.cpp \
     gui/asm_viewer.cpp \
     gui/executable_viewer.cpp \
     gui/hex_viewer.cpp \
@@ -38,10 +42,14 @@ HEADERS  += \
     core/code_container.hpp \
     core/container.hpp \
     core/file_assembly.hpp \
-    core/file_handler.hpp \
     core/file_unit.hpp \
     core/search_engine.hpp \
     elf/elf_file.hpp \
+    elf/elf_header_container.hpp \
+    elf/program_header_table_container.hpp \
+    elf/section_header_table_container.hpp \
+    elf/segment_contents_container.hpp \
+    elf/section_contents_container.hpp \
     dependencies/elfio/elf_types.hpp \
     dependencies/elfio/elfio_utils.hpp \
     dependencies/elfio/elfio_symbols.hpp \

@@ -2,9 +2,11 @@
 #include "QDesktopWidget"
 #include "QApplication"
 
-ExecutableViewer::ExecutableViewer(QString &filename, QWidget *parent) : QWidget(parent)
+ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
+    QWidget(parent), fileUnit(fileUnit)
 {
-    setWindowTitle(filename);
+    setWindowModified(false);
+    setWindowTitle(QString(fileUnit->getName().c_str()) + "[*]");
 
     QWidget *left = new QWidget(this);
     QWidget *center = new QWidget(this);
@@ -16,6 +18,15 @@ ExecutableViewer::ExecutableViewer(QString &filename, QWidget *parent) : QWidget
     QHBoxLayout *hv = new QHBoxLayout;
     hv->setContentsMargins(QMargins());
     hierarchicalViewer = new HierarchicalViewer(this);
+
+    std::vector<Container *> rootContainers = fileUnit->getTopLevelContainers();
+    for (unsigned int i = 0; i < rootContainers.size(); ++i)
+    {
+        QTreeWidgetItem *root = hierarchicalViewer->addRoot(rootContainers[i]->getName().c_str());
+        if (rootContainers[i]->isExpandable())
+            hierarchicalViewer->addChild(root, "Will be replaced at parent expansion.");
+    }
+
     hv->addWidget(hierarchicalViewer);
     left->setLayout(hv);
 
@@ -49,3 +60,7 @@ ExecutableViewer::ExecutableViewer(QString &filename, QWidget *parent) : QWidget
     setLayout(layout);
 }
 
+FileUnit *ExecutableViewer::getFileUnit()
+{
+    return fileUnit;
+}

@@ -1,11 +1,24 @@
 #include "elf_file.hpp"
+#include "elf_header_container.hpp"
+#include "program_header_table_container.hpp"
+#include "section_header_table_container.hpp"
+#include "segment_contents_container.hpp"
+#include "section_contents_container.hpp"
+#include <utility>
+
+using namespace elf;
 
 ELFFile::ELFFile(const std::string &filename) : FileUnit(filename)
 {
     file = new ELFIO::elfio();
     open = file->load(filename);
 
-    /* TODO: create top-level containers */
+    std::vector<Container *> &topLevelContainers = getTopLevelContainers();
+    topLevelContainers.push_back(new ELFHeaderContainer(this, std::make_pair(0, 9)));
+    topLevelContainers.push_back(new ProgramHeaderTableContainer(this, std::make_pair(10, 19)));
+    topLevelContainers.push_back(new SectionHeaderTableContainer(this, std::make_pair(20, 29)));
+    topLevelContainers.push_back(new SegmentContentsContainer(this));
+    topLevelContainers.push_back(new SectionContentsContainer(this));
 }
 
 ELFFile::~ELFFile()

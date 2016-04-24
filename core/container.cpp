@@ -6,7 +6,7 @@ Container::Container(FileUnit *file, bool expandable)
     invalidateInterval(interval);
 }
 
-Container::Container(FileUnit *file, bool expandable, std::pair<int, int> &interval)
+Container::Container(FileUnit *file, bool expandable, const std::pair<int, int> &interval)
     : file(file), expandable(expandable), interval(interval) {}
 
 FileUnit *Container::getFile()
@@ -29,7 +29,7 @@ std::string &Container::getName()
     return name;
 }
 
-void Container::setName(std::string &name)
+void Container::setName(const std::string &name)
 {
     this->name = name;
 }
