@@ -107,8 +107,11 @@ void MainWindow::open()
     /* check read access */
     QFile qFile(filename);
     if (!qFile.open(QFile::ReadOnly))
+    {
         QMessageBox::critical(this, QString("Error"), QString("Cannot read file %1:\n%2.")
                               .arg(filename) .arg(qFile.errorString()));
+        return;
+    }
     qFile.close();
 
     /* check file type */
