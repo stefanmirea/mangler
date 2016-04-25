@@ -1,3 +1,26 @@
+/* The MIT License (MIT)
+ *
+ * Copyright (c) 2016 Adrian Dobrică, Ștefan-Gabriel Mirea
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 #include "executable_viewer.hpp"
 #include "QDesktopWidget"
 #include "QApplication"
@@ -10,22 +33,20 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
 
     QWidget *left = new QWidget(this);
     QWidget *center = new QWidget(this);
-    QWidget *right = new QWidget(this);
 
-    QSplitter *split = new QSplitter(this);
+    split = new QSplitter(this);
+
+    /* Right extra component */
+    defaultSpecialRep = createDefaultSpecialRep();
 
     /* Left panel - hierarchy */
     QHBoxLayout *hv = new QHBoxLayout;
     hv->setContentsMargins(QMargins());
-    hierarchicalViewer = new HierarchicalViewer(this);
+    hierarchicalViewer = new HierarchicalViewer(split, defaultSpecialRep, this);
 
     std::vector<Container *> rootContainers = fileUnit->getTopLevelContainers();
     for (unsigned int i = 0; i < rootContainers.size(); ++i)
-    {
-        QTreeWidgetItem *root = hierarchicalViewer->addRoot(rootContainers[i]->getName().c_str());
-        if (rootContainers[i]->isExpandable())
-            hierarchicalViewer->addChild(root, "Will be replaced at parent expansion.");
-    }
+        hierarchicalViewer->addRoot(rootContainers[i]);
 
     hv->addWidget(hierarchicalViewer);
     left->setLayout(hv);
@@ -39,19 +60,10 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     hexaLayout->addWidget(searchBar);
     center->setLayout(hexaLayout);
 
-    /* Right extra component */
-    modifyBar = new ModifyASMBar();
-    asmView = new ASMViewer(this);
-    QVBoxLayout *extraLayout = new QVBoxLayout;
-    extraLayout->setContentsMargins(QMargins());
-    extraLayout->addWidget(asmView);
-    extraLayout->addWidget(modifyBar);
-    right->setLayout(extraLayout);
-
     /* Split the three components */
     split->addWidget(left);
     split->addWidget(center);
-    split->addWidget(right);
+    split->addWidget(defaultSpecialRep);
 
     QHBoxLayout *layout = new QHBoxLayout;
     layout->setContentsMargins(QMargins());
@@ -63,4 +75,24 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
 FileUnit *ExecutableViewer::getFileUnit()
 {
     return fileUnit;
+}
+
+ExecutableViewer::~ExecutableViewer()
+{
+    if (split->widget(2) != defaultSpecialRep)
+    {
+        delete defaultSpecialRep;
+
+        QTreeWidgetItem *currentItem = hierarchicalViewer->currentItem();
+
+        /* If the currently selected HierarchyNode wanted to keep its special representation after
+         * being deselected, the QWidget will be deallocated in that node's destructor. */
+        if (dynamic_cast<HierarchyNode *>(currentItem)->keepSpecialRepresentation())
+
+        /* The widget must be disconnected from the splitter, otherwise the splitter will
+         * try to deallocate it too. Setting the parent to null is safe as the splitter will get
+         * notified about its child being reparented. */
+            split->widget(2)->setParent(Q_NULLPTR);
+    }
+    /* else defaultSpecialRep will be deallocated automatically by the splitter destructor */
 }

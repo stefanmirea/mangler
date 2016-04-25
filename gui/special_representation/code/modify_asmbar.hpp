@@ -21,29 +21,29 @@
  * SOFTWARE.
  */
 
+#ifndef MODIFY_ASMBAR_HPP_
+#define MODIFY_ASMBAR_HPP_
+
+#include <QWidget>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
 #include "code_container.hpp"
 
-CodeContainer::CodeContainer(FileUnit *file)
-    : Container(file, false), injectionPossible(false) {}
-
-CodeContainer::CodeContainer(FileUnit *file, const std::pair<int, int> &interval)
-    : Container(file, false, interval), injectionPossible(false) {}
-
-bool CodeContainer::canInject()
+class CodeContainer::ModifyASMBar : public QWidget
 {
-    return injectionPossible;
-}
+    Q_OBJECT
+public:
+    explicit ModifyASMBar(QWidget *parent = 0);
 
-std::vector<Container *> &CodeContainer::getInnerContainers()
-{
-    return innerContainers;
-}
+signals:
 
-/**
- * In order to keep this class generic among different executable file formats,
- * do not fill up this method. If you want to implement code injection for your
- * file format, create a new class derived from CodeContainer.
- */
-void CodeContainer::injectCode(size_t offset, std::string &newContent) {}
+public slots:
+private:
+private:
+    QLabel *modify;
+    QLineEdit *text;
+    QPushButton *ok;
+};
 
-CodeContainer::~CodeContainer() {}
+#endif // MODIFY_ASMBAR_HPP_

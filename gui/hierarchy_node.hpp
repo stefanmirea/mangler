@@ -1,6 +1,6 @@
 /* The MIT License (MIT)
  *
- * Copyright (c) 2016 Adrian Dobrică, Ștefan-Gabriel Mirea
+ * Copyright (c) 2016 Ștefan-Gabriel Mirea, Adrian Dobrică
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,29 +21,27 @@
  * SOFTWARE.
  */
 
-#include "code_container.hpp"
+#ifndef HIERARCHY_NODE_HPP_
+#define HIERARCHY_NODE_HPP_
 
-CodeContainer::CodeContainer(FileUnit *file)
-    : Container(file, false), injectionPossible(false) {}
+#include <QTreeWidgetItem>
+#include "container.hpp"
 
-CodeContainer::CodeContainer(FileUnit *file, const std::pair<int, int> &interval)
-    : Container(file, false, interval), injectionPossible(false) {}
-
-bool CodeContainer::canInject()
+class HierarchyNode : public QTreeWidgetItem
 {
-    return injectionPossible;
-}
+public:
+    explicit HierarchyNode(Container *container, QTreeWidget *parent = 0);
+    explicit HierarchyNode(Container *container, QTreeWidgetItem *parent = 0);
+    bool createChildren();
+    bool keepSpecialRepresentation();
+    QWidget *getSpecialRepresentation();
+    virtual ~HierarchyNode();
+private:
+    void _HierarchyNode(Container *container);
+    Container *container;
+    bool everExpanded;
+    bool _keepSpecialRepresentation;
+    QWidget *specialRepresentation;
+};
 
-std::vector<Container *> &CodeContainer::getInnerContainers()
-{
-    return innerContainers;
-}
-
-/**
- * In order to keep this class generic among different executable file formats,
- * do not fill up this method. If you want to implement code injection for your
- * file format, create a new class derived from CodeContainer.
- */
-void CodeContainer::injectCode(size_t offset, std::string &newContent) {}
-
-CodeContainer::~CodeContainer() {}
+#endif // HIERARCHY_NODE_HPP_

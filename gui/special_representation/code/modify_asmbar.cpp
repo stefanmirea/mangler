@@ -1,6 +1,6 @@
 /* The MIT License (MIT)
  *
- * Copyright (c) 2016 Adrian Dobrică, Ștefan-Gabriel Mirea
+ * Copyright (c) 2016 Ștefan-Gabriel Mirea, Adrian Dobrică
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,29 +21,21 @@
  * SOFTWARE.
  */
 
-#include "code_container.hpp"
+#include "modify_asmbar.hpp"
+#include <QHBoxLayout>
 
-CodeContainer::CodeContainer(FileUnit *file)
-    : Container(file, false), injectionPossible(false) {}
-
-CodeContainer::CodeContainer(FileUnit *file, const std::pair<int, int> &interval)
-    : Container(file, false, interval), injectionPossible(false) {}
-
-bool CodeContainer::canInject()
+CodeContainer::ModifyASMBar::ModifyASMBar(QWidget *parent) : QWidget(parent)
 {
-    return injectionPossible;
+    modify = new QLabel(QString("Modify:"), this);
+    text = new QLineEdit(this);
+    ok = new QPushButton(QString("OK"), this);
+
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->setContentsMargins(QMargins());
+    layout->addWidget(modify);
+    layout->addWidget(text);
+    layout->addWidget(ok);
+    setLayout(layout);
+    setMaximumHeight(80);
 }
 
-std::vector<Container *> &CodeContainer::getInnerContainers()
-{
-    return innerContainers;
-}
-
-/**
- * In order to keep this class generic among different executable file formats,
- * do not fill up this method. If you want to implement code injection for your
- * file format, create a new class derived from CodeContainer.
- */
-void CodeContainer::injectCode(size_t offset, std::string &newContent) {}
-
-CodeContainer::~CodeContainer() {}

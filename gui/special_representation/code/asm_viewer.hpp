@@ -1,6 +1,6 @@
 /* The MIT License (MIT)
  *
- * Copyright (c) 2016 Adrian Dobrică, Ștefan-Gabriel Mirea
+ * Copyright (c) 2016 Ștefan-Gabriel Mirea, Adrian Dobrică
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,29 +21,20 @@
  * SOFTWARE.
  */
 
+#ifndef ASM_VIEWER_HPP_
+#define ASM_VIEWER_HPP_
+
+#include <QWidget>
+#include <QTreeView>
+#include <QStandardItemModel>
 #include "code_container.hpp"
 
-CodeContainer::CodeContainer(FileUnit *file)
-    : Container(file, false), injectionPossible(false) {}
-
-CodeContainer::CodeContainer(FileUnit *file, const std::pair<int, int> &interval)
-    : Container(file, false, interval), injectionPossible(false) {}
-
-bool CodeContainer::canInject()
+class CodeContainer::ASMViewer : public QTreeView
 {
-    return injectionPossible;
-}
+public:
+    ASMViewer(QWidget *parent = 0);
+private:
+    QStandardItemModel *model;
+};
 
-std::vector<Container *> &CodeContainer::getInnerContainers()
-{
-    return innerContainers;
-}
-
-/**
- * In order to keep this class generic among different executable file formats,
- * do not fill up this method. If you want to implement code injection for your
- * file format, create a new class derived from CodeContainer.
- */
-void CodeContainer::injectCode(size_t offset, std::string &newContent) {}
-
-CodeContainer::~CodeContainer() {}
+#endif // ASM_VIEWER_HPP_

@@ -1,6 +1,6 @@
 /* The MIT License (MIT)
  *
- * Copyright (c) 2016 Adrian Dobrică, Ștefan-Gabriel Mirea
+ * Copyright (c) 2016 Ștefan-Gabriel Mirea, Adrian Dobrică
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,29 +21,20 @@
  * SOFTWARE.
  */
 
-#include "code_container.hpp"
+#include "executable_viewer.hpp"
 
-CodeContainer::CodeContainer(FileUnit *file)
-    : Container(file, false), injectionPossible(false) {}
+#include <QVBoxLayout>
+#include <QLabel>
 
-CodeContainer::CodeContainer(FileUnit *file, const std::pair<int, int> &interval)
-    : Container(file, false, interval), injectionPossible(false) {}
-
-bool CodeContainer::canInject()
+QWidget *ExecutableViewer::createDefaultSpecialRep()
 {
-    return injectionPossible;
+    QWidget *area = new QWidget();
+
+    QVBoxLayout *layout = new QVBoxLayout();
+    QLabel *label = new QLabel(QString("No special representation available."));
+    layout->addWidget(label);
+    layout->setAlignment(label, Qt::AlignHCenter);
+    area->setLayout(layout);
+
+    return area;
 }
-
-std::vector<Container *> &CodeContainer::getInnerContainers()
-{
-    return innerContainers;
-}
-
-/**
- * In order to keep this class generic among different executable file formats,
- * do not fill up this method. If you want to implement code injection for your
- * file format, create a new class derived from CodeContainer.
- */
-void CodeContainer::injectCode(size_t offset, std::string &newContent) {}
-
-CodeContainer::~CodeContainer() {}

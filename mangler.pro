@@ -30,13 +30,16 @@ SOURCES +=\
     elf/section_header_table_container.cpp \
     elf/segment_contents_container.cpp \
     elf/section_contents_container.cpp \
-    gui/asm_viewer.cpp \
     gui/executable_viewer.cpp \
     gui/hex_viewer.cpp \
     gui/hierarchical_viewer.cpp \
     gui/main_window.cpp \
-    gui/modify_asmbar.cpp \
-    gui/search_bar.cpp
+    gui/search_bar.cpp \
+    gui/hierarchy_node.cpp \
+    gui/special_representation/code/asm_viewer.cpp \
+    gui/special_representation/code/modify_asmbar.cpp \
+    gui/special_representation/code/do.cpp \
+    gui/special_representation/default.cpp
 
 HEADERS  += \
     core/code_container.hpp \
@@ -62,13 +65,14 @@ HEADERS  += \
     dependencies/elfio/elfio_dynamic.hpp \
     dependencies/elfio/elfio_dump.hpp \
     dependencies/elfio/elfio.hpp \
-    gui/asm_viewer.hpp \
     gui/executable_viewer.hpp \
     gui/hex_viewer.hpp \
     gui/hierarchical_viewer.hpp \
     gui/main_window.hpp \
-    gui/modify_asmbar.hpp \
-    gui/search_bar.hpp
+    gui/search_bar.hpp \
+    gui/hierarchy_node.hpp \
+    gui/special_representation/code/asm_viewer.hpp \
+    gui/special_representation/code/modify_asmbar.hpp
 
 RESOURCES += \
     gui/mangler.qrc

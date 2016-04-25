@@ -1,3 +1,26 @@
+/* The MIT License (MIT)
+ *
+ * Copyright (c) 2016 Ștefan-Gabriel Mirea, Adrian Dobrică
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 #ifndef CONTAINER_HPP_
 #define CONTAINER_HPP_
 
@@ -9,6 +32,8 @@
 #include <algorithm>
 #include <queue>
 
+#include <QWidget>
+
 #define NO_INTERVAL -1
 
 class FileUnit;
@@ -16,7 +41,10 @@ class FileUnit;
 class Container
 {
 public:
+    /* Use this form with expandable = false only if you want to set de interval later
+     * (after obtaining its reference by using getInterval()) */
     Container(FileUnit *file, bool expandable = false);
+
     Container(FileUnit *file, bool expandable, const std::pair<int, int> &interval);
     FileUnit *getFile();
     std::vector<Container *> &getParents();
@@ -26,7 +54,7 @@ public:
     std::pair<int, int> &getInterval();
 
     virtual std::vector<Container *> &getInnerContainers();
-    virtual bool doSpecialRepresentation();
+    virtual QWidget *doSpecialRepresentation(bool &keepAfterNodeDeselection);
     virtual ~Container();
 
     static bool isValidInterval(std::pair<int, int> &interval);
@@ -45,4 +73,4 @@ private:
     std::string name;
 };
 
-#endif
+#endif // CONTAINER_HPP_
