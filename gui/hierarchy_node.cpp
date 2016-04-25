@@ -20,6 +20,8 @@ void HierarchyNode::_HierarchyNode(Container *container)
     else
         setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
     everExpanded = false;
+    _keepSpecialRepresentation = false;
+    specialRepresentation = nullptr;
 }
 
 bool HierarchyNode::createChildren()
@@ -33,4 +35,27 @@ bool HierarchyNode::createChildren()
         return true;
     }
     return false;
+}
+
+bool HierarchyNode::keepSpecialRepresentation()
+{
+    return _keepSpecialRepresentation;
+}
+
+QWidget *HierarchyNode::getSpecialRepresentation()
+{
+    if (_keepSpecialRepresentation)
+        return specialRepresentation;
+    QWidget *representation = container->doSpecialRepresentation(_keepSpecialRepresentation);
+    if (_keepSpecialRepresentation)
+        specialRepresentation = representation;
+    return representation;
+}
+
+HierarchyNode::~HierarchyNode()
+{
+    if (_keepSpecialRepresentation &&
+            /* the default Container::doSpecialRepresentation() returns a must-keep nullptr */
+            specialRepresentation != nullptr)
+        delete specialRepresentation;
 }

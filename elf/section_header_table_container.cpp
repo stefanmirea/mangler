@@ -12,7 +12,7 @@ std::vector<Container *> &SectionHeaderTableContainer::getInnerContainers()
 {
     if (innerContainers.empty())
     {
-        Container *container = new Container(getFile(), false);
+        Container *container = new Container(getFile(), false, std::make_pair(20, 30));
         container->setName("Nothing here");
         addInnerContainer(container);
     }

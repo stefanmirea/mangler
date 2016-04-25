@@ -11,8 +11,14 @@ std::vector<Container *> &SectionContentsContainer::getInnerContainers()
 {
     if (innerContainers.empty())
     {
-        Container *container = new Container(getFile(), false);
-        container->setName("Nothing here");
+        Container *container;
+
+        container = new Container(getFile(), false, std::make_pair(30, 40));
+        container->setName("[test] non-code section");
+        addInnerContainer(container);
+
+        container = new CodeContainer(getFile(), std::make_pair(40, 50));
+        container->setName("[test] code section");
         addInnerContainer(container);
     }
     return innerContainers;

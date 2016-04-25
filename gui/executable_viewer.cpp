@@ -10,14 +10,16 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
 
     QWidget *left = new QWidget(this);
     QWidget *center = new QWidget(this);
-    QWidget *right = new QWidget(this);
 
-    QSplitter *split = new QSplitter(this);
+    split = new QSplitter(this);
+
+    /* Right extra component */
+    defaultSpecialRep = createDefaultSpecialRep();
 
     /* Left panel - hierarchy */
     QHBoxLayout *hv = new QHBoxLayout;
     hv->setContentsMargins(QMargins());
-    hierarchicalViewer = new HierarchicalViewer(this);
+    hierarchicalViewer = new HierarchicalViewer(split, defaultSpecialRep, this);
 
     std::vector<Container *> rootContainers = fileUnit->getTopLevelContainers();
     for (unsigned int i = 0; i < rootContainers.size(); ++i)
@@ -35,19 +37,10 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     hexaLayout->addWidget(searchBar);
     center->setLayout(hexaLayout);
 
-    /* Right extra component */
-    modifyBar = new ModifyASMBar();
-    asmView = new ASMViewer(this);
-    QVBoxLayout *extraLayout = new QVBoxLayout;
-    extraLayout->setContentsMargins(QMargins());
-    extraLayout->addWidget(asmView);
-    extraLayout->addWidget(modifyBar);
-    right->setLayout(extraLayout);
-
     /* Split the three components */
     split->addWidget(left);
     split->addWidget(center);
-    split->addWidget(right);
+    split->addWidget(defaultSpecialRep);
 
     QHBoxLayout *layout = new QHBoxLayout;
     layout->setContentsMargins(QMargins());
@@ -59,4 +52,24 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
 FileUnit *ExecutableViewer::getFileUnit()
 {
     return fileUnit;
+}
+
+ExecutableViewer::~ExecutableViewer()
+{
+    if (split->widget(2) != defaultSpecialRep)
+    {
+        delete defaultSpecialRep;
+
+        QTreeWidgetItem *currentItem = hierarchicalViewer->currentItem();
+
+        /* If the currently selected HierarchyNode wanted to keep its special representation after
+         * being deselected, the QWidget will be deallocated in that node's destructor. */
+        if (dynamic_cast<HierarchyNode *>(currentItem)->keepSpecialRepresentation())
+
+        /* The widget must be disconnected from the splitter, otherwise the splitter will
+         * try to deallocate it too. Setting the parent to null is safe as the splitter will get
+         * notified about its child being reparented. */
+            split->widget(2)->setParent(Q_NULLPTR);
+    }
+    /* else defaultSpecialRep will be deallocated automatically by the splitter destructor */
 }

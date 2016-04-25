@@ -11,7 +11,7 @@ std::vector<Container *> &SegmentContentsContainer::getInnerContainers()
 {
     if (innerContainers.empty())
     {
-        Container *container = new Container(getFile(), false);
+        Container *container = new Container(getFile(), false, std::make_pair(5, 15));
         container->setName("Nothing here");
         addInnerContainer(container);
     }

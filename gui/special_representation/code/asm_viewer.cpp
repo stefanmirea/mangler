@@ -1,6 +1,6 @@
 #include "asm_viewer.hpp"
 
-ASMViewer::ASMViewer(QWidget *parent) : QTreeView(parent)
+CodeContainer::ASMViewer::ASMViewer(QWidget *parent) : QTreeView(parent)
 {
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setItemsExpandable(false);

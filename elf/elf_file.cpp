@@ -14,9 +14,9 @@ ELFFile::ELFFile(const std::string &filename) : FileUnit(filename)
     open = file->load(filename);
 
     std::vector<Container *> &topLevelContainers = getTopLevelContainers();
-    topLevelContainers.push_back(new ELFHeaderContainer(this, std::make_pair(0, 9)));
-    topLevelContainers.push_back(new ProgramHeaderTableContainer(this, std::make_pair(10, 19)));
-    topLevelContainers.push_back(new SectionHeaderTableContainer(this, std::make_pair(20, 29)));
+    topLevelContainers.push_back(new ELFHeaderContainer(this, std::make_pair(0, 10)));
+    topLevelContainers.push_back(new ProgramHeaderTableContainer(this, std::make_pair(10, 20)));
+    topLevelContainers.push_back(new SectionHeaderTableContainer(this, std::make_pair(20, 30)));
     topLevelContainers.push_back(new SegmentContentsContainer(this));
     topLevelContainers.push_back(new SectionContentsContainer(this));
 }

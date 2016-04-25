@@ -14,12 +14,12 @@ std::vector<Container *> &ELFHeaderContainer::getInnerContainers()
     {
         Container *container;
 
-        container = new Container(getFile(), false);
+        container = new Container(getFile(), false, std::make_pair(0, 5));
         container->setName("e_ident");
         addInnerContainer(container);
 
-        container = new Container(getFile(), false);
-        container->setName("co");
+        container = new Container(getFile(), false, std::make_pair(5, 10));
+        container->setName("& co");
         addInnerContainer(container);
     }
     return innerContainers;

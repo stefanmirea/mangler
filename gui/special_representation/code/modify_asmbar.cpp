@@ -1,7 +1,7 @@
 #include "modify_asmbar.hpp"
 #include <QHBoxLayout>
 
-ModifyASMBar::ModifyASMBar(QWidget *parent) : QWidget(parent)
+CodeContainer::ModifyASMBar::ModifyASMBar(QWidget *parent) : QWidget(parent)
 {
     modify = new QLabel(QString("Modify:"), this);
     text = new QLineEdit(this);

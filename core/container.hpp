@@ -9,6 +9,8 @@
 #include <algorithm>
 #include <queue>
 
+#include <QWidget>
+
 #define NO_INTERVAL -1
 
 class FileUnit;
@@ -16,7 +18,10 @@ class FileUnit;
 class Container
 {
 public:
+    /* Use this form with expandable = false only if you want to set de interval later
+     * (after obtaining its reference by using getInterval()) */
     Container(FileUnit *file, bool expandable = false);
+
     Container(FileUnit *file, bool expandable, const std::pair<int, int> &interval);
     FileUnit *getFile();
     std::vector<Container *> &getParents();
@@ -26,7 +31,7 @@ public:
     std::pair<int, int> &getInterval();
 
     virtual std::vector<Container *> &getInnerContainers();
-    virtual bool doSpecialRepresentation();
+    virtual QWidget *doSpecialRepresentation(bool &keepAfterNodeDeselection);
     virtual ~Container();
 
     static bool isValidInterval(std::pair<int, int> &interval);

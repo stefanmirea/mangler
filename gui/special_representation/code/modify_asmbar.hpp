@@ -5,8 +5,9 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include "code_container.hpp"
 
-class ModifyASMBar : public QWidget
+class CodeContainer::ModifyASMBar : public QWidget
 {
     Q_OBJECT
 public:

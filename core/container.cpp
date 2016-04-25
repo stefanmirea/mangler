@@ -56,9 +56,18 @@ std::vector<Container *> &Container::getInnerContainers()
     return innerContainers;
 }
 
-bool Container::doSpecialRepresentation()
+/**
+ * Override this method to draw a special representation of the container in the right pane.
+ *
+ * @param keepAfterNodeDeselection: Set to true if you need to keep state across container selection
+ *     changes; the hierarchicalViewer will only call the method once for this container and will
+ *     use the received QWidget * at further selections. If you don't need to keep state, set to
+ *     false to optimize memory usage.
+ */
+QWidget *Container::doSpecialRepresentation(bool &keepAfterNodeDeselection)
 {
-    return false;
+    keepAfterNodeDeselection = true;
+    return nullptr;
 }
 
 Container::~Container()

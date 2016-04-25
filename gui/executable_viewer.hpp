@@ -11,8 +11,6 @@
 #include "hierarchical_viewer.hpp"
 #include "hex_viewer.hpp"
 #include "search_bar.hpp"
-#include "modify_asmbar.hpp"
-#include "asm_viewer.hpp"
 
 #include "file_unit.hpp"
 
@@ -28,17 +26,20 @@ public:
     bool saveFile(const QString &fileName) {return true;}
     QString userFriendlyCurrentFile() {return QString("a");}
     QString currentFile() { return QString("current"); }
+    virtual ~ExecutableViewer();
 
 signals:
 
 public slots:
 private:
+    QSplitter *split;
     HierarchicalViewer *hierarchicalViewer;
     HexViewer *hexViewer;
     SearchBar *searchBar;
-    ModifyASMBar *modifyBar;
-    ASMViewer *asmView;
     FileUnit *fileUnit;
+
+    QWidget *defaultSpecialRep;
+    QWidget *createDefaultSpecialRep();
 };
 
 #endif // EXECUTABLEVIEWER_H

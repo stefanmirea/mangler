@@ -11,14 +11,16 @@ class CodeContainer : public Container
 {
 public:
     CodeContainer(FileUnit *file);
-    CodeContainer(FileUnit *file, std::pair<int, int> &interval);
+    CodeContainer(FileUnit *file, const std::pair<int, int> &interval);
     bool canInject();
     virtual std::vector<Container *> &getInnerContainers();
-    virtual bool doSpecialRepresentation();
+    virtual QWidget *doSpecialRepresentation(bool &keepAfterNodeDeselection);
     virtual void injectCode(size_t offset, std::string &newContent);
     virtual ~CodeContainer();
 
 private:
+    class ASMViewer;
+    class ModifyASMBar;
     bool injectionPossible;
 };
 
