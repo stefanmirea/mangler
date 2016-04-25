@@ -73,4 +73,4 @@ private:
     std::string name;
 };
 
-#endif
+#endif // CONTAINER_HPP_

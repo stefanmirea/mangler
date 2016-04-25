@@ -21,8 +21,8 @@
  * SOFTWARE.
  */
 
-#ifndef HIERACHICALVIEWER_HPP
-#define HIERACHICALVIEWER_HPP
+#ifndef HIERACHICAL_VIEWER_HPP_
+#define HIERACHICAL_VIEWER_HPP_
 
 #include <QMainWindow>
 #include <QObject>
@@ -49,4 +49,4 @@ private:
     QSplitter *split;
 };
 
-#endif // HIERACHICALVIEWER_HPP
+#endif // HIERACHICAL_VIEWER_HPP_

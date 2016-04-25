@@ -21,8 +21,8 @@
  * SOFTWARE.
  */
 
-#ifndef HEXVIEWER_HPP
-#define HEXVIEWER_HPP
+#ifndef HEX_VIEWER_HPP_
+#define HEX_VIEWER_HPP_
 
 #include <QWidget>
 #include <QAbstractScrollArea>
@@ -41,4 +41,4 @@ private:
     HierarchicalViewer *hierarchicalViewer;
 };
 
-#endif // HEXVIEWER_HPP
+#endif // HEX_VIEWER_HPP_

@@ -47,4 +47,4 @@ private:
     bool injectionPossible;
 };
 
-#endif
+#endif // CODE_CONTAINER_HPP_

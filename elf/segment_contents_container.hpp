@@ -38,4 +38,4 @@ public:
 };
 }
 
-#endif
+#endif // SEGMENT_CONTENTS_CONTAINER_HPP_

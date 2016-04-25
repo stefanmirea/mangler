@@ -47,4 +47,4 @@ private:
     std::vector<Container *> topLevelContainers;
 };
 
-#endif
+#endif // FILE_UNIT_HPP_

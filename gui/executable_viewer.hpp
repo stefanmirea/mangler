@@ -21,8 +21,8 @@
  * SOFTWARE.
  */
 
-#ifndef EXECUTABLEVIEWER_H
-#define EXECUTABLEVIEWER_H
+#ifndef EXECUTABLE_VIEWER_HPP_
+#define EXECUTABLE_VIEWER_HPP_
 
 #include <QObject>
 #include <QWidget>
@@ -65,4 +65,4 @@ private:
     QWidget *createDefaultSpecialRep();
 };
 
-#endif // EXECUTABLEVIEWER_H
+#endif // EXECUTABLE_VIEWER_HPP

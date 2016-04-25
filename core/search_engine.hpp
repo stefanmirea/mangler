@@ -47,5 +47,4 @@ public:
     virtual ~SearchEngine();
 };
 
-#endif
-
+#endif // SEARCH_ENGINE_HPP_

@@ -21,8 +21,8 @@
  * SOFTWARE.
  */
 
-#ifndef SEARCHBAR_HPP
-#define SEARCHBAR_HPP
+#ifndef SEARCH_BAR_HPP_
+#define SEARCH_BAR_HPP_
 
 #include <QWidget>
 #include <QLabel>
@@ -48,4 +48,4 @@ private:
     QRadioButton *hex, *dec, *string;
 };
 
-#endif // SEARCHBAR_HPP
+#endif // SEARCH_BAR_HPP_

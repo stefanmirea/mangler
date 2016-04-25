@@ -21,8 +21,8 @@
  * SOFTWARE.
  */
 
-#ifndef ASMVIEWER_HPP
-#define ASMVIEWER_HPP
+#ifndef ASM_VIEWER_HPP_
+#define ASM_VIEWER_HPP_
 
 #include <QWidget>
 #include <QTreeView>
@@ -37,4 +37,4 @@ private:
     QStandardItemModel *model;
 };
 
-#endif // ASMVIEWER_HPP
+#endif // ASM_VIEWER_HPP_

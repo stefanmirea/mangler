@@ -38,4 +38,4 @@ public:
 };
 }
 
-#endif
+#endif // ELF_HEADER_CONTAINER_HPP_

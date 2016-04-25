@@ -21,8 +21,8 @@
  * SOFTWARE.
  */
 
-#ifndef MODIFYASMBAR_HPP
-#define MODIFYASMBAR_HPP
+#ifndef MODIFY_ASMBAR_HPP_
+#define MODIFY_ASMBAR_HPP_
 
 #include <QWidget>
 #include <QLabel>
@@ -46,4 +46,4 @@ private:
     QPushButton *ok;
 };
 
-#endif // MODIFYASMBAR_HPP
+#endif // MODIFY_ASMBAR_HPP_

@@ -21,8 +21,8 @@
  * SOFTWARE.
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAIN_WINDOW_HPP_
+#define MAIN_WINDOW_HPP_
 
 #include <QMainWindow>
 #include <QMdiArea>
@@ -59,4 +59,4 @@ private:
     QAction *aboutAction;
 };
 
-#endif // MAINWINDOW_H
+#endif // MAIN_WINDOW_HPP_

@@ -21,8 +21,8 @@
  * SOFTWARE.
  */
 
-#ifndef HIERARCHY_NODE_HPP
-#define HIERARCHY_NODE_HPP
+#ifndef HIERARCHY_NODE_HPP_
+#define HIERARCHY_NODE_HPP_
 
 #include <QTreeWidgetItem>
 #include "container.hpp"
@@ -44,4 +44,4 @@ private:
     QWidget *specialRepresentation;
 };
 
-#endif
+#endif // HIERARCHY_NODE_HPP_

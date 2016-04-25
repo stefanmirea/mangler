@@ -55,4 +55,4 @@ public:
     virtual ~FileAssembly();
 };
 
-#endif
+#endif // FILE_ASSEMBLY_HPP_

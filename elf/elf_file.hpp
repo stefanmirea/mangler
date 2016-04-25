@@ -45,4 +45,4 @@ private:
 };
 }
 
-#endif
+#endif // ELF_FILE_HPP_
