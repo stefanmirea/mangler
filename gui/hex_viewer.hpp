@@ -32,13 +32,20 @@ class HexViewer : public QAbstractScrollArea
 {
     Q_OBJECT
 public:
-    explicit HexViewer(HierarchicalViewer *hierarchicalViewer, QWidget *parent = 0);
+    explicit HexViewer(QByteArray &hexdump, HierarchicalViewer *hierarchicalViewer, QWidget *parent = 0);
 
 signals:
 
 public slots:
 private:
     HierarchicalViewer *hierarchicalViewer;
+    void paintEvent(QPaintEvent *);
+
+    int font_width;
+    bool is_selected;
+    int row_width;
+    QPair<int, int> selectedBounds;
+    QByteArray hexdump;
 };
 
 #endif // HEX_VIEWER_HPP_

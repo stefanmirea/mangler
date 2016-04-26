@@ -23,6 +23,44 @@
 
 #include "hex_viewer.hpp"
 #include <QHeaderView>
+#include <QPainter>
 
-HexViewer::HexViewer(HierarchicalViewer *hierarchicalViewer, QWidget *parent) :
-    QAbstractScrollArea(parent), hierarchicalViewer(hierarchicalViewer) {}
+HexViewer::HexViewer(QByteArray &hexdump, HierarchicalViewer *hierarchicalViewer, QWidget *parent) :
+    QAbstractScrollArea(parent), hexdump(hexdump), hierarchicalViewer(hierarchicalViewer)
+{
+    viewport()->setContentsMargins(QMargins());
+}
+
+void HexViewer::paintEvent(QPaintEvent *)
+{
+    QPainter painter(viewport());
+    painter.setPen(Qt::black);
+
+    /* Set the font to monospace */
+    QFont current_monospace("Monospace");
+    QFontMetrics font_metrics(current_monospace);
+    font_width = font_metrics.width('W');
+    painter.setFont(current_monospace);
+
+    QString text("00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ...D..:.........\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ...X..:.........\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ...C..:.........\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ...V..:.........\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ... ..:.........\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ... ..:.........\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ... ..:.........\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ... ..:.........\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ... ..:.........\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ... ..:...B.....\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ... ..:....CA...\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ... ..:.........\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ... ..:.....B...\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ......:.........\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ......:..CXD....\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ......:.........\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ... ..:.........\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ... ..:.........\n"
+                 "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ... ..:.........\n");
+
+    painter.drawText(viewport()->rect(), Qt::AlignLeft, text);
+}

@@ -52,7 +52,10 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     left->setLayout(hv);
 
     /* Center hex viewer and search bar */
-    hexViewer = new HexViewer(hierarchicalViewer, this);
+    const char raw[] = {0xfa, 0x08, 0xff, 0x32, 0xf1, 0xa0, 0x3a, 0x84,
+                        0xb2, 0x18, 0xac, 0xaa, 0x01, 0xa0, 0x3a, 0x84};
+    QByteArray hexdump(raw);
+    hexViewer = new HexViewer(hexdump, hierarchicalViewer, this);
     searchBar = new SearchBar();
     QVBoxLayout *hexaLayout = new QVBoxLayout;
     hexaLayout->setContentsMargins(QMargins());
