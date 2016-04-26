@@ -24,11 +24,23 @@
 #include "hex_viewer.hpp"
 #include <QHeaderView>
 #include <QPainter>
+#include <QMouseEvent>
+#include <iostream>
 
-HexViewer::HexViewer(QByteArray &hexdump, HierarchicalViewer *hierarchicalViewer, QWidget *parent) :
-    QAbstractScrollArea(parent), hexdump(hexdump), hierarchicalViewer(hierarchicalViewer)
+HexViewer::HexViewer(QByteArray &hexdump, int address_size,
+                     HierarchicalViewer *hierarchicalViewer,
+                     QWidget *parent) :
+    QAbstractScrollArea(parent), hexdump(hexdump), address_size(address_size), hierarchicalViewer(hierarchicalViewer)
 {
+    setFont(QFont("Monospace"));
+    word_size = 2;
+    row_width = 16;
     viewport()->setContentsMargins(QMargins());
+}
+
+void HexViewer::repaint()
+{
+    viewport()->repaint();
 }
 
 void HexViewer::paintEvent(QPaintEvent *)
@@ -37,9 +49,14 @@ void HexViewer::paintEvent(QPaintEvent *)
     painter.setPen(Qt::black);
 
     /* Set the font to monospace */
-    QFont current_monospace("Monospace");
+    QFont current_monospace = font();//("Monospace");
+    //current_monospace.setStyleHint(QFont::Monospace);
     QFontMetrics font_metrics(current_monospace);
-    font_width = font_metrics.width('W');
+    font_width = font_metrics.width('i');
+    font_height = font_metrics.height();
+
+    std::cerr << "W: " << font_width << " H: " << font_height << std::endl;
+
     painter.setFont(current_monospace);
 
     QString text("00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ...D..:.........\n"
@@ -62,5 +79,31 @@ void HexViewer::paintEvent(QPaintEvent *)
                  "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ... ..:.........\n"
                  "00000000  fa 08 ff 32 f1 a0 3a 84  b2 18 ac aa 01 a0 3a 84  ... ..:.........\n");
 
+    font_width = 7; /* W = 10 */
+    font_height = 14; /* H = 19 */
+
+    total_space = text.size() - 18 + 18 * 20;
+
+    std::cerr << "X: " << selected_x << " Y: " << selected_y << " xn:"<<selected_x/font_width<<" " << " yn: " << selected_y/font_height << std::endl;
+
+    /* Highlighter */
+    painter.fillRect(
+                        QRectF(
+                            (selected_x / font_width) * font_width,
+                            (selected_y / font_height) * font_height,
+                            1 * font_width,
+                            1 * font_height),
+                        palette().highlight()
+                        );
     painter.drawText(viewport()->rect(), Qt::AlignLeft, text);
+}
+
+void HexViewer::mousePressEvent(QMouseEvent * event)
+{
+    if(event->button() == Qt::LeftButton)
+    {
+        selected_x = event->x();
+        selected_y = event->y();
+        viewport()->update();
+    }
 }
