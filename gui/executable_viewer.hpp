@@ -34,7 +34,7 @@
 #include <QIODevice>
 
 #include "hierarchical_viewer.hpp"
-#include "qhexedit.h"
+#include "qhexedit.hpp"
 #include "search_bar.hpp"
 
 #include "file_unit.hpp"

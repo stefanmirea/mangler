@@ -25,7 +25,7 @@
 #include "QDesktopWidget"
 #include "QApplication"
 #include <QFile>
-#include <qhexedit.h>
+#include <qhexedit.hpp>
 #include <iostream>
 
 ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :

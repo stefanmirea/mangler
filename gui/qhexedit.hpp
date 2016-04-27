@@ -5,8 +5,8 @@
 #include <QPen>
 #include <QBrush>
 
-#include "chunks.h"
-#include "commands.h"
+#include "chunks.hpp"
+#include "commands.hpp"
 
 /** \mainpage
 QHexEdit is a binary editor widget for Qt.

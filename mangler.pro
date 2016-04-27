@@ -74,9 +74,9 @@ HEADERS  += \
     gui/hierarchy_node.hpp \
     gui/special_representation/code/asm_viewer.hpp \
     gui/special_representation/code/modify_asmbar.hpp \
-    gui/qhexedit.h \
-    gui/chunks.h \
-    gui/commands.h
+    gui/qhexedit.hpp \
+    gui/commands.hpp \
+    gui/chunks.hpp
 
 RESOURCES += \
     gui/mangler.qrc

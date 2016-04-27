@@ -4,7 +4,7 @@
 #include <QPainter>
 #include <QScrollBar>
 
-#include "qhexedit.h"
+#include "qhexedit.hpp"
 
 const int HEXCHARS_IN_LINE = 47;
 const int BYTES_PER_LINE = 16;

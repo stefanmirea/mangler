@@ -30,6 +30,7 @@
 #include <QGroupBox>
 #include <QRadioButton>
 #include <QPushButton>
+#include <qhexedit.hpp>
 
 class SearchBar : public QWidget
 {
