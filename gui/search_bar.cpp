@@ -24,6 +24,7 @@
 #include "search_bar.hpp"
 #include <QHBoxLayout>
 #include <iostream>
+#include <algorithm>
 
 SearchBar::SearchBar(QHexEdit *hexedit, QWidget *parent) :
     QWidget(parent), hexedit(hexedit)
@@ -81,8 +82,11 @@ QByteArray SearchBar::getInput()
         if(dec->isChecked() == true)
         {
             int value = text->text().toInt();
-            input =  QByteArray::number(value);
-            std::cerr << "DEC\n";
+            input.append((char)((value >> 24)));
+            input.append((char)((value << 8) >> 24));
+            input.append((char)((value << 16) >> 24));
+            input.append((char)((value << 24) >> 24));
+            qDebug(input);
         }
 
         else
@@ -116,5 +120,5 @@ int SearchBar::findNext()
 
 int SearchBar::findPrev()
 {
-    return newPosition;
+    return -1;
 }
