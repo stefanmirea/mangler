@@ -1,5 +1,5 @@
-#ifndef CHUNKS_H
-#define CHUNKS_H
+#ifndef CHUNKS_HPP_
+#define CHUNKS_HPP_
 
 /** \cond docNever */
 
@@ -73,4 +73,4 @@ public:
 
 /** \endcond docNever */
 
-#endif // CHUNKS_H
+#endif // CHUNKS_HPP_

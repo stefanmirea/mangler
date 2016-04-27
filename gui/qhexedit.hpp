@@ -1,5 +1,5 @@
-#ifndef QHEXEDIT_H
-#define QHEXEDIT_H
+#ifndef QHEXEDIT_HPP_
+#define QHEXEDIT_HPP_
 
 #include <QAbstractScrollArea>
 #include <QPen>
@@ -382,4 +382,4 @@ private:
     /*! \endcond docNever */
 };
 
-#endif // QHEXEDIT_H
+#endif // QHEXEDIT_HPP_

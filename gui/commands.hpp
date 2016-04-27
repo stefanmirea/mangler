@@ -1,5 +1,5 @@
-#ifndef COMMANDS_H
-#define COMMANDS_H
+#ifndef COMMANDS_HPP_
+#define COMMANDS_HPP_
 
 /** \cond docNever */
 
@@ -44,4 +44,4 @@ private:
 
 /** \endcond docNever */
 
-#endif // COMMANDS_H
+#endif // COMMANDS_HPP_
