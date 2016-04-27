@@ -70,7 +70,7 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     const QByteArray ba = file_q->readAll();
 
     hexViewer->setData(ba);
-    searchBar = new SearchBar();
+    searchBar = new SearchBar(hexViewer);
     QVBoxLayout *hexaLayout = new QVBoxLayout;
     hexaLayout->setContentsMargins(QMargins());
     hexaLayout->addWidget(hexViewer);

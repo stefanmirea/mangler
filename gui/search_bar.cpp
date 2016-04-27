@@ -23,8 +23,10 @@
 
 #include "search_bar.hpp"
 #include <QHBoxLayout>
+#include <iostream>
 
-SearchBar::SearchBar(QWidget *parent) : QWidget(parent)
+SearchBar::SearchBar(QHexEdit *hexedit, QWidget *parent) :
+    QWidget(parent), hexedit(hexedit)
 {
     search = new QLabel(QString("Search:"), this);
     text = new QLineEdit(this);
@@ -32,8 +34,12 @@ SearchBar::SearchBar(QWidget *parent) : QWidget(parent)
     hex = new QRadioButton(QString("Hex"), this);
     dec = new QRadioButton(QString("Dec"), this);
     string = new QRadioButton(QString("String"), this);
+
     next = new QPushButton();
+    connect(next, SIGNAL (clicked()), this, SLOT (findNext()));
+
     previous = new QPushButton();
+    connect(previous, SIGNAL (clicked()), this, SLOT (findPrev()));
 
     next->setIcon(QIcon::fromTheme("go-next", QIcon(":/icons/next.png")));
     previous->setIcon(QIcon::fromTheme("go-previous", QIcon(":/icons/previous.png")));
@@ -60,3 +66,55 @@ SearchBar::SearchBar(QWidget *parent) : QWidget(parent)
     setMaximumHeight(80);
 }
 
+QByteArray SearchBar::getInput()
+{
+    QByteArray input;
+    if(text->text().isEmpty() == false)
+    {
+        if(hex->isChecked() == true)
+        {
+            input =  QByteArray::fromHex(text->text().toLatin1());
+            std::cerr << "HEX\n";
+        }
+
+        else
+        if(dec->isChecked() == true)
+        {
+            int value = text->text().toInt();
+            input =  QByteArray::number(value);
+            std::cerr << "DEC\n";
+        }
+
+        else
+        if(string->isChecked() == true)
+        {
+            input = QByteArray(text->text().toUtf8());
+            std::cerr << "STR\n";
+        }
+    }
+
+    qDebug(text->text().toLatin1());
+    return input;
+}
+
+int SearchBar::findNext()
+{
+    QByteArray searchInput = getInput();
+    if(searchInput.length() == 0)
+    {
+        return -1;
+    }
+
+    qint64 start = hexedit->cursorPosition() / 2;
+    qint64 newPosition = -1;
+
+    newPosition = hexedit->indexOf(searchInput, start);
+    std::cerr <<"New pos: " << newPosition;
+
+    return newPosition;
+}
+
+int SearchBar::findPrev()
+{
+    return newPosition;
+}
