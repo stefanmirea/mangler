@@ -24,6 +24,9 @@
 #include "executable_viewer.hpp"
 #include "QDesktopWidget"
 #include "QApplication"
+#include <QFile>
+#include <qhexedit.h>
+#include <iostream>
 
 ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     QWidget(parent), fileUnit(fileUnit)
@@ -54,8 +57,19 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     /* Center hex viewer and search bar */
     const char raw[] = {0xfa, 0x08, 0xff, 0x32, 0xf1, 0xa0, 0x3a, 0x84,
                         0xb2, 0x18, 0xac, 0xaa, 0x01, 0xa0, 0x3a, 0x84};
-    QByteArray hexdump(raw);
-    hexViewer = new HexViewer(hexdump, 8, hierarchicalViewer, this);
+
+    //hexViewer = new HexViewer(hexdump, 8, hierarchicalViewer, this);
+    hexViewer = new QHexEdit();
+
+    file_q = new QFile();
+
+    file_q->setFileName("/home/adrian/Desktop/a.out");
+    file_q->open(QIODevice::ReadOnly);
+    std::cerr << "--- " << file_q->isReadable() << " \n" << file_q->size() << "\n";
+
+    const QByteArray ba = file_q->readAll();
+
+    hexViewer->setData(ba);
     searchBar = new SearchBar();
     QVBoxLayout *hexaLayout = new QVBoxLayout;
     hexaLayout->setContentsMargins(QMargins());
