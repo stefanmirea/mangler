@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-
+QMAKE_CXXFLAGS += -std=gnu++0x
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = mangler
@@ -31,7 +31,6 @@ SOURCES +=\
     elf/segment_contents_container.cpp \
     elf/section_contents_container.cpp \
     gui/executable_viewer.cpp \
-    gui/hex_viewer.cpp \
     gui/hierarchical_viewer.cpp \
     gui/main_window.cpp \
     gui/search_bar.cpp \
@@ -39,7 +38,10 @@ SOURCES +=\
     gui/special_representation/code/asm_viewer.cpp \
     gui/special_representation/code/modify_asmbar.cpp \
     gui/special_representation/code/do.cpp \
-    gui/special_representation/default.cpp
+    gui/special_representation/default.cpp \
+    gui/qhexedit.cpp \
+    gui/chunks.cpp \
+    gui/commands.cpp
 
 HEADERS  += \
     core/code_container.hpp \
@@ -66,13 +68,15 @@ HEADERS  += \
     dependencies/elfio/elfio_dump.hpp \
     dependencies/elfio/elfio.hpp \
     gui/executable_viewer.hpp \
-    gui/hex_viewer.hpp \
     gui/hierarchical_viewer.hpp \
     gui/main_window.hpp \
     gui/search_bar.hpp \
     gui/hierarchy_node.hpp \
     gui/special_representation/code/asm_viewer.hpp \
-    gui/special_representation/code/modify_asmbar.hpp
+    gui/special_representation/code/modify_asmbar.hpp \
+    gui/qhexedit.hpp \
+    gui/commands.hpp \
+    gui/chunks.hpp
 
 RESOURCES += \
     gui/mangler.qrc

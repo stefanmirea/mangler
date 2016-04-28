@@ -30,17 +30,25 @@
 #include <QGroupBox>
 #include <QRadioButton>
 #include <QPushButton>
+#include <QByteArray>
+#include <qhexedit.hpp>
 
 class SearchBar : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SearchBar(QWidget *parent = 0);
+    explicit SearchBar(QHexEdit *hexedit, QWidget *parent = 0);
 
 signals:
 
 public slots:
+    int findNext();
+    int findPrev();
 private:
+    QByteArray getInput();
+
+    enum search_type {HEX, DEC, STRING};
+    QHexEdit *hexedit;
     QLabel *search;
     QLineEdit *text;
     QGroupBox *radiobox;

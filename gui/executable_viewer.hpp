@@ -30,9 +30,11 @@
 #include <QSplitter>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QFile>
+#include <QIODevice>
 
 #include "hierarchical_viewer.hpp"
-#include "hex_viewer.hpp"
+#include "qhexedit.hpp"
 #include "search_bar.hpp"
 
 #include "file_unit.hpp"
@@ -57,10 +59,9 @@ public slots:
 private:
     QSplitter *split;
     HierarchicalViewer *hierarchicalViewer;
-    HexViewer *hexViewer;
+    QHexEdit *hexViewer;
     SearchBar *searchBar;
     FileUnit *fileUnit;
-
     QWidget *defaultSpecialRep;
     QWidget *createDefaultSpecialRep();
 };

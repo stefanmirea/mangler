@@ -27,9 +27,8 @@
 #include <QWidget>
 #include <QTreeView>
 #include <QStandardItemModel>
-#include "code_container.hpp"
 
-class CodeContainer::ASMViewer : public QTreeView
+class ASMViewer : public QTreeView
 {
 public:
     ASMViewer(QWidget *parent = 0);
