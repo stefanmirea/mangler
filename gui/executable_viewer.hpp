@@ -62,7 +62,6 @@ private:
     QHexEdit *hexViewer;
     SearchBar *searchBar;
     FileUnit *fileUnit;
-    QFile *file_q;
     QWidget *defaultSpecialRep;
     QWidget *createDefaultSpecialRep();
 };
