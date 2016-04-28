@@ -28,9 +28,8 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
-#include "code_container.hpp"
 
-class CodeContainer::ModifyASMBar : public QWidget
+class ModifyASMBar : public QWidget
 {
     Q_OBJECT
 public:
