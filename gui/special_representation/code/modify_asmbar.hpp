@@ -28,21 +28,24 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QPushButton>
+#include "asm_viewer.hpp"
 
 class ModifyASMBar : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ModifyASMBar(QWidget *parent = 0);
+    explicit ModifyASMBar(ASMViewer *asmviewer, QWidget *parent = 0);
 
 signals:
 
 public slots:
+    bool editInstruction();
 private:
 private:
     QLabel *modify;
     QLineEdit *text;
     QPushButton *ok;
+    ASMViewer *asmviewer;
 };
 
 #endif // MODIFY_ASMBAR_HPP_

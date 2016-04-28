@@ -23,8 +23,10 @@
 
 #include "modify_asmbar.hpp"
 #include <QHBoxLayout>
+#include <iostream>
 
-ModifyASMBar::ModifyASMBar(QWidget *parent) : QWidget(parent)
+ModifyASMBar::ModifyASMBar(ASMViewer *asmviewer, QWidget *parent) :
+    QWidget(parent), asmviewer(asmviewer)
 {
     modify = new QLabel(QString("Modify:"), this);
     text = new QLineEdit(this);
@@ -37,5 +39,12 @@ ModifyASMBar::ModifyASMBar(QWidget *parent) : QWidget(parent)
     layout->addWidget(ok);
     setLayout(layout);
     setMaximumHeight(80);
+
+    connect(ok, SIGNAL(clicked()), this, SLOT(editInstruction()));
+}
+
+bool ModifyASMBar::editInstruction()
+{
+    std::cerr << "OK!\n";
 }
 

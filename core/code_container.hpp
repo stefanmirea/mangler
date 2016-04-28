@@ -25,6 +25,8 @@
 #define CODE_CONTAINER_HPP_
 
 #include "container.hpp"
+#include "special_representation/code/asm_viewer.hpp"
+#include "special_representation/code/modify_asmbar.hpp"
 
 /**
  * Generic class for areas containing executable machine code.
@@ -42,8 +44,8 @@ public:
     virtual ~CodeContainer();
 
 private:
-    class ASMViewer;
-    class ModifyASMBar;
+    ASMViewer *asmView;
+    ModifyASMBar *asmBar;
     bool injectionPossible;
 };
 

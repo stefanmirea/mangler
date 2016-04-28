@@ -32,13 +32,13 @@ QWidget *CodeContainer::doSpecialRepresentation(bool &keepAfterNodeDeselection)
     /* create disassembly area */
     QWidget *area = new QWidget();
 
-    ASMViewer *asmView = new ASMViewer(area);
-    ModifyASMBar *modifyBar = new ModifyASMBar(area);
+    asmView = new ASMViewer(area);
+    asmBar = new ModifyASMBar(asmView, area);
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(QMargins());
     layout->addWidget(asmView);
-    layout->addWidget(modifyBar);
+    layout->addWidget(asmBar);
 
     area->setLayout(layout);
 
