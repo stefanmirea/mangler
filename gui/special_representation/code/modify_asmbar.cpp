@@ -26,7 +26,7 @@
 #include <iostream>
 
 ModifyASMBar::ModifyASMBar(ASMViewer *asmviewer, QWidget *parent) :
-    QWidget(parent), asmviewer(asmviewer)
+    QWidget(parent), asmViewer(asmViewer)
 {
     modify = new QLabel(QString("Modify:"), this);
     text = new QLineEdit(this);

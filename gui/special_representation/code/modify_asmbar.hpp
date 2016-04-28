@@ -34,7 +34,7 @@ class ModifyASMBar : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ModifyASMBar(ASMViewer *asmviewer, QWidget *parent = 0);
+    explicit ModifyASMBar(ASMViewer *asmViewer, QWidget *parent = 0);
 
 signals:
 
@@ -45,7 +45,7 @@ private:
     QLabel *modify;
     QLineEdit *text;
     QPushButton *ok;
-    ASMViewer *asmviewer;
+    ASMViewer *asmViewer;
 };
 
 #endif // MODIFY_ASMBAR_HPP_
