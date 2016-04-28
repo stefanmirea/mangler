@@ -23,7 +23,7 @@
 
 #include "asm_viewer.hpp"
 
-CodeContainer::ASMViewer::ASMViewer(QWidget *parent) : QTreeView(parent)
+ASMViewer::ASMViewer(QWidget *parent) : QTreeView(parent)
 {
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setItemsExpandable(false);
