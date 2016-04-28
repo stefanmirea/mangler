@@ -64,8 +64,11 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     std::cerr << "--- " << file->isReadable() << " \n" << file->size() << "\n";
 
     const QByteArray ba = file->readAll();
+    file->close();
+    delete file;
 
-    hexViewer->setData(ba);
+    hexViewer->setData(ba);    
+
     searchBar = new SearchBar(hexViewer);
     QVBoxLayout *hexaLayout = new QVBoxLayout;
     hexaLayout->setContentsMargins(QMargins());
