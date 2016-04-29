@@ -23,14 +23,19 @@
 
 #include "container.hpp"
 
-Container::Container(FileUnit *file, bool expandable)
-    : file(file), expandable(expandable)
+Container::Container(FileUnit *file, bool expandable) : file(file), expandable(expandable)
 {
+    _keepSpecialRepresentation = false;
+    specialRepresentation = nullptr;
     invalidateInterval(interval);
 }
 
 Container::Container(FileUnit *file, bool expandable, const std::pair<int, int> &interval)
-    : file(file), expandable(expandable), interval(interval) {}
+    : file(file), expandable(expandable), interval(interval)
+{
+    _keepSpecialRepresentation = false;
+    specialRepresentation = nullptr;
+}
 
 FileUnit *Container::getFile()
 {
@@ -72,29 +77,35 @@ std::pair<int, int> &Container::getInterval()
     return interval;
 }
 
-/* For expandable containers, this method will generate the child containers
- * when called for the first time */
+QWidget *Container::getSpecialRepresentation()
+{
+    if (_keepSpecialRepresentation)
+        return specialRepresentation;
+    QWidget *representation = doSpecialRepresentation(_keepSpecialRepresentation);
+    if (_keepSpecialRepresentation)
+        specialRepresentation = representation;
+    return representation;
+}
+
+bool Container::keepSpecialRepresentation()
+{
+    return _keepSpecialRepresentation;
+}
+
+/* For expandable containers, this method will generate the child containers when called for the
+ * first time */
 std::vector<Container *> &Container::getInnerContainers()
 {
     return innerContainers;
 }
 
-/**
- * Override this method to draw a special representation of the container in the right pane.
- *
- * @param keepAfterNodeDeselection: Set to true if you need to keep state across container selection
- *     changes; the hierarchicalViewer will only call the method once for this container and will
- *     use the received QWidget * at further selections. If you don't need to keep state, set to
- *     false to optimize memory usage.
- */
-QWidget *Container::doSpecialRepresentation(bool &keepAfterNodeDeselection)
-{
-    keepAfterNodeDeselection = true;
-    return nullptr;
-}
-
 Container::~Container()
 {
+    if (_keepSpecialRepresentation &&
+            /* the default Container::doSpecialRepresentation() returns a must-keep nullptr */
+            specialRepresentation != nullptr)
+        delete specialRepresentation;
+
     for (unsigned int i = 0; i < parents.size(); ++i)
     {
         std::vector<Container *> &siblings = parents[i]->getInnerContainers();
@@ -145,4 +156,18 @@ bool Container::addInnerContainer(Container *container, size_t position)
     innerContainers.insert(innerContainers.begin() + position, container);
     container->getParents().push_back(this);
     return true;
+}
+
+/**
+ * Override this method to draw a special representation of the container in the right pane.
+ *
+ * @param keepAfterNodeDeselection: Set to true if you need to keep state across container selection
+ *     changes; the hierarchicalViewer will only call the method once for this container and will
+ *     use the received QWidget * at further selections. If you don't need to keep state, set to
+ *     false to optimize memory usage.
+ */
+QWidget *Container::doSpecialRepresentation(bool &keepAfterNodeDeselection)
+{
+    keepAfterNodeDeselection = true;
+    return nullptr;
 }

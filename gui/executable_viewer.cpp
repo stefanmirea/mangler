@@ -101,8 +101,9 @@ ExecutableViewer::~ExecutableViewer()
 
         QTreeWidgetItem *currentItem = hierarchicalViewer->currentItem();
 
-        /* If the currently selected HierarchyNode wanted to keep its special representation after
-         * being deselected, the QWidget will be deallocated in that node's destructor. */
+        /* If the currently selected HierarchyNode's container wanted to keep its special
+         * representation after being deselected, the QWidget will be deallocated in that
+         * container's destructor. */
         if (dynamic_cast<HierarchyNode *>(currentItem)->keepSpecialRepresentation())
 
         /* The widget must be disconnected from the splitter, otherwise the splitter will

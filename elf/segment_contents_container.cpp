@@ -34,8 +34,14 @@ std::vector<Container *> &SegmentContentsContainer::getInnerContainers()
 {
     if (innerContainers.empty())
     {
-        Container *container = new Container(getFile(), false, std::make_pair(5, 15));
-        container->setName("Nothing here");
+        Container *container;
+        
+        container = new CodeContainer(getFile(), std::make_pair(5, 15));
+        container->setName("[test] code section 1");
+        addInnerContainer(container);
+
+        container = new CodeContainer(getFile(), std::make_pair(15, 25));
+        container->setName("[test] code section 2");
         addInnerContainer(container);
     }
     return innerContainers;

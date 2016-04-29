@@ -27,10 +27,13 @@ HierarchicalViewer::HierarchicalViewer(QSplitter *split, QWidget *defaultSpecial
     QWidget *parent) : QTreeWidget(parent), defaultSpecialRep(defaultSpecialRep), split(split)
 {
     headerItem()->setHidden(true);
+    firstSelection = true;
+
     connect(this, SIGNAL(itemExpanded(QTreeWidgetItem *)),
             this, SLOT(expand(QTreeWidgetItem *)));
     connect(this, SIGNAL(currentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *)),
             this, SLOT(change(QTreeWidgetItem *, QTreeWidgetItem *)));
+    connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(select()));
 }
 
 HierarchyNode *HierarchicalViewer::addRoot(Container *container)
@@ -59,7 +62,9 @@ void HierarchicalViewer::change(QTreeWidgetItem *current, QTreeWidgetItem *previ
     /* The 1st change call:
      *  performed automatically; previous: nullptr, current: first root, selectedItems().empty()
      * The 2nd change call:
-     *  at the 1st click on a node; previous: first root, current: selected, selectedItems().empty()
+     *  at the 1st click on a node; previous: first root, current: selected,
+     *         selectedItems().empty(), if the clicked node was not the first root
+     *         selectedItems already contains the first root, otherwise
      * The 3rd change call:
      *  at the 2nd click on a node; previous & current work as expected, !selectedItems().empty()
      * Etc. */
@@ -67,22 +72,42 @@ void HierarchicalViewer::change(QTreeWidgetItem *current, QTreeWidgetItem *previ
     HierarchyNode *currentNode = dynamic_cast<HierarchyNode *>(current);
     HierarchyNode *previousNode = dynamic_cast<HierarchyNode *>(previous);
 
-    QWidget *currentSpecialRep = split->widget(2);
-
-    QWidget *newSpecialRep = currentNode->getSpecialRepresentation();
-    if (!newSpecialRep)
-        newSpecialRep = defaultSpecialRep;
-
-    if (newSpecialRep != currentSpecialRep)
+    if (previous && (selectedItems().empty() ||
+        current == previous || /* for the case when the first selected item is the first root;
+                                * see select() below */
+        !currentNode->sharesContainer(previousNode)))
     {
-        if (!selectedItems().empty() && !previousNode->keepSpecialRepresentation())
-            delete currentSpecialRep;
-        else
-            /* If the previous representation was the default, it will be deallocated in the
-             * ExecutableViewer destructor; else, in the destructor of the HierarchyNode which kept
-             * the QWidget. */
-            currentSpecialRep->setParent(Q_NULLPTR);
+        QWidget *currentSpecialRep = split->widget(2);
 
-        split->addWidget(newSpecialRep);
+        QWidget *newSpecialRep = currentNode->getSpecialRepresentation();
+        if (!newSpecialRep)
+            newSpecialRep = defaultSpecialRep;
+
+        if (newSpecialRep != currentSpecialRep)
+        {
+            if (!selectedItems().empty() && current != previous &&
+                !previousNode->keepSpecialRepresentation())
+                delete currentSpecialRep;
+            else
+                /* If the previous representation was the default one, it will be deallocated in the
+                 * ExecutableViewer destructor; else, in the destructor of the Container which kept
+                 * the QWidget. */
+                currentSpecialRep->setParent(Q_NULLPTR);
+
+            split->addWidget(newSpecialRep);
+        }
+    }
+}
+
+void HierarchicalViewer::select()
+{
+    QTreeWidgetItem *current = currentItem();
+
+    /* The only selection change that is not automatically caught by currentItemChanged because of
+     * the first top level item being the current one by default. */
+    if (firstSelection && indexOfTopLevelItem(current) == 0)
+    {
+        change(current, current);
+        firstSelection = false;
     }
 }

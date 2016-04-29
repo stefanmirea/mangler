@@ -33,15 +33,13 @@ public:
     explicit HierarchyNode(Container *container, QTreeWidget *parent = 0);
     explicit HierarchyNode(Container *container, QTreeWidgetItem *parent = 0);
     bool createChildren();
-    bool keepSpecialRepresentation();
     QWidget *getSpecialRepresentation();
-    virtual ~HierarchyNode();
+    bool keepSpecialRepresentation();
+    bool sharesContainer(HierarchyNode *node);
 private:
     void _HierarchyNode(Container *container);
     Container *container;
     bool everExpanded;
-    bool _keepSpecialRepresentation;
-    QWidget *specialRepresentation;
 };
 
 #endif // HIERARCHY_NODE_HPP_
