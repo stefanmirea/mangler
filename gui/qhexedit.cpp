@@ -310,6 +310,7 @@ void QHexEdit::ensureVisible()
 qint64 QHexEdit::indexOf(const QByteArray &ba, qint64 from)
 {
     qint64 pos = _chunks->indexOf(ba, from);
+    qDebug() << "Next is " << pos << "\n";
     if (pos > -1)
     {
         qint64 curPos = pos*2;
@@ -329,6 +330,7 @@ bool QHexEdit::isModified()
 qint64 QHexEdit::lastIndexOf(const QByteArray &ba, qint64 from)
 {
     qint64 pos = _chunks->lastIndexOf(ba, from);
+    qDebug() << "Next is " << pos << "\n";
     if (pos > -1)
     {
         qint64 curPos = pos*2;
