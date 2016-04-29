@@ -27,6 +27,7 @@
 #include <QFile>
 #include <qhexedit.hpp>
 #include <iostream>
+#include <qdebug.h>
 
 ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     QWidget(parent), fileUnit(fileUnit)

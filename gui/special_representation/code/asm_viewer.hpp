@@ -32,6 +32,7 @@ class ASMViewer : public QTreeView
 {
 public:
     ASMViewer(QWidget *parent = 0);
+    void editModel(int row, int col, QStandardItem *item);
 private:
     QStandardItemModel *model;
 };

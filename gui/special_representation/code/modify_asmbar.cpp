@@ -24,6 +24,7 @@
 #include "modify_asmbar.hpp"
 #include <QHBoxLayout>
 #include <iostream>
+#include <QDebug>
 
 ModifyASMBar::ModifyASMBar(ASMViewer *asmViewer, QWidget *parent) :
     QWidget(parent), asmViewer(asmViewer)
@@ -46,5 +47,16 @@ ModifyASMBar::ModifyASMBar(ASMViewer *asmViewer, QWidget *parent) :
 bool ModifyASMBar::editInstruction()
 {
     std::cerr << "OK!\n";
+    QModelIndexList list = asmViewer->selectionModel()->selectedIndexes();
+
+    QString address = list[0].data().toString();
+    QString machineCode = list[0].data().toString();
+    QString opCode = list[0].data().toString();
+    QString args = list[0].data().toString();
+
+
+
+    std::cerr << list.size() << "\n";
+    std::cerr << address.toStdString();
 }
 
