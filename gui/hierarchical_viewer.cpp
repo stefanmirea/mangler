@@ -53,8 +53,10 @@ HierarchyNode *HierarchicalViewer::addChild(HierarchyNode *parent, Container *co
 void HierarchicalViewer::expand(QTreeWidgetItem *item)
 {
     HierarchyNode *node = dynamic_cast<HierarchyNode *>(item);
-    if (node)
-        node->createChildren();
+#ifdef DEBUG
+    assert(node != nullptr);
+#endif
+    node->createChildren();
 }
 
 void HierarchicalViewer::change(QTreeWidgetItem *current, QTreeWidgetItem *previous)
@@ -71,6 +73,11 @@ void HierarchicalViewer::change(QTreeWidgetItem *current, QTreeWidgetItem *previ
 
     HierarchyNode *currentNode = dynamic_cast<HierarchyNode *>(current);
     HierarchyNode *previousNode = dynamic_cast<HierarchyNode *>(previous);
+
+#ifdef DEBUG
+    assert(!((current != nullptr) ^ (currentNode != nullptr)) &&
+           !((previous != nullptr) ^ (previousNode != nullptr)));
+#endif
 
     if (previous && (selectedItems().empty() ||
         current == previous || /* for the case when the first selected item is the first root;

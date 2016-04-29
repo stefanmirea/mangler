@@ -99,12 +99,18 @@ ExecutableViewer::~ExecutableViewer()
     {
         delete defaultSpecialRep;
 
-        QTreeWidgetItem *currentItem = hierarchicalViewer->currentItem();
+        HierarchyNode *currentItem = dynamic_cast<HierarchyNode *>(
+            hierarchicalViewer->currentItem()
+        );
+
+#ifdef DEBUG
+        assert(currentItem != nullptr);
+#endif
 
         /* If the currently selected HierarchyNode's container wanted to keep its special
          * representation after being deselected, the QWidget will be deallocated in that
          * container's destructor. */
-        if (dynamic_cast<HierarchyNode *>(currentItem)->keepSpecialRepresentation())
+        if (currentItem->keepSpecialRepresentation())
 
         /* The widget must be disconnected from the splitter, otherwise the splitter will
          * try to deallocate it too. Setting the parent to null is safe as the splitter will get
