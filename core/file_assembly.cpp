@@ -22,6 +22,7 @@
  */
 
 #include "file_assembly.hpp"
+#include <QString>
 
 FileAssembly::FileAssembly() {}
 
@@ -33,7 +34,7 @@ FileAssembly::Disassembler::~Disassembler() {}
 
 std::string FileAssembly::Disassembler::disassembleCode(uint8_t *code, unsigned int length)
 {
-    return std::string("");
+    return std::string("nop");
 }
 
 FileAssembly::Assembler::Assembler() {}

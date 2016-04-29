@@ -193,7 +193,7 @@ qint64 Chunks::lastIndexOf(const QByteArray &ba, qint64 from)
         qint64 sPos = pos - BUFFER_SIZE - (qint64)ba.size() + 1;
         if (sPos < 0)
             sPos = 0;
-        buffer = data(sPos, pos - sPos);
+        buffer = data(sPos, pos - sPos + 1);
         int findPos = buffer.lastIndexOf(ba);
         if (findPos >= 0)
             result = sPos + (qint64)findPos;

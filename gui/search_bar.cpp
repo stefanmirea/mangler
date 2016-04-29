@@ -120,5 +120,17 @@ int SearchBar::findNext()
 
 int SearchBar::findPrev()
 {
-    return -1;
+    QByteArray searchInput = getInput();
+    if(searchInput.length() == 0)
+    {
+        return -1;
+    }
+
+    qint64 start = hexedit->cursorPosition() / 2;
+    qint64 newPosition = -1;
+
+    newPosition = hexedit->lastIndexOf(searchInput, start);
+    std::cerr <<"New pos: " << newPosition;
+
+    return newPosition;
 }

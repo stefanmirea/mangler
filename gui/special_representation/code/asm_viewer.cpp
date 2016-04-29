@@ -57,3 +57,8 @@ ASMViewer::ASMViewer(QWidget *parent) : QTreeView(parent)
     model->appendRow(items);
 }
 
+void ASMViewer::editModel(int row, int col, QStandardItem *item)
+{
+    model->setItem(row, col, item);
+}
+

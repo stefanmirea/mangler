@@ -29,8 +29,6 @@
 #include "section_contents_container.hpp"
 #include <utility>
 
-//#include "code_container.hpp"
-
 using namespace elf;
 
 ELFFile::ELFFile(const std::string &filename) : FileUnit(filename)
@@ -45,10 +43,6 @@ ELFFile::ELFFile(const std::string &filename) : FileUnit(filename)
         std::vector<Container *> &topLevelContainers = getTopLevelContainers();
         topLevelContainers.push_back(new ELFHeaderContainer(this, std::make_pair(0, 10)));
         topLevelContainers.push_back(new ProgramHeaderTableContainer(this, std::make_pair(10, 20)));
-        //CodeContainer *c = new CodeContainer(this, std::make_pair(0, 10));
-        //c->setName("first root with representation");
-        //topLevelContainers.push_back(c);
-        //topLevelContainers.push_back(c);
         topLevelContainers.push_back(new SectionHeaderTableContainer(this, std::make_pair(20, 30)));
         topLevelContainers.push_back(new SegmentContentsContainer(this));
         topLevelContainers.push_back(new SectionContentsContainer(this));

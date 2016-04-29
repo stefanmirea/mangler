@@ -29,6 +29,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include "asm_viewer.hpp"
+#include <file_assembly.hpp>
 
 class ModifyASMBar : public QWidget
 {
