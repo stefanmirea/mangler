@@ -66,4 +66,4 @@ private:
     QWidget *createDefaultSpecialRep();
 };
 
-#endif // EXECUTABLE_VIEWER_HPP
+#endif // EXECUTABLE_VIEWER_HPP_

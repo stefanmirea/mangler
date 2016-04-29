@@ -35,7 +35,7 @@ std::vector<Container *> &SegmentContentsContainer::getInnerContainers()
     if (innerContainers.empty())
     {
         Container *container;
-        
+
         container = new CodeContainer(getFile(), std::make_pair(5, 15));
         container->setName("[test] code section 1");
         addInnerContainer(container);

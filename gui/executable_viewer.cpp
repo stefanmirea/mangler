@@ -67,7 +67,7 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     file->close();
     delete file;
 
-    hexViewer->setData(ba);    
+    hexViewer->setData(ba);
 
     searchBar = new SearchBar(hexViewer);
     QVBoxLayout *hexaLayout = new QVBoxLayout;
