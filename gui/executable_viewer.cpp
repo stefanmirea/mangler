@@ -112,4 +112,6 @@ ExecutableViewer::~ExecutableViewer()
             split->widget(2)->setParent(Q_NULLPTR);
     }
     /* else defaultSpecialRep will be deallocated automatically by the splitter destructor */
+
+    delete fileUnit;
 }
