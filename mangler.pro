@@ -15,8 +15,9 @@ TEMPLATE = app
 INCLUDEPATH += \
     $$PWD/core \
     $$PWD/dependencies \
+    $$PWD/dependencies/QHexEdit \
     $$PWD/elf \
-    $$PWD/gui \
+    $$PWD/gui
 
 SOURCES +=\
     core/code_container.cpp \
@@ -31,6 +32,9 @@ SOURCES +=\
     elf/section_header_table_container.cpp \
     elf/segment_contents_container.cpp \
     elf/section_contents_container.cpp \
+    dependencies/QHexEdit/qhexedit.cpp \
+    dependencies/QHexEdit/chunks.cpp \
+    dependencies/QHexEdit/commands.cpp \
     gui/executable_viewer.cpp \
     gui/hierarchical_viewer.cpp \
     gui/main_window.cpp \
@@ -39,10 +43,7 @@ SOURCES +=\
     gui/special_representation/code/asm_viewer.cpp \
     gui/special_representation/code/modify_asmbar.cpp \
     gui/special_representation/code/do.cpp \
-    gui/special_representation/default.cpp \
-    gui/qhexedit.cpp \
-    gui/chunks.cpp \
-    gui/commands.cpp
+    gui/special_representation/default.cpp
 
 HEADERS  += \
     core/code_container.hpp \
@@ -68,16 +69,16 @@ HEADERS  += \
     dependencies/elfio/elfio_dynamic.hpp \
     dependencies/elfio/elfio_dump.hpp \
     dependencies/elfio/elfio.hpp \
+    dependencies/QHexEdit/qhexedit.hpp \
+    dependencies/QHexEdit/chunks.hpp \
+    dependencies/QHexEdit/commands.hpp \
     gui/executable_viewer.hpp \
     gui/hierarchical_viewer.hpp \
     gui/main_window.hpp \
     gui/search_bar.hpp \
     gui/hierarchy_node.hpp \
     gui/special_representation/code/asm_viewer.hpp \
-    gui/special_representation/code/modify_asmbar.hpp \
-    gui/qhexedit.hpp \
-    gui/commands.hpp \
-    gui/chunks.hpp
+    gui/special_representation/code/modify_asmbar.hpp
 
 RESOURCES += \
     gui/mangler.qrc
