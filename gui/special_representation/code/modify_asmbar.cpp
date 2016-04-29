@@ -41,22 +41,63 @@ ModifyASMBar::ModifyASMBar(ASMViewer *asmViewer, QWidget *parent) :
     setLayout(layout);
     setMaximumHeight(80);
 
+    fileAssembly = new FileAssembly();
+
     connect(ok, SIGNAL(clicked()), this, SLOT(editInstruction()));
 }
 
 bool ModifyASMBar::editInstruction()
 {
     std::cerr << "OK!\n";
+
     QModelIndexList list = asmViewer->selectionModel()->selectedIndexes();
+    QString inputInstruction = text->text();
 
-    QString address = list[0].data().toString();
-    QString machineCode = list[0].data().toString();
-    QString opCode = list[0].data().toString();
-    QString args = list[0].data().toString();
+    if(list.size() && inputInstruction.isEmpty() == false)
+    {
+        QString address = list[0].data().toString();
+        QString machineCode = list[1].data().toString();
+        QString opCode = list[2].data().toString();
+        QString args = list[3].data().toString();
 
+        int selectedRow = list[0].row();
+        int instrSize = machineCode.size() / 4 + 2;
 
+        /* TODO: The input instruction will also be updated in the elfio backend
+         * and hexedit */
 
-    std::cerr << list.size() << "\n";
-    std::cerr << address.toStdString();
+        /* TODO: The instruction will be disassembled and the opCode and args
+         * will be updated */
+
+        /* TODO: deallocate memory for old QStandardItem */
+
+        if(inputInstruction.contains("90")) /* Testing purposes, not a rigorous check */
+        {
+            QString nops;
+            for(unsigned int i = 0; i < instrSize; i++)
+                nops.append("90 ");
+            asmViewer->editModel(selectedRow, 1, new QStandardItem(nops));
+
+            asmViewer->editModel(selectedRow, 2,
+                            new QStandardItem(QString::fromStdString(FileAssembly::Disassembler::
+                            disassembleCode(nullptr, 1))));
+
+            asmViewer->editModel(selectedRow, 3,
+                            new QStandardItem(QString("")));
+        }
+
+        else
+        {
+            asmViewer->editModel(selectedRow, 1, new QStandardItem(inputInstruction));
+            asmViewer->editModel(selectedRow, 2,
+                            new QStandardItem(QString("xor")));
+
+            asmViewer->editModel(selectedRow, 3,
+                                    new QStandardItem(QString("eax, eax")));
+        }
+
+        std::cerr << list[0].row() << "\n";
+        std::cerr << address.toStdString();
+    }
 }
 

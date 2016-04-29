@@ -29,6 +29,7 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include "asm_viewer.hpp"
+#include <file_assembly.hpp>
 
 class ModifyASMBar : public QWidget
 {
@@ -45,6 +46,7 @@ private:
     QLineEdit *text;
     QPushButton *ok;
     ASMViewer *asmViewer;
+    FileAssembly *fileAssembly;
 };
 
 #endif // MODIFY_ASMBAR_HPP_
