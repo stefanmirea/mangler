@@ -27,6 +27,7 @@ HierarchicalViewer::HierarchicalViewer(QSplitter *split, QWidget *defaultSpecial
     QWidget *parent) : QTreeWidget(parent), defaultSpecialRep(defaultSpecialRep), split(split)
 {
     headerItem()->setHidden(true);
+    setFont(QFont("Monospace", 10));
     firstSelection = true;
 
     connect(this, SIGNAL(itemExpanded(QTreeWidgetItem *)),

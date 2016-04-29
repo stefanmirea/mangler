@@ -29,6 +29,7 @@ ASMViewer::ASMViewer(QWidget *parent) : QTreeView(parent)
     setItemsExpandable(false);
     setRootIsDecorated(false);
     setUniformRowHeights(true);
+    setFont(QFont("Monospace", 10));
 
     model = new QStandardItemModel();
     model->setColumnCount(4);
