@@ -44,9 +44,11 @@ signals:
 public slots:
     void expand(QTreeWidgetItem *item);
     void change(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+    void select();
 private:
     QWidget *defaultSpecialRep;
     QSplitter *split;
+    bool firstSelection;
 };
 
 #endif // HIERACHICAL_VIEWER_HPP_

@@ -40,8 +40,7 @@ std::vector<Container *> &SectionContentsContainer::getInnerContainers()
         container->setName("[test] non-code section");
         addInnerContainer(container);
 
-        container = new CodeContainer(getFile(), std::make_pair(40, 50));
-        container->setName("[test] code section");
+        container = getFile()->getTopLevelContainers()[3]->getInnerContainers()[0];
         addInnerContainer(container);
     }
     return innerContainers;

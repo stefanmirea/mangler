@@ -52,9 +52,10 @@ public:
     std::string &getName();
     void setName(const std::string &name);
     std::pair<int, int> &getInterval();
+    QWidget *getSpecialRepresentation();
+    bool keepSpecialRepresentation();
 
     virtual std::vector<Container *> &getInnerContainers();
-    virtual QWidget *doSpecialRepresentation(bool &keepAfterNodeDeselection);
     virtual ~Container();
 
     static bool isValidInterval(std::pair<int, int> &interval);
@@ -71,6 +72,9 @@ private:
     bool expandable;
     std::pair<int, int> interval;
     std::string name;
+    bool _keepSpecialRepresentation;
+    QWidget *specialRepresentation;
+    virtual QWidget *doSpecialRepresentation(bool &keepAfterNodeDeselection);
 };
 
 #endif // CONTAINER_HPP_

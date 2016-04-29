@@ -139,7 +139,7 @@ void MainWindow::open()
 
     /* check file type */
     FileUnit *file;
-    do { 
+    do {
         file = new elf::ELFFile(filename.toStdString());
         if (file->getOpenStatus())
             break;

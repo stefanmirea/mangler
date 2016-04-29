@@ -67,7 +67,7 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     file->close();
     delete file;
 
-    hexViewer->setData(ba);    
+    hexViewer->setData(ba);
 
     searchBar = new SearchBar(hexViewer);
     QVBoxLayout *hexaLayout = new QVBoxLayout;
@@ -99,11 +99,18 @@ ExecutableViewer::~ExecutableViewer()
     {
         delete defaultSpecialRep;
 
-        QTreeWidgetItem *currentItem = hierarchicalViewer->currentItem();
+        HierarchyNode *currentItem = dynamic_cast<HierarchyNode *>(
+            hierarchicalViewer->currentItem()
+        );
 
-        /* If the currently selected HierarchyNode wanted to keep its special representation after
-         * being deselected, the QWidget will be deallocated in that node's destructor. */
-        if (dynamic_cast<HierarchyNode *>(currentItem)->keepSpecialRepresentation())
+#ifdef DEBUG
+        assert(currentItem != nullptr);
+#endif
+
+        /* If the currently selected HierarchyNode's container wanted to keep its special
+         * representation after being deselected, the QWidget will be deallocated in that
+         * container's destructor. */
+        if (currentItem->keepSpecialRepresentation())
 
         /* The widget must be disconnected from the splitter, otherwise the splitter will
          * try to deallocate it too. Setting the parent to null is safe as the splitter will get
@@ -111,4 +118,6 @@ ExecutableViewer::~ExecutableViewer()
             split->widget(2)->setParent(Q_NULLPTR);
     }
     /* else defaultSpecialRep will be deallocated automatically by the splitter destructor */
+
+    delete fileUnit;
 }
