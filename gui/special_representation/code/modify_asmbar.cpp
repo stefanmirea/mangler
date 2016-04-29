@@ -25,7 +25,7 @@
 #include <QHBoxLayout>
 #include <iostream>
 
-ModifyASMBar::ModifyASMBar(ASMViewer *asmviewer, QWidget *parent) :
+ModifyASMBar::ModifyASMBar(ASMViewer *asmViewer, QWidget *parent) :
     QWidget(parent), asmViewer(asmViewer)
 {
     modify = new QLabel(QString("Modify:"), this);
