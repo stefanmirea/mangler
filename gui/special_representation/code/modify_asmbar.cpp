@@ -41,8 +41,6 @@ ModifyASMBar::ModifyASMBar(ASMViewer *asmViewer, QWidget *parent) :
     setLayout(layout);
     setMaximumHeight(80);
 
-    fileAssembly = new FileAssembly();
-
     connect(ok, SIGNAL(clicked()), this, SLOT(editInstruction()));
 }
 

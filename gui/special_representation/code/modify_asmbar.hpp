@@ -46,7 +46,6 @@ private:
     QLineEdit *text;
     QPushButton *ok;
     ASMViewer *asmViewer;
-    FileAssembly *fileAssembly;
 };
 
 #endif // MODIFY_ASMBAR_HPP_
