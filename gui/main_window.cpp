@@ -242,8 +242,10 @@ void MainWindow::updateActions()
     closeAllAction->setEnabled(hasActiveSubWindow);
     tileAction->setEnabled(hasActiveSubWindow);
     cascadeAction->setEnabled(hasActiveSubWindow);
-    nextAction->setEnabled(hasActiveSubWindow);
-    previousAction->setEnabled(hasActiveSubWindow);
+
+    int subWindowsNum = mdiArea->subWindowList().size();
+    nextAction->setEnabled(subWindowsNum >= 2);
+    previousAction->setEnabled(subWindowsNum >= 2);
 }
 
 void MainWindow::updateCheckableWindows()
