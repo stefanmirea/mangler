@@ -51,6 +51,23 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     editMenu->addAction(copyAction);
     editMenu->addAction(pasteAction);
 
+    windowMenu = menuBar()->addMenu(QString("Window"));
+    connect(windowMenu, SIGNAL(aboutToShow()), this, SLOT(updateCheckableWindows()));
+    windowMenu->addAction(closeAction);
+    windowMenu->addAction(closeAllAction);
+    windowMenu->addSeparator();
+    windowMenu->addAction(tileAction);
+    windowMenu->addAction(cascadeAction);
+    windowMenu->addSeparator();
+    windowMenu->addAction(nextAction);
+    windowMenu->addAction(previousAction);
+
+    windowActionGroup = new QActionGroup(this);
+    signalMapper = new QSignalMapper(this);
+    connect(signalMapper, SIGNAL(mapped(QWidget *)), this, SLOT(selectWindow(QWidget *)));
+
+    updateCheckableWindows();
+
     QMenu *helpMenu = menuBar()->addMenu(QString("Help"));
     helpMenu->addAction(aboutAction);
 
@@ -102,6 +119,25 @@ void MainWindow::createActions()
     pasteAction = new QAction(QString("Paste Hex"), this);
     pasteAction->setIcon(QIcon::fromTheme("edit-paste", QIcon(":/icons/paste.png")));
     connect(pasteAction, SIGNAL(triggered()), this, SLOT(paste()));
+
+    /* Window menu */
+    closeAction = new QAction(QString("Close"), this);
+    connect(closeAction, SIGNAL(triggered()), mdiArea, SLOT(closeActiveSubWindow()));
+
+    closeAllAction = new QAction(QString("Close All"), this);
+    connect(closeAllAction, SIGNAL(triggered()), mdiArea, SLOT(closeAllSubWindows()));
+
+    tileAction = new QAction(QString("Tile"), this);
+    connect(tileAction, SIGNAL(triggered()), mdiArea, SLOT(tileSubWindows()));
+
+    cascadeAction = new QAction(QString("Cascade"), this);
+    connect(cascadeAction, SIGNAL(triggered()), mdiArea, SLOT(cascadeSubWindows()));
+
+    nextAction = new QAction(QString("Next"), this);
+    connect(nextAction, SIGNAL(triggered()), mdiArea, SLOT(activateNextSubWindow()));
+
+    previousAction = new QAction(QString("Previous"), this);
+    connect(previousAction, SIGNAL(triggered()), mdiArea, SLOT(activatePreviousSubWindow()));
 
     /* Help menu */
     aboutAction = new QAction(QString("About"), this);
@@ -190,4 +226,73 @@ void MainWindow::updateActions()
     redoAction->setEnabled(false);
     copyAction->setEnabled(false);
     pasteAction->setEnabled(false);
+
+    closeAction->setEnabled(hasActiveSubWindow);
+    closeAllAction->setEnabled(hasActiveSubWindow);
+    tileAction->setEnabled(hasActiveSubWindow);
+    cascadeAction->setEnabled(hasActiveSubWindow);
+    nextAction->setEnabled(hasActiveSubWindow);
+    previousAction->setEnabled(hasActiveSubWindow);
+}
+
+void MainWindow::updateCheckableWindows()
+{
+    /* Remove the previous checkable actions. */
+#ifdef DEBUG
+    assert(!windowMenu->actions().isEmpty());
+#endif
+    QAction *last;
+    while ((last = windowMenu->actions().back()) != previousAction)
+    {
+        windowMenu->removeAction(last);
+        if (!last->isSeparator())
+        {
+            windowActionGroup->removeAction(last);
+            /* signalMapper will automatically remove all the mappings for last if any. */
+        }
+        delete last;
+#ifdef DEBUG
+        assert(!windowMenu->actions().isEmpty());
+#endif
+    }
+
+    if (!mdiArea->subWindowList().empty())
+    {
+        QAction *separator = new QAction(this);
+        separator->setSeparator(true);
+        windowMenu->addAction(separator);
+    }
+
+    int index = 0;
+    foreach (QMdiSubWindow *window, mdiArea->subWindowList())
+    {
+        ++index;
+        ExecutableViewer *ev = qobject_cast<ExecutableViewer *>(window->widget());
+        QAction *action = new QAction(QString::fromStdString(ev->getFileUnit()->getName()), this);
+        action->setActionGroup(windowActionGroup);
+        action->setCheckable(true);
+        QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow();
+
+#ifdef DEBUG
+        /* Reaching this point supposes there is at least one subwindow. Therefore, we also have an
+         * active subwindow. */
+        assert(activeSubWindow != nullptr);
+#endif
+
+        action->setChecked(ev == qobject_cast<ExecutableViewer *>(activeSubWindow->widget()));
+        connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
+        signalMapper->setMapping(action, window);
+        windowMenu->addAction(action);
+    }
+}
+
+void MainWindow::selectWindow(QWidget *subWindow)
+{
+    QMdiSubWindow *mdiSubWindow = dynamic_cast<QMdiSubWindow *>(subWindow);
+
+#ifdef DEBUG
+    assert(mdiSubWindow != nullptr);
+#endif
+
+    mdiArea->setActiveSubWindow(mdiSubWindow);
 }
