@@ -41,6 +41,8 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
 
     MainWindow *wn = new MainWindow();
+    for (int i = 1; i < argc; ++i)
+        wn->open(QString(argv[i]));
     wn->show();
 
     return app.exec();

@@ -149,14 +149,24 @@ void MainWindow::createActions()
 void MainWindow::open()
 {
     QString filename = QFileDialog::getOpenFileName(this, QString("Open"));
-    if (filename.isEmpty())
+    if (!filename.isEmpty())
+        open(filename);
+}
+
+void MainWindow::open(const QString &filename)
+{
+    QString canonicalName = QFileInfo(filename).canonicalFilePath();
+    if (canonicalName == "")
+    {
+        QMessageBox::critical(this, QString("Error"), QString("The file %1 does not exist.")
+                              .arg(filename));
         return;
-    filename = QFileInfo(filename).canonicalFilePath();
+    }
 
     foreach (QMdiSubWindow *window, mdiArea->subWindowList())
     {
         ExecutableViewer *ev = qobject_cast<ExecutableViewer *>(window->widget());
-        if (ev->getFileUnit()->getName() == filename.toStdString())
+        if (ev->getFileUnit()->getName() == canonicalName.toStdString())
         {
             mdiArea->setActiveSubWindow(window);
             return;
@@ -164,11 +174,11 @@ void MainWindow::open()
     }
 
     /* check read access */
-    QFile qFile(filename);
+    QFile qFile(canonicalName);
     if (!qFile.open(QFile::ReadOnly))
     {
         QMessageBox::critical(this, QString("Error"), QString("Cannot read file %1:\n%2.")
-                              .arg(filename) .arg(qFile.errorString()));
+                              .arg(canonicalName) .arg(qFile.errorString()));
         return;
     }
     qFile.close();
@@ -176,7 +186,7 @@ void MainWindow::open()
     /* check file type */
     FileUnit *file;
     do {
-        file = new elf::ELFFile(filename.toStdString());
+        file = new elf::ELFFile(canonicalName.toStdString());
         if (file->getOpenStatus())
             break;
         delete file;
@@ -184,7 +194,8 @@ void MainWindow::open()
         /* check other file types */
 
         /* unknown file format */
-        QMessageBox::critical(this, QString("Error"), QString("Unknown file format."));
+        QMessageBox::critical(this, QString("Error"), QString("%1: Unknown file format.")
+                              .arg(canonicalName));
         return;
     } while (false);
 
