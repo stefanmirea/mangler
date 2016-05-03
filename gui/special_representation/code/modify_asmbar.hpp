@@ -31,6 +31,10 @@
 #include "asm_viewer.hpp"
 #include <file_assembly.hpp>
 
+/**
+ * The Modify form at the bottom of the ASMViewer, used to replace the selected assembly
+ * instruction.
+ */
 class ModifyASMBar : public QWidget
 {
     Q_OBJECT

@@ -28,6 +28,9 @@
 #include <QTreeView>
 #include <QStandardItemModel>
 
+/**
+ * The list which displays the assembly instructions in the currently selected code area.
+ */
 class ASMViewer : public QTreeView
 {
 public:

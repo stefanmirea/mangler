@@ -39,6 +39,9 @@
 
 #include "file_unit.hpp"
 
+/**
+ * The internal widget of the MDI subwindow associated with an open file.
+ */
 class ExecutableViewer : public QWidget
 {
     Q_OBJECT

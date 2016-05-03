@@ -26,6 +26,10 @@
 #include <QVBoxLayout>
 #include <QLabel>
 
+/**
+ * Generates the content displayed in the right side of a subwindow either before any HierarchyNode
+ * is selected or if the current HierarchyNode does not have a special representation.
+ */
 QWidget *ExecutableViewer::createDefaultSpecialRep()
 {
     QWidget *area = new QWidget();

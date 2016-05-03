@@ -29,6 +29,9 @@
 
 namespace elf
 {
+/**
+ * Container associated with the program header table.
+ */
 class ProgramHeaderTableContainer : public Container
 {
 public:

@@ -33,6 +33,9 @@ enum Direction
     DIR_FORWARD
 };
 
+/**
+ * Provides methods that search for specific data in an open file.
+ */
 class SearchEngine
 {
 public:

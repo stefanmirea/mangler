@@ -30,6 +30,11 @@
 
 namespace elf
 {
+/**
+ * Container used to access the actual segments in the file. Since segments in the input file will
+ * probably be separated by inactive space or even by the section header table, this container does
+ * not represent a contiguous interval in the file.
+ */
 class SegmentContentsContainer : public Container
 {
 public:

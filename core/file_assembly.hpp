@@ -27,6 +27,10 @@
 #include <cstdint>
 #include <string>
 
+/**
+ * Provides methods for converting from machine code instructions to assembly language and vice
+ * versa.
+ */
 class FileAssembly
 {
 public:

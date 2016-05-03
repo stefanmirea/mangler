@@ -29,6 +29,9 @@
 
 namespace elf
 {
+/**
+ * Container associated with the ELF header.
+ */
 class ELFHeaderContainer : public Container
 {
 public:
