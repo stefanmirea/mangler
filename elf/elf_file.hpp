@@ -31,7 +31,7 @@
 namespace elf
 {
 /**
- * The FileUnit responsible for interpreting ELF executable files. Its is based on the ELFIO
+ * The FileUnit responsible for interpreting ELF executable files. It is based on the ELFIO
  * library.
  */
 class ELFFile : public FileUnit
