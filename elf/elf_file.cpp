@@ -35,7 +35,7 @@ ELFFile::ELFFile(const std::string &filename) : FileUnit(filename)
 {
     file = new ELFIO::elfio();
     open = file->load(filename);
-    if (file->get_type() != ET_EXEC)
+    if (open && file->get_type() != ET_EXEC)
         open = false;
 
     if (open)
