@@ -38,6 +38,11 @@
 
 class FileUnit;
 
+/**
+ * Information associated with a HierarchyNode. While HierarchyNodes are arranged in a tree
+ * structure, Containers make up a directed acyclic graph. That's because different nodes
+ * corresponding to the same area in the input file share the same Container object.
+ */
 class Container
 {
 public:

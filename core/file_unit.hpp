@@ -30,6 +30,10 @@
 
 class Container;
 
+/**
+ * Manages information associated with an open file. Extend this class in order to implement support
+ * for new executable file formats.
+ */
 class FileUnit
 {
 public:

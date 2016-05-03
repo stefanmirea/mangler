@@ -27,6 +27,11 @@
 #include <QTreeWidgetItem>
 #include "container.hpp"
 
+/**
+ * An item of the HierarchicalViewer. The relationship between HierarchyNodes and areas in the input
+ * files is many to one. That is, different nodes can represent the same file area. See also the
+ * Container class.
+ */
 class HierarchyNode : public QTreeWidgetItem
 {
 public:

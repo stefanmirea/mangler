@@ -33,6 +33,9 @@
 #include <QByteArray>
 #include <qhexedit.hpp>
 
+/**
+ * The search form at the bottom of the HexViewer, used to find specific data inside the file.
+ */
 class SearchBar : public QWidget
 {
     Q_OBJECT

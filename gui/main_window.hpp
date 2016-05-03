@@ -32,6 +32,9 @@
 #include <QFileDialog>
 #include <QMdiSubWindow>
 
+/**
+ * The main window of the application.
+ */
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

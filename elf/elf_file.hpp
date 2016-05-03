@@ -30,6 +30,10 @@
 
 namespace elf
 {
+/**
+ * The FileUnit responsible for interpreting ELF executable files. Its is based on the ELFIO
+ * library.
+ */
 class ELFFile : public FileUnit
 {
 public:

@@ -27,6 +27,10 @@
 
 #include <QVBoxLayout>
 
+/**
+ * Creates the contents of the right side of an open file subwindow when the selected HierarchyNode
+ * represents a code area.
+ */
 QWidget *CodeContainer::doSpecialRepresentation(bool &keepAfterNodeDeselection)
 {
     /* create disassembly area */

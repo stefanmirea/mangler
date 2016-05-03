@@ -32,6 +32,9 @@
 
 #include "hierarchy_node.hpp"
 
+/**
+ * The hierarchical file area browser in the left side of an open file subwindow.
+ */
 class HierarchicalViewer : public QTreeWidget
 {
     Q_OBJECT

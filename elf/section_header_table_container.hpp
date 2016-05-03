@@ -29,6 +29,9 @@
 
 namespace elf
 {
+/**
+ * Container associated with the section header table.
+ */
 class SectionHeaderTableContainer : public Container
 {
 public:
