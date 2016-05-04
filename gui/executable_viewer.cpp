@@ -60,7 +60,7 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
 
     QFile *file = new QFile();
 
-    file->setFileName("/home/adrian/Desktop/a.out");
+    file->setFileName(fileUnit->getName().c_str());
     file->open(QIODevice::ReadOnly);
     std::cerr << "--- " << file->isReadable() << " \n" << file->size() << "\n";
 

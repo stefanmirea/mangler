@@ -51,6 +51,23 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     editMenu->addAction(copyAction);
     editMenu->addAction(pasteAction);
 
+    windowMenu = menuBar()->addMenu(QString("Window"));
+    connect(windowMenu, SIGNAL(aboutToShow()), this, SLOT(updateCheckableWindows()));
+    windowMenu->addAction(closeAction);
+    windowMenu->addAction(closeAllAction);
+    windowMenu->addSeparator();
+    windowMenu->addAction(tileAction);
+    windowMenu->addAction(cascadeAction);
+    windowMenu->addSeparator();
+    windowMenu->addAction(nextAction);
+    windowMenu->addAction(previousAction);
+
+    windowActionGroup = new QActionGroup(this);
+    signalMapper = new QSignalMapper(this);
+    connect(signalMapper, SIGNAL(mapped(QWidget *)), this, SLOT(selectWindow(QWidget *)));
+
+    updateCheckableWindows();
+
     QMenu *helpMenu = menuBar()->addMenu(QString("Help"));
     helpMenu->addAction(aboutAction);
 
@@ -103,6 +120,25 @@ void MainWindow::createActions()
     pasteAction->setIcon(QIcon::fromTheme("edit-paste", QIcon(":/icons/paste.png")));
     connect(pasteAction, SIGNAL(triggered()), this, SLOT(paste()));
 
+    /* Window menu */
+    closeAction = new QAction(QString("Close"), this);
+    connect(closeAction, SIGNAL(triggered()), mdiArea, SLOT(closeActiveSubWindow()));
+
+    closeAllAction = new QAction(QString("Close All"), this);
+    connect(closeAllAction, SIGNAL(triggered()), mdiArea, SLOT(closeAllSubWindows()));
+
+    tileAction = new QAction(QString("Tile"), this);
+    connect(tileAction, SIGNAL(triggered()), mdiArea, SLOT(tileSubWindows()));
+
+    cascadeAction = new QAction(QString("Cascade"), this);
+    connect(cascadeAction, SIGNAL(triggered()), mdiArea, SLOT(cascadeSubWindows()));
+
+    nextAction = new QAction(QString("Next"), this);
+    connect(nextAction, SIGNAL(triggered()), mdiArea, SLOT(activateNextSubWindow()));
+
+    previousAction = new QAction(QString("Previous"), this);
+    connect(previousAction, SIGNAL(triggered()), mdiArea, SLOT(activatePreviousSubWindow()));
+
     /* Help menu */
     aboutAction = new QAction(QString("About"), this);
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
@@ -113,14 +149,24 @@ void MainWindow::createActions()
 void MainWindow::open()
 {
     QString filename = QFileDialog::getOpenFileName(this, QString("Open"));
-    if (filename.isEmpty())
+    if (!filename.isEmpty())
+        open(filename);
+}
+
+void MainWindow::open(const QString &filename)
+{
+    QString canonicalName = QFileInfo(filename).canonicalFilePath();
+    if (canonicalName == "")
+    {
+        QMessageBox::critical(this, QString("Error"), QString("The file %1 does not exist.")
+                              .arg(filename));
         return;
-    filename = QFileInfo(filename).canonicalFilePath();
+    }
 
     foreach (QMdiSubWindow *window, mdiArea->subWindowList())
     {
         ExecutableViewer *ev = qobject_cast<ExecutableViewer *>(window->widget());
-        if (ev->getFileUnit()->getName() == filename.toStdString())
+        if (ev->getFileUnit()->getName() == canonicalName.toStdString())
         {
             mdiArea->setActiveSubWindow(window);
             return;
@@ -128,11 +174,11 @@ void MainWindow::open()
     }
 
     /* check read access */
-    QFile qFile(filename);
+    QFile qFile(canonicalName);
     if (!qFile.open(QFile::ReadOnly))
     {
         QMessageBox::critical(this, QString("Error"), QString("Cannot read file %1:\n%2.")
-                              .arg(filename) .arg(qFile.errorString()));
+                              .arg(canonicalName) .arg(qFile.errorString()));
         return;
     }
     qFile.close();
@@ -140,7 +186,7 @@ void MainWindow::open()
     /* check file type */
     FileUnit *file;
     do {
-        file = new elf::ELFFile(filename.toStdString());
+        file = new elf::ELFFile(canonicalName.toStdString());
         if (file->getOpenStatus())
             break;
         delete file;
@@ -148,7 +194,8 @@ void MainWindow::open()
         /* check other file types */
 
         /* unknown file format */
-        QMessageBox::critical(this, QString("Error"), QString("Unknown file format."));
+        QMessageBox::critical(this, QString("Error"), QString("%1: Unknown file format.")
+                              .arg(canonicalName));
         return;
     } while (false);
 
@@ -190,4 +237,75 @@ void MainWindow::updateActions()
     redoAction->setEnabled(false);
     copyAction->setEnabled(false);
     pasteAction->setEnabled(false);
+
+    closeAction->setEnabled(hasActiveSubWindow);
+    closeAllAction->setEnabled(hasActiveSubWindow);
+    tileAction->setEnabled(hasActiveSubWindow);
+    cascadeAction->setEnabled(hasActiveSubWindow);
+
+    int subWindowsNum = mdiArea->subWindowList().size();
+    nextAction->setEnabled(subWindowsNum >= 2);
+    previousAction->setEnabled(subWindowsNum >= 2);
+}
+
+void MainWindow::updateCheckableWindows()
+{
+    /* Remove the previous checkable actions. */
+#ifdef DEBUG
+    assert(!windowMenu->actions().isEmpty());
+#endif
+    QAction *last;
+    while ((last = windowMenu->actions().back()) != previousAction)
+    {
+        windowMenu->removeAction(last);
+        if (!last->isSeparator())
+        {
+            windowActionGroup->removeAction(last);
+            /* signalMapper will automatically remove all the mappings for last if any. */
+        }
+        delete last;
+#ifdef DEBUG
+        assert(!windowMenu->actions().isEmpty());
+#endif
+    }
+
+    if (!mdiArea->subWindowList().empty())
+    {
+        QAction *separator = new QAction(this);
+        separator->setSeparator(true);
+        windowMenu->addAction(separator);
+    }
+
+    int index = 0;
+    foreach (QMdiSubWindow *window, mdiArea->subWindowList())
+    {
+        ++index;
+        ExecutableViewer *ev = qobject_cast<ExecutableViewer *>(window->widget());
+        QAction *action = new QAction(QString::fromStdString(ev->getFileUnit()->getName()), this);
+        action->setActionGroup(windowActionGroup);
+        action->setCheckable(true);
+        QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow();
+
+#ifdef DEBUG
+        /* Reaching this point supposes there is at least one subwindow. Therefore, we also have an
+         * active subwindow. */
+        assert(activeSubWindow != nullptr);
+#endif
+
+        action->setChecked(ev == qobject_cast<ExecutableViewer *>(activeSubWindow->widget()));
+        connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
+        signalMapper->setMapping(action, window);
+        windowMenu->addAction(action);
+    }
+}
+
+void MainWindow::selectWindow(QWidget *subWindow)
+{
+    QMdiSubWindow *mdiSubWindow = dynamic_cast<QMdiSubWindow *>(subWindow);
+
+#ifdef DEBUG
+    assert(mdiSubWindow != nullptr);
+#endif
+
+    mdiArea->setActiveSubWindow(mdiSubWindow);
 }

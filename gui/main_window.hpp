@@ -31,6 +31,7 @@
 #include <QToolBar>
 #include <QFileDialog>
 #include <QMdiSubWindow>
+#include <QSignalMapper>
 
 /**
  * The main window of the application.
@@ -40,6 +41,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = 0);
+    void open(const QString &filename);
 signals:
 
 public slots:
@@ -53,13 +55,20 @@ public slots:
     void paste();
     void about();
     void updateActions();
+    void updateCheckableWindows();
+    void selectWindow(QWidget *subWindow);
 private:
     void createActions();
 
     QMdiArea *mdiArea;
     QAction *openAction, *saveAction, *saveAsAction, *exitAction;
     QAction *undoAction, *redoAction, *copyAction, *pasteAction;
+    QAction *closeAction, *closeAllAction, *tileAction, *cascadeAction, *nextAction,
+            *previousAction;
     QAction *aboutAction;
+    QMenu *windowMenu;
+    QActionGroup *windowActionGroup;
+    QSignalMapper *signalMapper;
 };
 
 #endif // MAIN_WINDOW_HPP_
