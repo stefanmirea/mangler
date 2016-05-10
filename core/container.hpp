@@ -65,11 +65,11 @@ public:
 
     static bool isValidInterval(std::pair<int, int> &interval);
     static void invalidateInterval(std::pair<int, int> &interval);
+    bool addInnerContainer(Container *container);
+    bool addInnerContainer(Container *container, size_t position);
 
 protected:
     std::vector<Container *> innerContainers;
-    bool addInnerContainer(Container *container);
-    bool addInnerContainer(Container *container, size_t position);
 
 private:
     FileUnit *file;
