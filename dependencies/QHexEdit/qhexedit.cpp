@@ -342,6 +342,14 @@ qint64 QHexEdit::lastIndexOf(const QByteArray &ba, qint64 from)
     return pos;
 }
 
+void QHexEdit::selectData(int position, int size)
+{
+	setCursorPosition(position * 2 - 1);
+	resetSelection(position * 2);
+	setSelection(position * 2 + size * 2);
+	ensureVisible();
+}
+
 void QHexEdit::redo()
 {
     _undoStack->redo();

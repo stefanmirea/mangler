@@ -263,6 +263,8 @@ signals:
 public:
     ~QHexEdit();
 
+    void selectData(int position, int size);
+
     // Properties
     bool addressArea();
     void setAddressArea(bool addressArea);
