@@ -38,6 +38,10 @@ public:
     ELFHeaderContainer(ELFFile *file, const std::pair<int, int> &interval);
     std::vector<Container *> &getInnerContainers();
     ~ELFHeaderContainer();
+
+private:
+    void addHeaderEntry(Container *entry, Container *val, const std::string &entryName,
+                        const std::string &valName);
 };
 }
 
