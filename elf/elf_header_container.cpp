@@ -31,11 +31,40 @@ ELFHeaderContainer::ELFHeaderContainer(ELFFile *file, const std::pair<int, int> 
 {
     setName("ELF Header");
 
-    int offset = 0x04;
+    int offset = 0x00;
     int increment = 0;
 
     std::string val_display;
     unsigned char byte;
+
+    byte = file->getELFIO()->get_elfmag0();
+    val_display = std::to_string((int)byte);
+    addHeaderEntry(new Container(getFile(), true, std::make_pair(offset, offset + 1)),
+                   new Container(getFile(), false, std::make_pair(offset, offset + 1)),
+                   "e_ident[EI_MAG0]", val_display);
+    offset++;
+
+    byte = file->getELFIO()->get_elfmag1();
+    val_display = std::to_string((int)byte);
+    addHeaderEntry(new Container(getFile(), true, std::make_pair(offset, offset + 1)),
+                   new Container(getFile(), false, std::make_pair(offset, offset + 1)),
+                   "e_ident[EI_MAG1]", val_display);
+    offset++;
+
+    byte = file->getELFIO()->get_elfmag2();
+    val_display = std::to_string((int)byte);
+    addHeaderEntry(new Container(getFile(), true, std::make_pair(offset, offset + 1)),
+                   new Container(getFile(), false, std::make_pair(offset, offset + 1)),
+                   "e_ident[EI_MAG2]", val_display);
+    offset++;
+
+    byte = file->getELFIO()->get_elfmag3();
+    val_display = std::to_string((int)byte);
+    addHeaderEntry(new Container(getFile(), true, std::make_pair(offset, offset + 1)),
+                   new Container(getFile(), false, std::make_pair(offset, offset + 1)),
+                   "e_ident[EI_MAG3]", val_display);
+    offset++;
+
 
     byte = file->getELFIO()->get_class();
     val_display = std::to_string((int)byte);
@@ -151,7 +180,7 @@ ELFHeaderContainer::ELFHeaderContainer(ELFFile *file, const std::pair<int, int> 
 
     offset += 2;
 
-    val_display = std::to_string(0);//(file->getELFIO()->get_segments_num());
+    val_display = std::to_string(file->getELFIO()->get_segments_num());
     addHeaderEntry(new Container(getFile(), true, std::make_pair(offset, offset + 2)),
                    new Container(getFile(), false, std::make_pair(offset, offset + 2)),
                     "e_phnum", val_display);
@@ -165,7 +194,7 @@ ELFHeaderContainer::ELFHeaderContainer(ELFFile *file, const std::pair<int, int> 
 
     offset += 2;
 
-    val_display = std::to_string(0);//(file->getELFIO()->get_sections_num());
+    val_display = std::to_string((file->getELFIO()->get_sections_num()));
     addHeaderEntry(new Container(getFile(), true, std::make_pair(offset, offset + 2)),
                    new Container(getFile(), false, std::make_pair(offset, offset + 2)),
                     "e_shnum", val_display);
@@ -178,29 +207,6 @@ ELFHeaderContainer::ELFHeaderContainer(ELFFile *file, const std::pair<int, int> 
                     "e_shstrndx", val_display);
 
     offset += 2;
-    /*container = new Container(getFile(), true, std::make_pair(offset, offset + 1));
-    container->setName();
-    addInnerContainer(new Container(getFile(), true, std::make_pair(offset, offset + 1)));
-
-    value = new Container(getFile(), false, std::make_pair(offset, offset + 1));
-    value->setName(val_display);
-    container->addInnerContainer(value);
-
-    offset++;
-
-    container = new Container(getFile(), true, std::make_pair(offset, offset + 1));
-    container->setName("e_ident[EI_DATA]");
-    addInnerContainer(container);
-
-    byte = file->getELFIO()->get_encoding();
-    val_display = std::to_string((int)byte);
-
-    value = new Container(getFile(), false, std::make_pair(offset, offset + 1));
-    value->setName(val_display);
-    container->addInnerContainer(value);*/
-
-
-
 }
 
 void ELFHeaderContainer::addHeaderEntry(Container *entry, Container *val, const std::string &entryName, const std::string &valName)
@@ -213,18 +219,6 @@ void ELFHeaderContainer::addHeaderEntry(Container *entry, Container *val, const 
 
 std::vector<Container *> &ELFHeaderContainer::getInnerContainers()
 {
-    /*if (innerContainers.empty())
-    {
-        Container *container;
-
-        container = new Container(getFile(), false, std::make_pair(0, 5));
-        container->setName("e_ident");
-        addInnerContainer(container);
-
-        container = new Container(getFile(), false, std::make_pair(5, 10));
-        container->setName("& co");
-        addInnerContainer(container);
-    }*/
     return innerContainers;
 }
 
