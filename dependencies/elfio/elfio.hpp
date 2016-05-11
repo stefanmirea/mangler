@@ -184,6 +184,10 @@ class elfio
 
 //------------------------------------------------------------------------------
     // ELF header access functions
+    ELFIO_HEADER_ACCESS_GET( unsigned char, elfmag0            );
+    ELFIO_HEADER_ACCESS_GET( unsigned char, elfmag1            );
+    ELFIO_HEADER_ACCESS_GET( unsigned char, elfmag2            );
+    ELFIO_HEADER_ACCESS_GET( unsigned char, elfmag3            );
     ELFIO_HEADER_ACCESS_GET( unsigned char, class              );
     ELFIO_HEADER_ACCESS_GET( unsigned char, elf_version        );
     ELFIO_HEADER_ACCESS_GET( unsigned char, encoding           );
