@@ -29,6 +29,7 @@
 #include <QWidget>
 #include <QTreeWidget>
 #include <QSplitter>
+#include <qhexedit.hpp>
 
 #include "hierarchy_node.hpp"
 
@@ -39,7 +40,8 @@ class HierarchicalViewer : public QTreeWidget
 {
     Q_OBJECT
 public:
-    explicit HierarchicalViewer(QSplitter *split, QWidget *defaultSpecialRep, QWidget *parent = 0);
+    explicit HierarchicalViewer(QSplitter *split, QWidget *defaultSpecialRep,
+                                QHexEdit* hexViewer, QWidget *parent = 0);
     HierarchyNode *addRoot(Container *container);
     HierarchyNode *addChild(HierarchyNode *parent, Container *container);
 signals:
@@ -51,6 +53,7 @@ public slots:
 private:
     QWidget *defaultSpecialRep;
     QSplitter *split;
+    QHexEdit *hexViewer;
     bool firstSelection;
 };
 
