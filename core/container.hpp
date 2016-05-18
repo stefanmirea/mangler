@@ -48,9 +48,11 @@ class Container
 public:
     /* Use this form with expandable = false only if you want to set de interval later
      * (after obtaining its reference by using getInterval()) */
-    Container(FileUnit *file, bool expandable = false);
+    Container(FileUnit *file, bool expandable = false, void (*update)(char * data) = nullptr);
 
-    Container(FileUnit *file, bool expandable, const std::pair<int, int> &interval);
+    Container(FileUnit *file, bool expandable, const std::pair<int, int> &interval,
+              void (*update)(char * data) = nullptr);
+
     FileUnit *getFile();
     std::vector<Container *> &getParents();
     bool isExpandable();
@@ -67,6 +69,7 @@ public:
     static void invalidateInterval(std::pair<int, int> &interval);
     bool addInnerContainer(Container *container);
     bool addInnerContainer(Container *container, size_t position);
+    void (*update)(char * data);
 
 protected:
     std::vector<Container *> innerContainers;
