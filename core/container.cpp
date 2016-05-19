@@ -23,21 +23,19 @@
 
 #include "container.hpp"
 
-Container::Container(FileUnit *file, bool expandable, void (*update)(char * data)) :
-    file(file), expandable(expandable), update(update)
+Container::Container(FileUnit *file, bool expandable) :
+    file(file), expandable(expandable)
 {
     _keepSpecialRepresentation = false;
     specialRepresentation = nullptr;
     invalidateInterval(interval);
 }
 
-Container::Container(FileUnit *file, bool expandable, const std::pair<int, int> &interval,
-                     void (*update)(char * data))
-    : file(file), expandable(expandable), interval(interval), update(update)
+Container::Container(FileUnit *file, bool expandable, const std::pair<int, int> &interval)
+    : file(file), expandable(expandable), interval(interval)
 {
     _keepSpecialRepresentation = false;
     specialRepresentation = nullptr;
-    update = nullptr;
 }
 
 FileUnit *Container::getFile()
