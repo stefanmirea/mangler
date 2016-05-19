@@ -70,3 +70,11 @@ ELFIO::elfio *ELFFile::getELFIO()
 {
     return file;
 }
+
+void ELFFile::refresh(int start, int end, char *data)
+{
+
+    std::vector<Container *> topLevelContainers = getTopLevelContainers();
+    //((ELFHeaderContainer*)topLevelContainers[0])->refresh(start, end, data);
+    ((ELFEntry*)((((ELFHeaderContainer*)topLevelContainers[0])->getInnerContainers())[0]))->update(data);
+}
