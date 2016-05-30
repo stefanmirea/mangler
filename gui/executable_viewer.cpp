@@ -56,7 +56,7 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     left->setLayout(hv);
 
     /* Center hex viewer and search bar */
-    hexViewer = new QHexEdit();
+    hexViewer = new QHexEdit(fileUnit);
 
     QFile *file = new QFile();
 
@@ -69,7 +69,6 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     delete file;
 
     hexViewer->setData(ba);
-
 
     hierarchicalViewer = new HierarchicalViewer(split, defaultSpecialRep, hexViewer, this);
 

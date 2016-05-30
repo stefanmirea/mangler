@@ -49,6 +49,9 @@ public:
 private:
     std::string filename;
     std::vector<Container *> topLevelContainers;
+
+protected:
+
 };
 
 #endif // FILE_UNIT_HPP_
