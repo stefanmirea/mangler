@@ -27,6 +27,7 @@
 #include "section_header_table_container.hpp"
 #include "segment_contents_container.hpp"
 #include "section_contents_container.hpp"
+#include "elf_entry.hpp"
 #include <utility>
 
 using namespace elf;
@@ -73,8 +74,16 @@ ELFIO::elfio *ELFFile::getELFIO()
 
 void ELFFile::refresh(int start, int end, char *data)
 {
-
+    std::cerr << "Modify here\n";
     std::vector<Container *> topLevelContainers = getTopLevelContainers();
+    ELFHeaderContainer *header = dynamic_cast<ELFHeaderContainer *>(topLevelContainers[0]);
+    std::cerr << header->getName();
+    std::vector<Container *> elfHeaderEntries = header->getInnerContainers();
+    for(int i = 0; i < elfHeaderEntries.size(); i++)
+    {
+        std::cerr << elfHeaderEntries[i]->getName();
+    }
+
     //((ELFHeaderContainer*)topLevelContainers[0])->refresh(start, end, data);
-    ((ELFEntry*)((((ELFHeaderContainer*)topLevelContainers[0])->getInnerContainers())[0]))->update(data);
+   //(ELFHeaderContainer*)(topLevelContainers[0]);
 }
