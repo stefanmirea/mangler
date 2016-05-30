@@ -83,7 +83,4 @@ void ELFFile::refresh(int start, int end, char *data)
     {
         std::cerr << elfHeaderEntries[i]->getName();
     }
-
-    //((ELFHeaderContainer*)topLevelContainers[0])->refresh(start, end, data);
-   //(ELFHeaderContainer*)(topLevelContainers[0]);
 }
