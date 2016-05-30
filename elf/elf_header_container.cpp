@@ -388,28 +388,33 @@ ELFHeaderContainer::ELFHeaderContainer(ELFFile *file, const std::pair<int, int> 
     ELFHeaderContainer::e_ident_ei_mag0_t *e_ident_ei_mag0 =
             new ELFHeaderContainer::e_ident_ei_mag0_t(file, std::make_pair(offset, offset + 1));
     addInnerContainer(e_ident_ei_mag0);
+    file->addLeaf(e_ident_ei_mag0);
 
     offset++;
 
     ELFHeaderContainer::e_ident_ei_mag1_t *e_ident_ei_mag1 =
             new ELFHeaderContainer::e_ident_ei_mag1_t(file, std::make_pair(offset, offset + 1));
     addInnerContainer(e_ident_ei_mag1);
+    file->addLeaf(e_ident_ei_mag1);
 
     offset++;
 
     ELFHeaderContainer::e_ident_ei_mag2_t *e_ident_ei_mag2 =
             new ELFHeaderContainer::e_ident_ei_mag2_t(file, std::make_pair(offset, offset + 1));
     addInnerContainer(e_ident_ei_mag2);
+    file->addLeaf(e_ident_ei_mag2);
     offset++;
 
     ELFHeaderContainer::e_ident_ei_mag3_t *e_ident_ei_mag3 =
             new ELFHeaderContainer::e_ident_ei_mag3_t(file, std::make_pair(offset, offset + 1));
     addInnerContainer(e_ident_ei_mag3);
+    file->addLeaf(e_ident_ei_mag3);
     offset++;
 
     ELFHeaderContainer::ei_class_t *ei_class =
             new ELFHeaderContainer::ei_class_t(file, std::make_pair(offset, offset + 1));
     addInnerContainer(ei_class);
+    file->addLeaf(ei_class);
     offset++;
 
     increment = 4;
@@ -417,93 +422,111 @@ ELFHeaderContainer::ELFHeaderContainer(ELFFile *file, const std::pair<int, int> 
     ELFHeaderContainer::ei_data_t *ei_data =
             new ELFHeaderContainer::ei_data_t(file, std::make_pair(offset, offset + 1));
     addInnerContainer(ei_data);
+    file->addLeaf(ei_data);
     offset++;
 
     ELFHeaderContainer::ei_version_t *ei_version =
             new ELFHeaderContainer::ei_version_t(file, std::make_pair(offset, offset + 1));
     addInnerContainer(ei_version);
+    file->addLeaf(ei_version);
     offset++;
 
     ELFHeaderContainer::ei_osabi_t *ei_osabi =
             new ELFHeaderContainer::ei_osabi_t(file, std::make_pair(offset, offset + 1));
     addInnerContainer(ei_osabi);
+    file->addLeaf(ei_osabi);
     offset++;
 
     ELFHeaderContainer::ei_abiversion_t *ei_abiversion =
             new ELFHeaderContainer::ei_abiversion_t(file, std::make_pair(offset, offset + 1));
     addInnerContainer(ei_abiversion);
+    file->addLeaf(ei_abiversion);
     offset++;
 
     /* TODO: get value */
     ELFHeaderContainer::e_ident_ei_pad_t  *e_ident_ei_pad =
             new ELFHeaderContainer::e_ident_ei_pad_t(file, std::make_pair(offset, offset + 7));
     addInnerContainer(e_ident_ei_pad);
+    file->addLeaf(e_ident_ei_pad);
     offset += 7;
 
     ELFHeaderContainer::e_type_t  *e_type =
             new ELFHeaderContainer::e_type_t(file, std::make_pair(offset, offset + 2));
     addInnerContainer(e_type);
+    file->addLeaf(e_type);
     offset += 2;
 
     ELFHeaderContainer::e_machine_t  *machine =
             new ELFHeaderContainer::e_machine_t(file, std::make_pair(offset, offset + 2));
     addInnerContainer(machine);
+    file->addLeaf(machine);
     offset += 2;
 
     ELFHeaderContainer::e_version_t  *e_version =
             new ELFHeaderContainer::e_version_t(file, std::make_pair(offset, offset + 4));
     addInnerContainer(e_version);
+    file->addLeaf(e_version);
     offset += 4;
 
     ELFHeaderContainer::e_entry_t  *e_entry =
             new ELFHeaderContainer::e_entry_t(file, std::make_pair(offset, offset + increment));
     addInnerContainer(e_entry);
+    file->addLeaf(e_entry);
     offset += increment;
 
     ELFHeaderContainer::e_phoff_t  *e_phoff =
             new ELFHeaderContainer::e_phoff_t(file, std::make_pair(offset, offset + increment));
     addInnerContainer(e_phoff);
+    file->addLeaf(e_phoff);
     offset += increment;
 
     ELFHeaderContainer::e_shoff_t  *e_shoff =
             new ELFHeaderContainer::e_shoff_t(file, std::make_pair(offset, offset + increment));
     addInnerContainer(e_shoff);
+    file->addLeaf(e_shoff);
     offset += increment;
 
     ELFHeaderContainer::e_flags_t  *e_flags =
             new ELFHeaderContainer::e_flags_t(file, std::make_pair(offset, offset + 4));
     addInnerContainer(e_flags);
+    file->addLeaf(e_flags);
     offset += 4;
 
 
     ELFHeaderContainer::e_ehsize_t  *e_ehsize =
             new ELFHeaderContainer::e_ehsize_t(file, std::make_pair(offset, offset + 2));
     addInnerContainer(e_ehsize);
+    file->addLeaf(e_ehsize);
     offset += 2;
 
     ELFHeaderContainer::e_phentsize_t  *e_phentsize =
             new ELFHeaderContainer::e_phentsize_t(file, std::make_pair(offset, offset + 2));
     addInnerContainer(e_phentsize);
+    file->addLeaf(e_phentsize);
     offset += 2;
 
     ELFHeaderContainer::e_phnum_t  *e_phnum =
             new ELFHeaderContainer::e_phnum_t(file, std::make_pair(offset, offset + 2));
     addInnerContainer(e_phnum);
+    file->addLeaf(e_phnum);
     offset += 2;
 
     ELFHeaderContainer::e_shentsize_t  *e_shentsize =
             new ELFHeaderContainer::e_shentsize_t(file, std::make_pair(offset, offset + 2));
     addInnerContainer(e_shentsize);
+    file->addLeaf(e_shentsize);
     offset += 2;
 
     ELFHeaderContainer::e_shnum_t  *e_shnum =
             new ELFHeaderContainer::e_shnum_t(file, std::make_pair(offset, offset + 2));
     addInnerContainer(e_shnum);
+    file->addLeaf(e_shnum);
     offset += 2;
 
     ELFHeaderContainer::e_shstrndx_t  *e_shstrndx =
             new ELFHeaderContainer::e_shstrndx_t(file, std::make_pair(offset, offset + 2));
     addInnerContainer(e_shstrndx);
+    file->addLeaf(e_shstrndx);
     offset += 2;
 }
 

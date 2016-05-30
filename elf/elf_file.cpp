@@ -27,7 +27,6 @@
 #include "section_header_table_container.hpp"
 #include "segment_contents_container.hpp"
 #include "section_contents_container.hpp"
-#include "elf_entry.hpp"
 #include <utility>
 
 using namespace elf;
@@ -75,12 +74,32 @@ ELFIO::elfio *ELFFile::getELFIO()
 void ELFFile::refresh(int start, int end, char *data)
 {
     std::cerr << "Modify here\n";
-    std::vector<Container *> topLevelContainers = getTopLevelContainers();
+    /*std::vector<Container *> topLevelContainers = getTopLevelContainers();
     ELFHeaderContainer *header = dynamic_cast<ELFHeaderContainer *>(topLevelContainers[0]);
     std::cerr << header->getName();
     std::vector<Container *> elfHeaderEntries = header->getInnerContainers();
     for(int i = 0; i < elfHeaderEntries.size(); i++)
     {
         std::cerr << elfHeaderEntries[i]->getName();
+    }*/
+
+    bool found = false;
+
+    for(int i = 0; i < leaves.size() && !found; i++)
+    {
+        std::pair<int, int> interval = leaves[i]->getInterval();
+        if(interval.first == start && interval.second == end)
+        {
+            ELFEntry *entry = dynamic_cast<ELFEntry *>(leaves[i]);
+            std::cerr << "FOUND!";
+            entry->update(data);
+            found = true;
+        }
     }
 }
+
+void ELFFile::addLeaf(ELFEntry *leaf)
+{
+    leaves.push_back(leaf);
+}
+
