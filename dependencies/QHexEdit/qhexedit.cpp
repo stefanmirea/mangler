@@ -5,6 +5,9 @@
 #include <QScrollBar>
 
 #include "qhexedit.hpp"
+#include "file_unit.hpp"
+#include <elf/elf_file.hpp>
+#include <iostream>
 
 const int HEXCHARS_IN_LINE = 47;
 const int BYTES_PER_LINE = 16;
@@ -12,7 +15,7 @@ const int BYTES_PER_LINE = 16;
 
 // ********************************************************************** Constructor, destructor
 
-QHexEdit::QHexEdit(QWidget *parent) : QAbstractScrollArea(parent)
+QHexEdit::QHexEdit(FileUnit *fileUnit, QWidget *parent) : fileUnit(fileUnit), QAbstractScrollArea(parent)
 {
     _chunks = new Chunks();
     _undoStack = new UndoStack(_chunks, this);
@@ -687,6 +690,12 @@ void QHexEdit::keyPressEvent(QKeyEvent *event)
     {
         setOverwriteMode(!overwriteMode());
         setCursorPosition(_cursorPosition);
+    }
+
+    if ((event->key() == Qt::Key_F5))
+    {
+        std::cerr <<"F5-ed  " << getSelectionBegin() << " " << getSelectionEnd() << "\n";
+        ((elf::ELFFile*)fileUnit)->refresh(getSelectionBegin(), getSelectionEnd(), nullptr);
     }
 
     refresh();
