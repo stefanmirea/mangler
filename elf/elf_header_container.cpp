@@ -507,14 +507,6 @@ ELFHeaderContainer::ELFHeaderContainer(ELFFile *file, const std::pair<int, int> 
     offset += 2;
 }
 
-void ELFHeaderContainer::addHeaderEntry(Container *entry, Container *val, const std::string &entryName, const std::string &valName)
-{
-    entry->setName(entryName);
-    val->setName(valName);
-    entry->addInnerContainer(val);
-    addInnerContainer(entry);
-}
-
 std::vector<Container *> &ELFHeaderContainer::getInnerContainers()
 {
     return innerContainers;

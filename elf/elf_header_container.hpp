@@ -202,10 +202,6 @@ public:
     };
 
     ~ELFHeaderContainer();
-
-private:
-    void addHeaderEntry(Container *entry, Container *val, const std::string &entryName,
-                        const std::string &valName);
 };
 }
 
