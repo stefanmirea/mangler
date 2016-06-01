@@ -15,7 +15,7 @@ const int BYTES_PER_LINE = 16;
 
 // ********************************************************************** Constructor, destructor
 
-QHexEdit::QHexEdit(FileUnit *fileUnit, QWidget *parent) : fileUnit(fileUnit), QAbstractScrollArea(parent)
+QHexEdit::QHexEdit(QWidget *parent) : QAbstractScrollArea(parent)
 {
     _chunks = new Chunks();
     _undoStack = new UndoStack(_chunks, this);

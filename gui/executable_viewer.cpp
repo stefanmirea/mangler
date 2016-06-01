@@ -56,7 +56,7 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     left->setLayout(hv);
 
     /* Center hex viewer and search bar */
-    hexViewer = new QHexEdit(fileUnit);
+    hexViewer = new QHexEdit();
 
     QFile *file = new QFile();
 
