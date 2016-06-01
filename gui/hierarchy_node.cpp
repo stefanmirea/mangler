@@ -73,7 +73,7 @@ bool HierarchyNode::sharesContainer(HierarchyNode *node)
     return container == node->container;
 }
 
-Container *HierarchyNode::getContainer()
+std::pair<int, int> &HierarchyNode::getInterval()
 {
-    return container;
+    return container->getInterval();
 }

@@ -40,8 +40,8 @@ public:
     bool createChildren();
     QWidget *getSpecialRepresentation();
     bool keepSpecialRepresentation();
+    std::pair<int, int> &getInterval();
     bool sharesContainer(HierarchyNode *node);
-    Container *getContainer();
 private:
     void _HierarchyNode(Container *container);
     Container *container;
