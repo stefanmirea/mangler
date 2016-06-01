@@ -59,7 +59,7 @@ bool ModifyASMBar::editInstruction()
         QString args = list[3].data().toString();
 
         int selectedRow = list[0].row();
-        int instrSize = machineCode.size() / 4 + 2;
+        int instrSize = (machineCode.size() + 1) / 3;
 
         /* TODO: The input instruction will also be updated in the elfio backend
          * and hexedit */
