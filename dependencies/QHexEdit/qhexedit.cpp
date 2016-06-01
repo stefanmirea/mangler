@@ -692,16 +692,6 @@ void QHexEdit::keyPressEvent(QKeyEvent *event)
         setCursorPosition(_cursorPosition);
     }
 
-    // Refresh action
-    if ((event->key() == Qt::Key_F5))
-    {
-        std::cerr <<"F5-ed  " << getSelectionBegin() << " " << getSelectionEnd() << "\n";
-        QByteArray ba = dataAt(getSelectionBegin(), getSelectionEnd() - getSelectionBegin());
-
-       ((elf::ELFFile*)fileUnit)->refresh(getSelectionBegin(), getSelectionEnd(), ba.data());
-
-    }
-
     refresh();
 }
 
