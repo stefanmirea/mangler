@@ -31,6 +31,7 @@
 #include <QRadioButton>
 #include <QPushButton>
 #include <QByteArray>
+#include <QCheckBox>
 #include <qhexedit.hpp>
 
 /**
@@ -45,18 +46,20 @@ public:
 signals:
 
 public slots:
-    int findNext();
-    int findPrev();
+    void searchValue();
 private:
     QByteArray getInput();
+    void findNext();
+    void findPrev();
 
     enum search_type {HEX, DEC, STRING};
     QHexEdit *hexedit;
     QLabel *search;
     QLineEdit *text;
     QGroupBox *radiobox;
-    QPushButton *next, *previous;
+    QPushButton *next;
     QRadioButton *hex, *dec, *string;
+    QCheckBox *direction;
 };
 
 #endif // SEARCH_BAR_HPP_
