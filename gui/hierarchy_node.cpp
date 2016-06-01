@@ -72,3 +72,8 @@ bool HierarchyNode::sharesContainer(HierarchyNode *node)
 {
     return container == node->container;
 }
+
+Container *HierarchyNode::getContainer()
+{
+    return container;
+}

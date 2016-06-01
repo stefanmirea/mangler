@@ -35,6 +35,10 @@ class elf_header
     virtual bool save( std::ostream& stream ) const = 0;
 
     // ELF header functions
+    ELFIO_GET_ACCESS_DECL( unsigned char, elfmag0            );
+    ELFIO_GET_ACCESS_DECL( unsigned char, elfmag1            );
+    ELFIO_GET_ACCESS_DECL( unsigned char, elfmag2            );
+    ELFIO_GET_ACCESS_DECL( unsigned char, elfmag3            );
     ELFIO_GET_ACCESS_DECL( unsigned char, class              );
     ELFIO_GET_ACCESS_DECL( unsigned char, elf_version        );
     ELFIO_GET_ACCESS_DECL( unsigned char, encoding           );
@@ -116,6 +120,10 @@ template< class T > class elf_header_impl : public elf_header
     }
 
     // ELF header functions
+    ELFIO_GET_ACCESS( unsigned char, elfmag0,            header.e_ident[EI_MAG0] );
+    ELFIO_GET_ACCESS( unsigned char, elfmag1,            header.e_ident[EI_MAG1] );
+    ELFIO_GET_ACCESS( unsigned char, elfmag2,            header.e_ident[EI_MAG2] );
+    ELFIO_GET_ACCESS( unsigned char, elfmag3,            header.e_ident[EI_MAG3] );
     ELFIO_GET_ACCESS( unsigned char, class,              header.e_ident[EI_CLASS] );
     ELFIO_GET_ACCESS( unsigned char, elf_version,        header.e_ident[EI_VERSION] );
     ELFIO_GET_ACCESS( unsigned char, encoding,           header.e_ident[EI_DATA] );

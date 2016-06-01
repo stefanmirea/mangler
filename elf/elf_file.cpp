@@ -41,7 +41,7 @@ ELFFile::ELFFile(const std::string &filename) : FileUnit(filename)
     if (open)
     {
         std::vector<Container *> &topLevelContainers = getTopLevelContainers();
-        topLevelContainers.push_back(new ELFHeaderContainer(this, std::make_pair(0, 10)));
+        topLevelContainers.push_back(new ELFHeaderContainer(this, std::make_pair(0, file->get_header_size())));
         topLevelContainers.push_back(new ProgramHeaderTableContainer(this, std::make_pair(10, 20)));
         topLevelContainers.push_back(new SectionHeaderTableContainer(this, std::make_pair(20, 30)));
         topLevelContainers.push_back(new SegmentContentsContainer(this));
@@ -65,3 +65,8 @@ bool ELFFile::save(std::string &filename)
 }
 
 void ELFFile::modifyHex(size_t offset, std::string &newContent) {}
+
+ELFIO::elfio *ELFFile::getELFIO()
+{
+    return file;
+}

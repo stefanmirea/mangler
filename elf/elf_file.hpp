@@ -27,6 +27,7 @@
 #include "elfio/elfio.hpp"
 #include "file_unit.hpp"
 #include <string>
+#include <vector>
 
 namespace elf
 {
@@ -34,6 +35,9 @@ namespace elf
  * The FileUnit responsible for interpreting ELF executable files. It is based on the ELFIO
  * library.
  */
+
+class ELFEntry;
+
 class ELFFile : public FileUnit
 {
 public:
@@ -41,6 +45,8 @@ public:
     bool getOpenStatus();
     bool save(std::string &filename);
     void modifyHex(size_t offset, std::string &newContent);
+    ELFIO::elfio *getELFIO();
+
     virtual ~ELFFile();
 
 private:

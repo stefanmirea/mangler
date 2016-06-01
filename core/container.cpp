@@ -23,7 +23,8 @@
 
 #include "container.hpp"
 
-Container::Container(FileUnit *file, bool expandable) : file(file), expandable(expandable)
+Container::Container(FileUnit *file, bool expandable) :
+    file(file), expandable(expandable)
 {
     _keepSpecialRepresentation = false;
     specialRepresentation = nullptr;

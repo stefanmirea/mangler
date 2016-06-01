@@ -5,6 +5,9 @@
 #include <QScrollBar>
 
 #include "qhexedit.hpp"
+#include "file_unit.hpp"
+#include <elf/elf_file.hpp>
+#include <iostream>
 
 const int HEXCHARS_IN_LINE = 47;
 const int BYTES_PER_LINE = 16;
@@ -12,7 +15,7 @@ const int BYTES_PER_LINE = 16;
 
 // ********************************************************************** Constructor, destructor
 
-QHexEdit::QHexEdit(QWidget *parent) : QAbstractScrollArea(parent)
+QHexEdit::QHexEdit(FileUnit *fileUnit, QWidget *parent) : fileUnit(fileUnit), QAbstractScrollArea(parent)
 {
     _chunks = new Chunks();
     _undoStack = new UndoStack(_chunks, this);
@@ -340,6 +343,14 @@ qint64 QHexEdit::lastIndexOf(const QByteArray &ba, qint64 from)
         ensureVisible();
     }
     return pos;
+}
+
+void QHexEdit::selectData(int position, int size)
+{
+	setCursorPosition(position * 2 - 1);
+	resetSelection(position * 2);
+	setSelection(position * 2 + size * 2);
+	ensureVisible();
 }
 
 void QHexEdit::redo()

@@ -41,6 +41,7 @@ public:
     QWidget *getSpecialRepresentation();
     bool keepSpecialRepresentation();
     bool sharesContainer(HierarchyNode *node);
+    Container *getContainer();
 private:
     void _HierarchyNode(Container *container);
     Container *container;

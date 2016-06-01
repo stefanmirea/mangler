@@ -184,6 +184,10 @@ class elfio
 
 //------------------------------------------------------------------------------
     // ELF header access functions
+    ELFIO_HEADER_ACCESS_GET( unsigned char, elfmag0            );
+    ELFIO_HEADER_ACCESS_GET( unsigned char, elfmag1            );
+    ELFIO_HEADER_ACCESS_GET( unsigned char, elfmag2            );
+    ELFIO_HEADER_ACCESS_GET( unsigned char, elfmag3            );
     ELFIO_HEADER_ACCESS_GET( unsigned char, class              );
     ELFIO_HEADER_ACCESS_GET( unsigned char, elf_version        );
     ELFIO_HEADER_ACCESS_GET( unsigned char, encoding           );
@@ -201,6 +205,8 @@ class elfio
     ELFIO_HEADER_ACCESS_GET_SET( Elf64_Off,     sections_offset        );
     ELFIO_HEADER_ACCESS_GET_SET( Elf64_Off,     segments_offset        );
     ELFIO_HEADER_ACCESS_GET_SET( Elf_Half,      section_name_str_index );
+    ELFIO_HEADER_ACCESS_GET_SET( Elf_Half,      segments_num           );
+    ELFIO_HEADER_ACCESS_GET_SET( Elf_Half,      sections_num           );
 
 //------------------------------------------------------------------------------
     const endianess_convertor& get_convertor() const

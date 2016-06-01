@@ -7,6 +7,7 @@
 
 #include "chunks.hpp"
 #include "commands.hpp"
+#include "file_unit.hpp"
 
 /** \mainpage
 QHexEdit is a binary editor widget for Qt.
@@ -127,7 +128,7 @@ public:
     /*! Creates an instance of QHexEdit.
     \param parent Parent widget of QHexEdit.
     */
-    QHexEdit(QWidget *parent=0);
+    QHexEdit(FileUnit *fileUnit, QWidget *parent=0);
 
     // Access to data of qhexedit
 
@@ -263,6 +264,8 @@ signals:
 public:
     ~QHexEdit();
 
+    void selectData(int position, int size);
+
     // Properties
     bool addressArea();
     void setAddressArea(bool addressArea);
@@ -380,6 +383,8 @@ private:
     int _rowsShown;                             // lines of text shown
     UndoStack * _undoStack;                     // Stack to store edit actions for undo/redo
     /*! \endcond docNever */
+
+    FileUnit *fileUnit;
 };
 
 #endif // QHEXEDIT_HPP_
