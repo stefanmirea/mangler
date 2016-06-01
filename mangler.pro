@@ -28,6 +28,7 @@ SOURCES +=\
     core/search_engine.cpp \
     elf/elf_file.cpp \
     elf/elf_header_container.cpp \
+    elf/e_ident_container.cpp \
     elf/program_header_table_container.cpp \
     elf/section_header_table_container.cpp \
     elf/segment_contents_container.cpp \
@@ -53,6 +54,7 @@ HEADERS  += \
     core/search_engine.hpp \
     elf/elf_file.hpp \
     elf/elf_header_container.hpp \
+    elf/e_ident_container.hpp \
     elf/program_header_table_container.hpp \
     elf/section_header_table_container.hpp \
     elf/segment_contents_container.hpp \
