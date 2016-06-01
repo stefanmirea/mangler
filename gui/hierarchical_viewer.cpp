@@ -107,10 +107,11 @@ void HierarchicalViewer::change(QTreeWidgetItem *current, QTreeWidgetItem *previ
         }
     }
 
-    std::pair<int, int> interval = currentNode->getInterval();
-    if (Container::isValidInterval(interval))
+    if (previous)
     {
-        hexViewer->selectData(interval.first, interval.second - interval.first);
+        std::pair<int, int> interval = currentNode->getInterval();
+        if (Container::isValidInterval(interval))
+            hexViewer->selectData(interval.first, interval.second - interval.first);
     }
 }
 
