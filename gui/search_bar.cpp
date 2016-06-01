@@ -23,6 +23,7 @@
 
 #include "search_bar.hpp"
 #include <QHBoxLayout>
+#include <QMessageBox>
 #include <iostream>
 #include <algorithm>
 
@@ -79,12 +80,30 @@ QByteArray SearchBar::getInput()
         }
         else if (dec->isChecked() == true)
         {
-            int value = text->text().toInt();
-            input.append((char)((value >> 24)));
-            input.append((char)((value << 8) >> 24));
-            input.append((char)((value << 16) >> 24));
-            input.append((char)((value << 24) >> 24));
-            qDebug(input);
+            bool ok;
+            qulonglong value = text->text().toULongLong(&ok);
+            if (!ok)
+                QMessageBox::critical(this, QString("Error"),
+                                      QString("%1 is not a valid decimal value.")
+                                      .arg(text->text()));
+            else if (value == 0)
+                input.fill(0, 1);
+            else
+            {
+                int shift = CHAR_BIT * (sizeof(unsigned long long) - 1);
+                unsigned long long mask = 0xFF << shift;
+                bool null = true;
+                while (mask)
+                {
+                    char byte = (char)((value & mask) >> shift);
+                    if (byte != 0)
+                        null = false;
+                    if (!null)
+                        input.append(byte);
+                    mask >>= CHAR_BIT;
+                    shift -= CHAR_BIT;
+                }
+            }
         }
         else if (string->isChecked() == true)
         {
