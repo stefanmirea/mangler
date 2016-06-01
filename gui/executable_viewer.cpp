@@ -46,13 +46,6 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     /* Left panel - hierarchy */
     QHBoxLayout *hv = new QHBoxLayout;
     hv->setContentsMargins(QMargins());
-    /*hierarchicalViewer = new HierarchicalViewer(split, defaultSpecialRep, this);
-
-    std::vector<Container *> rootContainers = fileUnit->getTopLevelContainers();
-    for (unsigned int i = 0; i < rootContainers.size(); ++i)
-        hierarchicalViewer->addRoot(rootContainers[i]);
-
-    hv->addWidget(hierarchicalViewer);*/
     left->setLayout(hv);
 
     /* Center hex viewer and search bar */
