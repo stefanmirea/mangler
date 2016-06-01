@@ -70,16 +70,14 @@ SearchBar::SearchBar(QHexEdit *hexedit, QWidget *parent) :
 QByteArray SearchBar::getInput()
 {
     QByteArray input;
-    if(text->text().isEmpty() == false)
+    if (text->text().isEmpty() == false)
     {
-        if(hex->isChecked() == true)
+        if (hex->isChecked() == true)
         {
             input =  QByteArray::fromHex(text->text().toLatin1());
             std::cerr << "HEX\n";
         }
-
-        else
-        if(dec->isChecked() == true)
+        else if (dec->isChecked() == true)
         {
             int value = text->text().toInt();
             input.append((char)((value >> 24)));
@@ -88,9 +86,7 @@ QByteArray SearchBar::getInput()
             input.append((char)((value << 24) >> 24));
             qDebug(input);
         }
-
-        else
-        if(string->isChecked() == true)
+        else if (string->isChecked() == true)
         {
             input = QByteArray(text->text().toUtf8());
             std::cerr << "STR\n";
@@ -104,7 +100,7 @@ QByteArray SearchBar::getInput()
 int SearchBar::findNext()
 {
     QByteArray searchInput = getInput();
-    if(searchInput.length() == 0)
+    if (searchInput.length() == 0)
     {
         return -1;
     }
@@ -121,7 +117,7 @@ int SearchBar::findNext()
 int SearchBar::findPrev()
 {
     QByteArray searchInput = getInput();
-    if(searchInput.length() == 0)
+    if (searchInput.length() == 0)
     {
         return -1;
     }

@@ -51,7 +51,7 @@ bool ModifyASMBar::editInstruction()
     QModelIndexList list = asmViewer->selectionModel()->selectedIndexes();
     QString inputInstruction = text->text();
 
-    if(list.size() && inputInstruction.isEmpty() == false)
+    if (list.size() && inputInstruction.isEmpty() == false)
     {
         QString address = list[0].data().toString();
         QString machineCode = list[1].data().toString();
@@ -69,10 +69,10 @@ bool ModifyASMBar::editInstruction()
 
         /* TODO: deallocate memory for old QStandardItem */
 
-        if(inputInstruction.contains("90")) /* Testing purposes, not a rigorous check */
+        if (inputInstruction.contains("90")) /* Testing purposes, not a rigorous check */
         {
             QString nops;
-            for(unsigned int i = 0; i < instrSize; i++)
+            for (unsigned int i = 0; i < instrSize; i++)
                 nops.append("90 ");
             asmViewer->editModel(selectedRow, 1, new QStandardItem(nops));
 
@@ -83,7 +83,6 @@ bool ModifyASMBar::editInstruction()
             asmViewer->editModel(selectedRow, 3,
                             new QStandardItem(QString("")));
         }
-
         else
         {
             asmViewer->editModel(selectedRow, 1, new QStandardItem(inputInstruction));
