@@ -44,7 +44,7 @@ ModifyASMBar::ModifyASMBar(ASMViewer *asmViewer, QWidget *parent) :
     connect(ok, SIGNAL(clicked()), this, SLOT(editInstruction()));
 }
 
-bool ModifyASMBar::editInstruction()
+void ModifyASMBar::editInstruction()
 {
     std::cerr << "OK!\n";
 
