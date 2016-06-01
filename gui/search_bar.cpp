@@ -137,7 +137,11 @@ void SearchBar::findNext()
     qint64 newPosition = -1;
 
     newPosition = hexedit->indexOf(searchInput, start);
-    std::cerr <<"New pos: " << newPosition;
+    std::cerr << "New pos: " << newPosition;
+
+    if (newPosition == -1)
+        QMessageBox::information(this, QString("Information"),
+        QString("Your search reached the end of the file."));
 }
 
 void SearchBar::findPrev()
@@ -152,5 +156,9 @@ void SearchBar::findPrev()
     qint64 newPosition = -1;
 
     newPosition = hexedit->lastIndexOf(searchInput, start);
-    std::cerr <<"New pos: " << newPosition;
+    std::cerr << "New pos: " << newPosition;
+
+    if (newPosition == -1)
+        QMessageBox::information(this, QString("Information"),
+        QString("Your search reached the beginning of the file."));
 }
