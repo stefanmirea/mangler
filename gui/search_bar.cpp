@@ -36,15 +36,11 @@ SearchBar::SearchBar(QHexEdit *hexedit, QWidget *parent) :
     hex = new QRadioButton(QString("Hex"), this);
     dec = new QRadioButton(QString("Dec"), this);
     string = new QRadioButton(QString("String"), this);
+    direction = new QCheckBox("Backwards", this);
 
     next = new QPushButton();
-    connect(next, SIGNAL (clicked()), this, SLOT (findNext()));
-
-    previous = new QPushButton();
-    connect(previous, SIGNAL (clicked()), this, SLOT (findPrev()));
-
+    connect(next, SIGNAL (clicked()), this, SLOT (searchValue()));
     next->setIcon(QIcon::fromTheme("go-next", QIcon(":/icons/next.png")));
-    previous->setIcon(QIcon::fromTheme("go-previous", QIcon(":/icons/previous.png")));
 
     radiobox->setStyleSheet("border:0;");
 
@@ -61,11 +57,24 @@ SearchBar::SearchBar(QHexEdit *hexedit, QWidget *parent) :
     hbox->addWidget(search);
     hbox->addWidget(text);
     hbox->addWidget(radiobox);
-    hbox->addWidget(previous);
+    hbox->addWidget(direction);
     hbox->addWidget(next);
 
     setLayout(hbox);
     setMaximumHeight(80);
+}
+
+void SearchBar::searchValue()
+{
+    if (!direction->isChecked())
+    {
+        findNext();
+    }
+
+    else
+    {
+        findPrev();
+    }
 }
 
 QByteArray SearchBar::getInput()
@@ -116,36 +125,32 @@ QByteArray SearchBar::getInput()
     return input;
 }
 
-int SearchBar::findNext()
+void SearchBar::findNext()
 {
     QByteArray searchInput = getInput();
     if (searchInput.length() == 0)
     {
-        return -1;
+        return;
     }
 
-    qint64 start = hexedit->cursorPosition() / 2;
+    qint64 start = (hexedit->cursorPosition() + 1) / 2;
     qint64 newPosition = -1;
 
     newPosition = hexedit->indexOf(searchInput, start);
     std::cerr <<"New pos: " << newPosition;
-
-    return newPosition;
 }
 
-int SearchBar::findPrev()
+void SearchBar::findPrev()
 {
     QByteArray searchInput = getInput();
     if (searchInput.length() == 0)
     {
-        return -1;
+        return;
     }
 
-    qint64 start = hexedit->cursorPosition() / 2;
+    qint64 start = (hexedit->cursorPosition() - 1) / 2;
     qint64 newPosition = -1;
 
     newPosition = hexedit->lastIndexOf(searchInput, start);
     std::cerr <<"New pos: " << newPosition;
-
-    return newPosition;
 }
