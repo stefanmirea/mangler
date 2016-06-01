@@ -71,8 +71,9 @@ std::pair<int, int> &Container::getInterval()
         for (unsigned int i = 0; i < parents.size(); ++i)
         {
             std::pair<int, int> &parentInterval = parents[i]->getInterval();
-            assert(parentInterval.first <= interval.first &&
-                   interval.second <= parentInterval.second);
+            if (isValidInterval(parentInterval))
+                assert(parentInterval.first <= interval.first &&
+                       interval.second <= parentInterval.second);
         }
 #endif
     return interval;
