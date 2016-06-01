@@ -44,7 +44,7 @@ public:
 signals:
 
 public slots:
-    bool editInstruction();
+    void editInstruction();
 private:
     QLabel *modify;
     QLineEdit *text;

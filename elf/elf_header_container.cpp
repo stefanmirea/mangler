@@ -26,348 +26,137 @@
 
 using namespace elf;
 
-ELFHeaderContainer::e_ident_ei_mag0_t::e_ident_ei_mag0_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_elfmag0();
-    std::string val_display = "e_ident[EI_MAG0]:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_ident_ei_mag1_t::e_ident_ei_mag1_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_elfmag1();
-    std::string val_display = "e_ident[EI_MAG1]:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_ident_ei_mag2_t::e_ident_ei_mag2_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_elfmag2();
-    std::string val_display = "e_ident[EI_MAG2]:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_ident_ei_mag3_t::e_ident_ei_mag3_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_elfmag3();
-    std::string val_display = "e_ident[EI_MAG3]:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::ei_class_t::ei_class_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_class();
-    std::string val_display = "e_ident[EI_CLASS]:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::ei_data_t::ei_data_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_encoding();
-    std::string val_display = "e_ident[EI_DATA]:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::ei_version_t::ei_version_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_elf_version();
-    std::string val_display = "e_ident[EI_VERSION]:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::ei_osabi_t::ei_osabi_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_os_abi();
-    std::string val_display = "e_ident[EI_OSABI]:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::ei_abiversion_t::ei_abiversion_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_abi_version();
-    std::string val_display = "e_ident[EI_ABIVERSION]:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_ident_ei_pad_t::e_ident_ei_pad_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    std::string val_display = "e_ident[EI_PAD]:    *******";
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_type_t::e_type_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_type();
-    std::string val_display = "e_type:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_machine_t::e_machine_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_machine();
-    std::string val_display = "e_machine:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_version_t::e_version_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_version();
-    std::string val_display = "e_version:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_entry_t::e_entry_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_entry();
-    std::string val_display = "e_entry:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_phoff_t::e_phoff_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_segments_offset();
-    std::string val_display = "e_phoff:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_shoff_t::e_shoff_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_sections_offset();
-    std::string val_display = "e_shoff:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_flags_t::e_flags_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_flags();
-    std::string val_display = "e_flags:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_ehsize_t::e_ehsize_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_header_size();
-    std::string val_display = "e_ehsize:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_phentsize_t::e_phentsize_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_segment_entry_size();
-    std::string val_display = "e_phentsize:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_phnum_t::e_phnum_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_segments_num();
-    std::string val_display = "e_phnum:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_shentsize_t::e_shentsize_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_section_entry_size();
-    std::string val_display = "e_shentsize:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_shnum_t::e_shnum_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_sections_num();
-    std::string val_display = "e_shnum:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
-ELFHeaderContainer::e_shstrndx_t::e_shstrndx_t(ELFFile *file,
-                                                         const std::pair<int, int> &interval) :
-   Container(file, false, interval)
-{
-    unsigned char byte = file->getELFIO()->get_section_name_str_index();
-    std::string val_display = "e_shstrndx:    " + std::to_string((int)byte);
-    setName(val_display);
-}
-
 ELFHeaderContainer::ELFHeaderContainer(ELFFile *file, const std::pair<int, int> &interval) :
     Container(file, true, interval)
 {
     setName("ELF Header");
-
-    int offset = 0x00;
-    int increment = 0;
-
-    std::string val_display;
-    unsigned char byte;
-
-    byte = file->getELFIO()->get_elfmag0();
-    val_display = std::to_string((int)byte);
-
-    ELFHeaderContainer::e_ident_ei_mag0_t *e_ident_ei_mag0 =
-            new ELFHeaderContainer::e_ident_ei_mag0_t(file, std::make_pair(offset, offset + 1));
-    addInnerContainer(e_ident_ei_mag0);
-    offset++;
-
-    ELFHeaderContainer::e_ident_ei_mag1_t *e_ident_ei_mag1 =
-            new ELFHeaderContainer::e_ident_ei_mag1_t(file, std::make_pair(offset, offset + 1));
-    addInnerContainer(e_ident_ei_mag1);
-    offset++;
-
-    ELFHeaderContainer::e_ident_ei_mag2_t *e_ident_ei_mag2 =
-            new ELFHeaderContainer::e_ident_ei_mag2_t(file, std::make_pair(offset, offset + 1));
-    addInnerContainer(e_ident_ei_mag2);
-    offset++;
-
-    ELFHeaderContainer::e_ident_ei_mag3_t *e_ident_ei_mag3 =
-            new ELFHeaderContainer::e_ident_ei_mag3_t(file, std::make_pair(offset, offset + 1));
-    addInnerContainer(e_ident_ei_mag3);
-    offset++;
-
-    ELFHeaderContainer::ei_class_t *ei_class =
-            new ELFHeaderContainer::ei_class_t(file, std::make_pair(offset, offset + 1));
-    addInnerContainer(ei_class);
-    offset++;
-
-    increment = 4;
-
-    ELFHeaderContainer::ei_data_t *ei_data =
-            new ELFHeaderContainer::ei_data_t(file, std::make_pair(offset, offset + 1));
-    addInnerContainer(ei_data);
-    offset++;
-
-    ELFHeaderContainer::ei_version_t *ei_version =
-            new ELFHeaderContainer::ei_version_t(file, std::make_pair(offset, offset + 1));
-    addInnerContainer(ei_version);
-    offset++;
-
-    ELFHeaderContainer::ei_osabi_t *ei_osabi =
-            new ELFHeaderContainer::ei_osabi_t(file, std::make_pair(offset, offset + 1));
-    addInnerContainer(ei_osabi);
-    offset++;
-
-    ELFHeaderContainer::ei_abiversion_t *ei_abiversion =
-            new ELFHeaderContainer::ei_abiversion_t(file, std::make_pair(offset, offset + 1));
-    addInnerContainer(ei_abiversion);
-    offset++;
-
-    /* TODO: get value */
-    ELFHeaderContainer::e_ident_ei_pad_t  *e_ident_ei_pad =
-            new ELFHeaderContainer::e_ident_ei_pad_t(file, std::make_pair(offset, offset + 7));
-    addInnerContainer(e_ident_ei_pad);
-    offset += 7;
-
-    ELFHeaderContainer::e_type_t  *e_type =
-            new ELFHeaderContainer::e_type_t(file, std::make_pair(offset, offset + 2));
-    addInnerContainer(e_type);
-    offset += 2;
-
-    ELFHeaderContainer::e_machine_t  *machine =
-            new ELFHeaderContainer::e_machine_t(file, std::make_pair(offset, offset + 2));
-    addInnerContainer(machine);
-    offset += 2;
-
-    ELFHeaderContainer::e_version_t  *e_version =
-            new ELFHeaderContainer::e_version_t(file, std::make_pair(offset, offset + 4));
-    addInnerContainer(e_version);
-    offset += 4;
-
-    ELFHeaderContainer::e_entry_t  *e_entry =
-            new ELFHeaderContainer::e_entry_t(file, std::make_pair(offset, offset + increment));
-    addInnerContainer(e_entry);
-    offset += increment;
-
-    ELFHeaderContainer::e_phoff_t  *e_phoff =
-            new ELFHeaderContainer::e_phoff_t(file, std::make_pair(offset, offset + increment));
-    addInnerContainer(e_phoff);
-    offset += increment;
-
-    ELFHeaderContainer::e_shoff_t  *e_shoff =
-            new ELFHeaderContainer::e_shoff_t(file, std::make_pair(offset, offset + increment));
-    addInnerContainer(e_shoff);
-    offset += increment;
-
-    ELFHeaderContainer::e_flags_t  *e_flags =
-            new ELFHeaderContainer::e_flags_t(file, std::make_pair(offset, offset + 4));
-    addInnerContainer(e_flags);
-    offset += 4;
-
-
-    ELFHeaderContainer::e_ehsize_t  *e_ehsize =
-            new ELFHeaderContainer::e_ehsize_t(file, std::make_pair(offset, offset + 2));
-    addInnerContainer(e_ehsize);
-    offset += 2;
-
-    ELFHeaderContainer::e_phentsize_t  *e_phentsize =
-            new ELFHeaderContainer::e_phentsize_t(file, std::make_pair(offset, offset + 2));
-    addInnerContainer(e_phentsize);
-    offset += 2;
-
-    ELFHeaderContainer::e_phnum_t  *e_phnum =
-            new ELFHeaderContainer::e_phnum_t(file, std::make_pair(offset, offset + 2));
-    addInnerContainer(e_phnum);
-    offset += 2;
-
-    ELFHeaderContainer::e_shentsize_t  *e_shentsize =
-            new ELFHeaderContainer::e_shentsize_t(file, std::make_pair(offset, offset + 2));
-    addInnerContainer(e_shentsize);
-    offset += 2;
-
-    ELFHeaderContainer::e_shnum_t  *e_shnum =
-            new ELFHeaderContainer::e_shnum_t(file, std::make_pair(offset, offset + 2));
-    addInnerContainer(e_shnum);
-    offset += 2;
-
-    ELFHeaderContainer::e_shstrndx_t  *e_shstrndx =
-            new ELFHeaderContainer::e_shstrndx_t(file, std::make_pair(offset, offset + 2));
-    addInnerContainer(e_shstrndx);
-    offset += 2;
 }
 
 std::vector<Container *> &ELFHeaderContainer::getInnerContainers()
 {
+    if (innerContainers.empty())
+    {
+        Container *container;
+        ELFFile *efile = dynamic_cast<ELFFile *>(getFile());
+        ELFIO::elfio *elfio = efile->getELFIO();
+        int offset = 0x00;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
+        container->setName("e_ident[EI_MAG0]: " + std::to_string(elfio->get_elfmag0()));
+        addInnerContainer(container);
+        offset++;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
+        container->setName("e_ident[EI_MAG1]: " + std::to_string(elfio->get_elfmag1()));
+        addInnerContainer(container);
+        offset++;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
+        container->setName("e_ident[EI_MAG2]: " + std::to_string(elfio->get_elfmag2()));
+        addInnerContainer(container);
+        offset++;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
+        container->setName("e_ident[EI_MAG3]: " + std::to_string(elfio->get_elfmag3()));
+        addInnerContainer(container);
+        offset++;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
+        container->setName("e_ident[EI_CLASS]: " + std::to_string(elfio->get_class()));
+        addInnerContainer(container);
+        offset++;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
+        container->setName("e_ident[EI_DATA]: " + std::to_string(elfio->get_encoding()));
+        addInnerContainer(container);
+        offset++;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
+        container->setName("e_ident[EI_VERSION]: " + std::to_string(elfio->get_elf_version()));
+        addInnerContainer(container);
+        offset++;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
+        container->setName("e_ident[EI_OSABI]: " + std::to_string(elfio->get_os_abi()));
+        addInnerContainer(container);
+        offset++;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
+        container->setName("e_ident[EI_ABIVERSION]: " + std::to_string(elfio->get_abi_version()));
+        addInnerContainer(container);
+        offset++;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 7));
+        container->setName("e_ident[EI_PAD]: " + std::string("00 00 00 00 00 00 00"));
+        addInnerContainer(container);
+        offset += 7;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 2));
+        container->setName("e_type: " + std::to_string(elfio->get_type()));
+        addInnerContainer(container);
+        offset += 2;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 2));
+        container->setName("e_machine: " + std::to_string(elfio->get_machine()));
+        addInnerContainer(container);
+        offset += 2;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 4));
+        container->setName("e_version: " + std::to_string(elfio->get_version()));
+        addInnerContainer(container);
+        offset += 4;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 4));
+        container->setName("e_entry: " + std::to_string(elfio->get_entry()));
+        addInnerContainer(container);
+        offset += 4;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 4));
+        container->setName("e_phoff: " + std::to_string(elfio->get_segments_offset()));
+        addInnerContainer(container);
+        offset += 4;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 4));
+        container->setName("e_shoff: " + std::to_string(elfio->get_sections_offset()));
+        addInnerContainer(container);
+        offset += 4;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 4));
+        container->setName("e_flags: " + std::to_string(elfio->get_flags()));
+        addInnerContainer(container);
+        offset += 4;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 2));
+        container->setName("e_ehsize: " + std::to_string(elfio->get_header_size()));
+        addInnerContainer(container);
+        offset += 2;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 2));
+        container->setName("e_phentsize: " + std::to_string(elfio->get_segment_entry_size()));
+        addInnerContainer(container);
+        offset += 2;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 2));
+        container->setName("e_phnum: " + std::to_string(elfio->get_segments_num()));
+        addInnerContainer(container);
+        offset += 2;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 2));
+        container->setName("e_shentsize: " + std::to_string(elfio->get_section_entry_size()));
+        addInnerContainer(container);
+        offset += 2;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 2));
+        container->setName("e_shnum: " + std::to_string(elfio->get_sections_num()));
+        addInnerContainer(container);
+        offset += 2;
+
+        container = new Container(getFile(), false, std::make_pair(offset, offset + 2));
+        container->setName("e_shstrndx: " + std::to_string(elfio->get_section_name_str_index()));
+        addInnerContainer(container);
+        offset += 2;
+    }
+
     return innerContainers;
 }
 
