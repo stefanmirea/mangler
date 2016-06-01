@@ -24,24 +24,12 @@
 #include "file_assembly.hpp"
 #include <QString>
 
-FileAssembly::FileAssembly() {}
-
-FileAssembly::~FileAssembly() {}
-
-FileAssembly::Disassembler::Disassembler() {}
-
-FileAssembly::Disassembler::~Disassembler() {}
-
-std::string FileAssembly::Disassembler::disassembleCode(uint8_t *code, unsigned int length)
+std::string FileAssembly::disassembleCode(const std::string &code)
 {
     return std::string("nop");
 }
 
-FileAssembly::Assembler::Assembler() {}
-
-FileAssembly::Assembler::~Assembler() {}
-
-uint8_t *FileAssembly::Assembler::assembleCode(std::string &code)
+std::string FileAssembly::assembleCode(const std::string &instruction)
 {
-    return nullptr;
+    return "";
 }

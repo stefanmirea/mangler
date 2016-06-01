@@ -34,29 +34,8 @@
 class FileAssembly
 {
 public:
-    FileAssembly();
-
-    class Disassembler
-    {
-    public:
-        Disassembler();
-
-        static std::string disassembleCode(uint8_t *code, unsigned int length);
-
-        virtual ~Disassembler();
-    };
-
-    class Assembler
-    {
-    public:
-        Assembler();
-
-        static uint8_t *assembleCode(std::string &code);
-
-        virtual ~Assembler();
-    };
-
-    virtual ~FileAssembly();
+    static std::string disassembleCode(const std::string &machineCode);
+    static std::string assembleCode(const std::string &instruction);
 };
 
 #endif // FILE_ASSEMBLY_HPP_
