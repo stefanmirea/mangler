@@ -33,7 +33,7 @@
 #include "container.hpp"
 #include "code_container.hpp"
 #include "file_unit.hpp"
-#include "elf/elf_file.hpp"
+#include "elf_file.hpp"
 #include "elfio/elfio.hpp"
 
 int main(int argc, char *argv[])
