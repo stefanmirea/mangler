@@ -128,7 +128,7 @@ public:
     /*! Creates an instance of QHexEdit.
     \param parent Parent widget of QHexEdit.
     */
-    QHexEdit(FileUnit *fileUnit, QWidget *parent=0);
+    QHexEdit(QWidget *parent=0);
 
     // Access to data of qhexedit
 
@@ -383,8 +383,6 @@ private:
     int _rowsShown;                             // lines of text shown
     UndoStack * _undoStack;                     // Stack to store edit actions for undo/redo
     /*! \endcond docNever */
-
-    FileUnit *fileUnit;
 };
 
 #endif // QHEXEDIT_HPP_

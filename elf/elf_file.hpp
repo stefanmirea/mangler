@@ -36,8 +36,6 @@ namespace elf
  * library.
  */
 
-class ELFEntry;
-
 class ELFFile : public FileUnit
 {
 public:
