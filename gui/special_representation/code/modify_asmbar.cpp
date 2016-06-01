@@ -59,7 +59,7 @@ bool ModifyASMBar::editInstruction()
         QString args = list[3].data().toString();
 
         int selectedRow = list[0].row();
-        int instrSize = machineCode.size() / 4 + 2;
+        unsigned int instrSize = (machineCode.size() + 1) / 3;
 
         /* TODO: The input instruction will also be updated in the elfio backend
          * and hexedit */
@@ -77,8 +77,8 @@ bool ModifyASMBar::editInstruction()
             asmViewer->editModel(selectedRow, 1, new QStandardItem(nops));
 
             asmViewer->editModel(selectedRow, 2,
-                            new QStandardItem(QString::fromStdString(FileAssembly::Disassembler::
-                            disassembleCode(nullptr, 1))));
+                            new QStandardItem(QString::fromStdString(FileAssembly::
+                            disassembleCode(""))));
 
             asmViewer->editModel(selectedRow, 3,
                             new QStandardItem(QString("")));
