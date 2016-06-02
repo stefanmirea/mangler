@@ -72,9 +72,9 @@ ELFIO::elfio *ELFFile::getELFIO()
     return file;
 }
 
-void ELFFile::refresh(std::string &filename)
+bool ELFFile::refresh(std::string &tmpName)
 {
-    this->filename = filename;
+    filename = tmpName;
 
     /* Delete the old file and its containers */
     delete file;
@@ -97,4 +97,6 @@ void ELFFile::refresh(std::string &filename)
         topLevelContainers.push_back(new SegmentContentsContainer(this));
         topLevelContainers.push_back(new SectionContentsContainer(this));
     }
+
+    return open;
 }

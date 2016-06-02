@@ -50,7 +50,7 @@ data. The size of edited data can be more then two gigabytes without any
 restrictions.
 */
 
-class FileUnit;
+class ExecutableViewer;
 
 class QHexEdit : public QAbstractScrollArea
 {
@@ -131,7 +131,7 @@ public:
     /*! Creates an instance of QHexEdit.
     \param parent Parent widget of QHexEdit.
     */
-    QHexEdit(FileUnit *fileHandler, QWidget *parent=0);
+    QHexEdit(ExecutableViewer *executableViewer, QWidget *parent=0);
 
     // Access to data of qhexedit
 
@@ -388,7 +388,7 @@ private:
     bool _modified;                             // Is any data in editor modified?
     int _rowsShown;                             // lines of text shown
     UndoStack * _undoStack;                     // Stack to store edit actions for undo/redo
-    FileUnit *fileHandler;
+    ExecutableViewer *executableViewer;
     /*! \endcond docNever */
 };
 

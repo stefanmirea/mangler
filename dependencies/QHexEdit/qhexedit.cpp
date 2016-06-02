@@ -6,6 +6,7 @@
 #include <QMessageBox>
 
 #include "qhexedit.hpp"
+#include "executable_viewer.hpp"
 #include <iostream>
 
 const int HEXCHARS_IN_LINE = 47;
@@ -14,8 +15,8 @@ const int BYTES_PER_LINE = 16;
 
 // ********************************************************************** Constructor, destructor
 
-QHexEdit::QHexEdit(FileUnit *fileHandler, QWidget *parent) : QAbstractScrollArea(parent),
-    fileHandler(fileHandler)
+QHexEdit::QHexEdit(ExecutableViewer *executableViewer, QWidget *parent) : QAbstractScrollArea(parent),
+    executableViewer(executableViewer)
 {
     _chunks = new Chunks();
     _undoStack = new UndoStack(_chunks, this);
@@ -695,12 +696,11 @@ void QHexEdit::keyPressEvent(QKeyEvent *event)
     // Refresh Event
     if ((event->key() == Qt::Key_F5))
     {
-        std::string tmpName = fileHandler->getName() + ".tmp";
+        std::string tmpName = executableViewer->getFileName() + ".tmp";
         bool saved = saveFile(QString(tmpName.c_str()));
         if (saved)
         {
-            std::cerr << fileHandler->getName();
-            fileHandler->refresh(tmpName);
+            saved = executableViewer->refresh(tmpName);
         }
     }
 
@@ -996,7 +996,7 @@ void QHexEdit::updateCursor()
 void QHexEdit::loadFile()
 {
     QFile *file = new QFile();
-    file->setFileName(fileHandler->getName().c_str());
+    file->setFileName(executableViewer->getFileName().c_str());
     file->open(QIODevice::ReadOnly);
     std::cerr << "--- " << file->isReadable() << " \n" << file->size() << "\n";
 

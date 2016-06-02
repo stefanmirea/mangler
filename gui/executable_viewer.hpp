@@ -48,12 +48,14 @@ class ExecutableViewer : public QWidget
 public:
     ExecutableViewer(FileUnit *fileUnit, QWidget *parent = 0);
     FileUnit *getFileUnit();
+    std::string &getFileName();
     bool loadFile(const QString &fileName) {return true;}
     bool save() {return true;}
     bool saveAs() {return true;}
     bool saveFile(const QString &fileName) {return true;}
     QString userFriendlyCurrentFile() {return QString("a");}
     QString currentFile() { return QString("current"); }
+    bool refresh(std::string &tmpName);
     virtual ~ExecutableViewer();
 
 signals:

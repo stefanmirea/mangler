@@ -49,7 +49,7 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     left->setLayout(hv);
 
     /* Center hex viewer and search bar */
-    hexViewer = new QHexEdit(fileUnit);
+    hexViewer = new QHexEdit(this, this);
     hexViewer->loadFile();
 
     hierarchicalViewer = new HierarchicalViewer(split, defaultSpecialRep, hexViewer, this);
@@ -111,4 +111,14 @@ ExecutableViewer::~ExecutableViewer()
     /* else defaultSpecialRep will be deallocated automatically by the splitter destructor */
 
     delete fileUnit;
+}
+
+std::string &ExecutableViewer::getFileName()
+{
+    return fileUnit->getName();
+}
+
+bool ExecutableViewer::refresh(std::string &tmpName)
+{
+    return fileUnit->refresh(tmpName);
 }
