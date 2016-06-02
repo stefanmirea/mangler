@@ -28,10 +28,12 @@ SOURCES +=\
     core/search_engine.cpp \
     elf/elf_file.cpp \
     elf/elf_header_container.cpp \
+    elf/e_ident_container.cpp \
     elf/program_header_table_container.cpp \
     elf/section_header_table_container.cpp \
     elf/segment_contents_container.cpp \
     elf/section_contents_container.cpp \
+    elf/elf_code_container.cpp \
     dependencies/QHexEdit/qhexedit.cpp \
     dependencies/QHexEdit/chunks.cpp \
     dependencies/QHexEdit/commands.cpp \
@@ -53,10 +55,12 @@ HEADERS  += \
     core/search_engine.hpp \
     elf/elf_file.hpp \
     elf/elf_header_container.hpp \
+    elf/e_ident_container.hpp \
     elf/program_header_table_container.hpp \
     elf/section_header_table_container.hpp \
     elf/segment_contents_container.hpp \
     elf/section_contents_container.hpp \
+    elf/elf_code_container.hpp \
     dependencies/elfio/elf_types.hpp \
     dependencies/elfio/elfio_utils.hpp \
     dependencies/elfio/elfio_symbols.hpp \

@@ -1,6 +1,6 @@
 /* The MIT License (MIT)
  *
- * Copyright (c) 2016 Adrian Dobrică, Ștefan-Gabriel Mirea
+ * Copyright (c) 2016 Ștefan-Gabriel Mirea, Adrian Dobrică
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,40 +21,28 @@
  * SOFTWARE.
  */
 
-#ifndef MODIFY_ASMBAR_HPP_
-#define MODIFY_ASMBAR_HPP_
+#ifndef ELF_CODE_CONTAINER_HPP_
+#define ELF_CODE_CONTAINER_HPP_
 
-class ModifyASMBar;
+#include "elfio/elfio.hpp"
+#include "code_container.hpp"
+#include "elf_file.hpp"
 
-#include <QWidget>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QItemSelection>
-#include "asm_viewer.hpp"
-#include <file_assembly.hpp>
-
-/**
- * The Modify form at the bottom of the ASMViewer, used to replace the selected assembly
- * instruction.
- */
-class ModifyASMBar : public QWidget
+namespace elf
 {
-    Q_OBJECT
+/**
+ * The CodeContainer responsible for managing ELF code sections.
+ */
+
+class ELFCodeContainer : public CodeContainer
+{
 public:
-    explicit ModifyASMBar(CodeContainer *container, ASMViewer *asmViewer, QWidget *parent = 0);
-
-signals:
-
-public slots:
-    void editInstruction();
-    void changeViewerSelection(const QItemSelection &, const QItemSelection &);
-private:
-    CodeContainer *container;
-    QLabel *modify;
-    QLineEdit *text;
-    QPushButton *ok;
-    ASMViewer *asmViewer;
+    ELFCodeContainer(ELFFile *file, const std::pair<int, int> &interval);
+    unsigned int addressToOffset(unsigned long long address);
+    void getContent(std::vector<std::pair<unsigned long long, std::string>> &content);
+    void overwrite(unsigned long long address, std::string newMachineCode);
+    virtual ~ELFCodeContainer();
 };
+}
 
-#endif // MODIFY_ASMBAR_HPP_
+#endif // ELF_CODE_CONTAINER_HPP_

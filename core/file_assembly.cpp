@@ -26,6 +26,29 @@
 
 std::string FileAssembly::disassembleCode(const std::string &code)
 {
+    char instr1[] = {0x89, 0x85, 0x24, 0xff, 0xff, 0xff};
+    char instr2[] = {0x8b, 0x85, 0x24, 0xff, 0xff, 0xff};
+    if (code.size() == 6)
+    {
+        bool matches = true;
+        for (unsigned int i = 0; i < 6; ++i)
+            if (code[i] != instr1[i])
+            {
+                matches = false;
+                break;
+            }
+        if (matches)
+            return "mov DWORD PTR [rbp-0xdc],eax";
+        matches = true;
+        for (unsigned int i = 0; i < 6; ++i)
+            if (code[i] != instr2[i])
+            {
+                matches = false;
+                break;
+            }
+        if (matches)
+            return "mov eax,DWORD PTR [rbp-0xdc]";
+    }
     return std::string("nop");
 }
 

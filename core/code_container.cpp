@@ -24,10 +24,10 @@
 #include "code_container.hpp"
 
 CodeContainer::CodeContainer(FileUnit *file)
-    : Container(file, false), injectionPossible(false) {}
+    : Container(file, false) {}
 
 CodeContainer::CodeContainer(FileUnit *file, const std::pair<int, int> &interval)
-    : Container(file, false, interval), injectionPossible(false) {}
+    : Container(file, false, interval) {}
 
 bool CodeContainer::canInject()
 {

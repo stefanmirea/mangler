@@ -22,6 +22,7 @@
  */
 
 #include "elf_header_container.hpp"
+#include "e_ident_container.hpp"
 #include <iostream>
 
 using namespace elf;
@@ -38,58 +39,13 @@ std::vector<Container *> &ELFHeaderContainer::getInnerContainers()
     {
         Container *container;
         ELFFile *efile = dynamic_cast<ELFFile *>(getFile());
+#ifdef DEBUG
+        assert(efile != nullptr);
+#endif
         ELFIO::elfio *elfio = efile->getELFIO();
-        int offset = 0x00;
 
-        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
-        container->setName("e_ident[EI_MAG0]: " + std::to_string(elfio->get_elfmag0()));
-        addInnerContainer(container);
-        offset++;
-
-        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
-        container->setName("e_ident[EI_MAG1]: " + std::to_string(elfio->get_elfmag1()));
-        addInnerContainer(container);
-        offset++;
-
-        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
-        container->setName("e_ident[EI_MAG2]: " + std::to_string(elfio->get_elfmag2()));
-        addInnerContainer(container);
-        offset++;
-
-        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
-        container->setName("e_ident[EI_MAG3]: " + std::to_string(elfio->get_elfmag3()));
-        addInnerContainer(container);
-        offset++;
-
-        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
-        container->setName("e_ident[EI_CLASS]: " + std::to_string(elfio->get_class()));
-        addInnerContainer(container);
-        offset++;
-
-        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
-        container->setName("e_ident[EI_DATA]: " + std::to_string(elfio->get_encoding()));
-        addInnerContainer(container);
-        offset++;
-
-        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
-        container->setName("e_ident[EI_VERSION]: " + std::to_string(elfio->get_elf_version()));
-        addInnerContainer(container);
-        offset++;
-
-        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
-        container->setName("e_ident[EI_OSABI]: " + std::to_string(elfio->get_os_abi()));
-        addInnerContainer(container);
-        offset++;
-
-        container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
-        container->setName("e_ident[EI_ABIVERSION]: " + std::to_string(elfio->get_abi_version()));
-        addInnerContainer(container);
-        offset++;
-
-        container = new Container(getFile(), false, std::make_pair(offset, offset + 7));
-        container->setName("e_ident[EI_PAD]: " + std::string("00 00 00 00 00 00 00"));
-        addInnerContainer(container);
-        offset += 7;
+        addInnerContainer(new EIdentContainer(efile));
+        int offset = EI_NIDENT;
 
         container = new Container(getFile(), false, std::make_pair(offset, offset + 2));
         container->setName("e_type: " + std::to_string(elfio->get_type()));

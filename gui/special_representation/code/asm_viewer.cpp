@@ -23,7 +23,8 @@
 
 #include "asm_viewer.hpp"
 
-ASMViewer::ASMViewer(QWidget *parent) : QTreeView(parent)
+ASMViewer::ASMViewer(CodeContainer *container, QWidget *parent) :
+    QTreeView(parent), container(container)
 {
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setItemsExpandable(false);
@@ -42,19 +43,43 @@ ASMViewer::ASMViewer(QWidget *parent) : QTreeView(parent)
     for (unsigned int column = 0; column < 4; ++column)
         resizeColumnToContents(column);
 
-    QList<QStandardItem *> items;
-    items.append(new QStandardItem(QString("406637")));
-    items.append(new QStandardItem(QString("89 85 24 ff ff ff")));
-    items.append(new QStandardItem(QString("mov")));
-    items.append(new QStandardItem(QString("DWORD PTR [rbp-0xdc],eax")));
-    model->appendRow(items);
+    std::vector<std::pair<unsigned long long, std::string>> content;
+    container->getContent(content);
 
-    items.clear();
-    items.append(new QStandardItem(QString("40663d")));
-    items.append(new QStandardItem(QString("8b 85 24 ff ff ff")));
-    items.append(new QStandardItem(QString("mov")));
-    items.append(new QStandardItem(QString("eax,DWORD PTR [rbp-0xdc]")));
-    model->appendRow(items);
+    QList<QStandardItem *> items;
+    for (unsigned int i = 0; i < content.size(); ++i)
+    {
+        items.clear();
+        items.append(new QStandardItem(QString::number(content[i].first, 16)));
+        QString machineCode;
+        for (unsigned int byte = 0; byte < content[i].second.size(); ++byte)
+        {
+            char c = content[i].second[byte];
+            machineCode += QString::number((c & 0xF0) >> 4, 16).toUpper();
+            machineCode += QString::number(c & 0xF, 16).toUpper();
+            if (byte != content[i].second.size() - 1)
+                machineCode += ' ';
+        }
+        items.append(new QStandardItem(machineCode));
+
+        std::string instruction = FileAssembly::disassembleCode(content[i].second);
+        size_t spacePos = instruction.find(' ');
+        std::string opcode, arguments;
+        if (spacePos == std::string::npos)
+        {
+            /* For example "nop" */
+            opcode = instruction;
+            arguments = "";
+        }
+        else
+        {
+            opcode = instruction.substr(0, spacePos);
+            arguments = instruction.substr(spacePos + 1);
+        }
+        items.append(new QStandardItem(QString(opcode.c_str())));
+        items.append(new QStandardItem(QString(arguments.c_str())));
+        model->appendRow(items);
+    }
 }
 
 void ASMViewer::editModel(int row, int col, QStandardItem *item)

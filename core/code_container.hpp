@@ -24,6 +24,8 @@
 #ifndef CODE_CONTAINER_HPP_
 #define CODE_CONTAINER_HPP_
 
+class CodeContainer;
+
 #include "container.hpp"
 #include "special_representation/code/asm_viewer.hpp"
 #include "special_representation/code/modify_asmbar.hpp"
@@ -43,10 +45,16 @@ public:
     virtual void injectCode(size_t offset, std::string &newContent);
     virtual ~CodeContainer();
 
+    virtual unsigned int addressToOffset(unsigned long long address) = 0;
+    virtual void getContent(std::vector<std::pair<unsigned long long, std::string>> &content) = 0;
+    virtual void overwrite(unsigned long long address, std::string newMachineCode) = 0;
+
+protected:
+    bool injectionPossible;
+
 private:
     ASMViewer *asmView;
     ModifyASMBar *asmBar;
-    bool injectionPossible;
 };
 
 #endif // CODE_CONTAINER_HPP_

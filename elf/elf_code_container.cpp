@@ -21,35 +21,46 @@
  * SOFTWARE.
  */
 
-#include "segment_contents_container.hpp"
+#include "elf_code_container.hpp"
 
 using namespace elf;
 
-SegmentContentsContainer::SegmentContentsContainer(ELFFile *file) : Container(file, true)
+ELFCodeContainer::ELFCodeContainer(ELFFile *file, const std::pair<int, int> &interval) :
+    CodeContainer(file, interval)
 {
-    setName("Segment contents");
+    injectionPossible = false;
 }
 
-std::vector<Container *> &SegmentContentsContainer::getInnerContainers()
+unsigned int ELFCodeContainer::addressToOffset(unsigned long long address)
 {
-    if (innerContainers.empty())
-    {
-        Container *container;
+    /* TODO */
+    return address - 0x400000;
+}
 
-        ELFFile *efile = dynamic_cast<ELFFile *>(getFile());
+void ELFCodeContainer::getContent(std::vector<std::pair<unsigned long long, std::string>> &content)
+{
+    ELFFile *efile = dynamic_cast<ELFFile *>(getFile());
 #ifdef DEBUG
-        assert(efile != nullptr);
+    assert(efile != nullptr);
 #endif
+    /* TODO: populate content using ELFIO */
+    efile->getELFIO();
 
-        container = new ELFCodeContainer(efile, std::make_pair(5, 15));
-        container->setName("[test] code section 1");
-        addInnerContainer(container);
-
-        container = new ELFCodeContainer(efile, std::make_pair(15, 25));
-        container->setName("[test] code section 2");
-        addInnerContainer(container);
-    }
-    return innerContainers;
+    content.clear();
+    char inst1[] = {0x89, 0x85, 0x24, 0xff, 0xff, 0xff};
+    char inst2[] = {0x8b, 0x85, 0x24, 0xff, 0xff, 0xff};
+    content.push_back(std::make_pair(4220471, std::string(inst1, 6)));
+    content.push_back(std::make_pair(4220477, std::string(inst2, 6)));
 }
 
-SegmentContentsContainer::~SegmentContentsContainer() {}
+void ELFCodeContainer::overwrite(unsigned long long address, std::string newMachineCode)
+{
+    ELFFile *efile = dynamic_cast<ELFFile *>(getFile());
+#ifdef DEBUG
+    assert(efile != nullptr);
+#endif
+    /* TODO: update efile->getELFIO() */
+    efile->getELFIO();
+}
+
+ELFCodeContainer::~ELFCodeContainer() {}

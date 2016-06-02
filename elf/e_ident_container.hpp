@@ -1,6 +1,6 @@
 /* The MIT License (MIT)
  *
- * Copyright (c) 2016 Adrian Dobrică, Ștefan-Gabriel Mirea
+ * Copyright (c) 2016 Ștefan-Gabriel Mirea, Adrian Dobrică
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,40 +21,26 @@
  * SOFTWARE.
  */
 
-#ifndef MODIFY_ASMBAR_HPP_
-#define MODIFY_ASMBAR_HPP_
+#ifndef E_IDENT_CONTAINER_HPP_
+#define E_IDENT_CONTAINER_HPP_
 
-class ModifyASMBar;
+#include "container.hpp"
+#include "elf_file.hpp"
+#include <iostream>
 
-#include <QWidget>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QItemSelection>
-#include "asm_viewer.hpp"
-#include <file_assembly.hpp>
-
-/**
- * The Modify form at the bottom of the ASMViewer, used to replace the selected assembly
- * instruction.
- */
-class ModifyASMBar : public QWidget
+namespace elf
 {
-    Q_OBJECT
+/**
+ * Container associated with the e_ident field in the ELF header.
+ */
+class EIdentContainer : public Container
+{
 public:
-    explicit ModifyASMBar(CodeContainer *container, ASMViewer *asmViewer, QWidget *parent = 0);
+    EIdentContainer(ELFFile *file);
+    std::vector<Container *> &getInnerContainers();
 
-signals:
-
-public slots:
-    void editInstruction();
-    void changeViewerSelection(const QItemSelection &, const QItemSelection &);
-private:
-    CodeContainer *container;
-    QLabel *modify;
-    QLineEdit *text;
-    QPushButton *ok;
-    ASMViewer *asmViewer;
+    ~EIdentContainer();
 };
+}
 
-#endif // MODIFY_ASMBAR_HPP_
+#endif // E_IDENT_CONTAINER_HPP_
