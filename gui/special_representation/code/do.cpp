@@ -26,6 +26,7 @@
 #include "modify_asmbar.hpp"
 
 #include <QVBoxLayout>
+#include <QObject>
 
 /**
  * Creates the contents of the right side of an open file subwindow when the selected HierarchyNode
@@ -38,6 +39,10 @@ QWidget *CodeContainer::doSpecialRepresentation(bool &keepAfterNodeDeselection)
 
     asmView = new ASMViewer(area);
     asmBar = new ModifyASMBar(asmView, area);
+
+    QObject::connect(asmView->selectionModel(),
+        SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), asmBar,
+        SLOT(changeViewerSelection(const QItemSelection &, const QItemSelection &)));
 
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(QMargins());

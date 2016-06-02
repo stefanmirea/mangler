@@ -45,6 +45,7 @@ signals:
 
 public slots:
     void editInstruction();
+    void changeViewerSelection(const QItemSelection &, const QItemSelection &);
 private:
     QLabel *modify;
     QLineEdit *text;

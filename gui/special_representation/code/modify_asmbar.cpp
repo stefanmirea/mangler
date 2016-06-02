@@ -47,7 +47,6 @@ ModifyASMBar::ModifyASMBar(ASMViewer *asmViewer, QWidget *parent) :
 void ModifyASMBar::editInstruction()
 {
     std::cerr << "OK!\n";
-
     QModelIndexList list = asmViewer->selectionModel()->selectedIndexes();
     QString inputInstruction = text->text();
 
@@ -98,3 +97,9 @@ void ModifyASMBar::editInstruction()
     }
 }
 
+void ModifyASMBar::changeViewerSelection(const QItemSelection &selected,
+                                         const QItemSelection &deselected)
+{
+    QModelIndexList list = selected.indexes();
+    text->setText(list[2].data().toString() + ' ' + list[3].data().toString());
+}
