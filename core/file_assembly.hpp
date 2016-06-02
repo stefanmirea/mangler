@@ -35,7 +35,7 @@ class FileAssembly
 {
 public:
     static std::string disassembleCode(const std::string &machineCode);
-    static std::string assembleCode(const std::string &instruction);
+    static std::string assembleCode(const std::string &instruction, bool &ok);
 };
 
 #endif // FILE_ASSEMBLY_HPP_

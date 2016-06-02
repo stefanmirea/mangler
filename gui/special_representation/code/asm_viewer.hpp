@@ -38,7 +38,10 @@ class ASMViewer : public QTreeView
 {
 public:
     ASMViewer(CodeContainer *container, QWidget *parent = 0);
-    void editModel(int row, int col, QStandardItem *item);
+    QStandardItemModel *getModel();
+    static QString bufferToHex(const std::string &buffer);
+    static void splitInstruction(const std::string &binary, std::string &opcode,
+                                 std::string &arguments);
 private:
     CodeContainer *container;
     QStandardItemModel *model;

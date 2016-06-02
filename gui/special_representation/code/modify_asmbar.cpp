@@ -23,6 +23,7 @@
 
 #include "modify_asmbar.hpp"
 #include "qhexedit.hpp"
+#include <QMessageBox>
 #include <QHBoxLayout>
 #include <iostream>
 #include <QDebug>
@@ -52,51 +53,152 @@ void ModifyASMBar::editInstruction()
     QModelIndexList list = asmViewer->selectionModel()->selectedIndexes();
     QString inputInstruction = text->text();
 
-    if (list.size() && inputInstruction.isEmpty() == false)
+    if (!list.size())
     {
-        QString address = list[0].data().toString();
-        QString machineCode = list[1].data().toString();
-        QString opCode = list[2].data().toString();
-        QString args = list[3].data().toString();
+        QMessageBox::critical(this, QString("Error"),
+                              QString("You must select the instruction to be replaced."));
+        return;
+    }
 
-        int selectedRow = list[0].row();
-        unsigned int instrSize = (machineCode.size() + 1) / 3;
+    std::string binaryCode;
+    int fullyCovered;
+    int rest;
+    QString machineCode = list[1].data().toString();
+    unsigned int instrSize = (machineCode.size() + 1) / 3;
+    int selectedRow = list[0].row();
 
-        /* TODO: The input instruction will also be updated in the elfio backend
-         * and hexedit */
-
-        /* TODO: The instruction will be disassembled and the opCode and args
-         * will be updated */
-
-        /* TODO: deallocate memory for old QStandardItem */
-
-        if (inputInstruction.contains("90")) /* Testing purposes, not a rigorous check */
+    if (inputInstruction.isEmpty())
+    {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "Confirmation required",
+            "You left the \"Modify\" field blank. Do you want to delete the currently selected "
+            "instruction? Its content will be replaced with NOP instructions.",
+            QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::No)
+            return;
+        fullyCovered = 0;
+        rest = instrSize;
+    }
+    else
+    {
+        bool assembled;
+        binaryCode = FileAssembly::assembleCode(inputInstruction.toStdString(), assembled);
+        if (!assembled)
         {
-            QString nops;
-            for (unsigned int i = 0; i < instrSize; i++)
-                nops.append("90 ");
-            asmViewer->editModel(selectedRow, 1, new QStandardItem(nops));
+            QMessageBox::critical(this, QString("Error"),
+                QString("The instruction provided could not be assembled. "
+                        "Please check your input and try again."));
+            return;
+        }
 
-            asmViewer->editModel(selectedRow, 2,
-                            new QStandardItem(QString::fromStdString(FileAssembly::
-                            disassembleCode(""))));
+        if (binaryCode.size() < instrSize)
+        {
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(this, "Confirmation required",
+                QString("The instruction provided is shorter than the instruction to be replaced. "
+                        "The last %1 byte(s) of the currently selected instruction will be "
+                        "overwritten with NOP instructions.\nDo you want to proceed?")
+                        .arg(instrSize - binaryCode.size()),
+                QMessageBox::Yes | QMessageBox::No);
+            if (reply == QMessageBox::No)
+                return;
+            fullyCovered = 0;
+            rest = instrSize - binaryCode.size();
+        }
+        else if (binaryCode.size() > instrSize)
+        {
+            int row = selectedRow;
+            int bytesLeft = binaryCode.size();
+            rest = 0;
 
-            asmViewer->editModel(selectedRow, 3,
-                            new QStandardItem(QString("")));
+            while (bytesLeft > 0 && row < asmViewer->getModel()->rowCount())
+            {
+                int currentSize = (asmViewer->getModel()->item(row, 1)->text().size() + 1) / 3;
+                if (currentSize >= bytesLeft)
+                    rest = currentSize - bytesLeft;
+                bytesLeft -= currentSize;
+                ++row;
+            }
+
+            if (bytesLeft > 0 && row == asmViewer->getModel()->rowCount())
+            {
+                QMessageBox::critical(this, QString("Error"),
+                    QString("The new instruction cannot exceed the section limit."));
+                return;
+            }
+
+            fullyCovered = row - selectedRow;
+            if (rest)
+                --fullyCovered;
+
+            QString message = QString("The instruction provided is longer than the instruction to "
+                "be replaced. %1 instruction(s) starting with the one you selected will be fully "
+                "overwritten.").arg(fullyCovered);
+            QString ord;
+            if (fullyCovered + 1 == 2)
+                ord = QString("nd");
+            else if (fullyCovered + 1 == 3)
+                ord = QString("rd");
+            else
+                ord = QString("th");
+            if (rest)
+                message += QString(" Additionally, the %1%2 instruction will be partially "
+                    "overwritten: its last %3 bytes will be replaced with NOP instructions. ")
+                    .arg(fullyCovered + 1).arg(ord).arg(rest);
+            message += QString("\nDo you want to proceed?");
+
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(this, "Confirmation required", message,
+                QMessageBox::Yes | QMessageBox::No);
+            if (reply == QMessageBox::No)
+                return;
         }
         else
         {
-            asmViewer->editModel(selectedRow, 1, new QStandardItem(inputInstruction));
-            asmViewer->editModel(selectedRow, 2,
-                            new QStandardItem(QString("xor")));
-
-            asmViewer->editModel(selectedRow, 3,
-                                    new QStandardItem(QString("eax, eax")));
+            fullyCovered = 1;
+            rest = 0;
         }
-
-        std::cerr << list[0].row() << "\n";
-        std::cerr << address.toStdString();
     }
+
+    bool ok;
+    unsigned long long address = list[0].data().toString().toULongLong(&ok, 16);
+    int row = selectedRow;
+
+    if (binaryCode != "")
+    {
+        std::string opcode;
+        std::string arguments;
+        ASMViewer::splitInstruction(binaryCode, opcode, arguments);
+
+        QList<QStandardItem *> newInstructionEntry {
+            new QStandardItem(QString::number(address, 16)),
+            new QStandardItem(ASMViewer::bufferToHex(binaryCode)),
+            new QStandardItem(QString(opcode.c_str())),
+            new QStandardItem(QString(arguments.c_str()))
+        };
+
+        asmViewer->getModel()->insertRow(row, newInstructionEntry);
+        address += binaryCode.size();
+        ++row;
+    }
+
+    for (int i = 0; i < rest; ++i)
+    {
+        QList<QStandardItem *> newInstructionEntry {
+            new QStandardItem(QString::number(address, 16)),
+            new QStandardItem(QString("90")),
+            new QStandardItem(QString("nop")),
+            new QStandardItem(QString(""))
+        };
+        asmViewer->getModel()->insertRow(row, newInstructionEntry);
+        ++address;
+        ++row;
+    }
+
+    asmViewer->getModel()->removeRows(row, fullyCovered + (rest ? 1 : 0));
+
+    /* TODO: The input instruction will also be updated in the elfio backend
+     * and hexedit */
 }
 
 void ModifyASMBar::changeViewerSelection(const QItemSelection &selected,
