@@ -7,6 +7,7 @@
 
 #include "chunks.hpp"
 #include "commands.hpp"
+#include "file_unit.hpp"
 
 /** \mainpage
 QHexEdit is a binary editor widget for Qt.
@@ -48,6 +49,9 @@ QHexEdit is based on QIODevice, that's why QHexEdit can handle big amounts of
 data. The size of edited data can be more then two gigabytes without any
 restrictions.
 */
+
+class FileUnit;
+
 class QHexEdit : public QAbstractScrollArea
 {
     Q_OBJECT
@@ -127,7 +131,7 @@ public:
     /*! Creates an instance of QHexEdit.
     \param parent Parent widget of QHexEdit.
     */
-    QHexEdit(QWidget *parent=0);
+    QHexEdit(FileUnit *fileHandler, QWidget *parent=0);
 
     // Access to data of qhexedit
 
@@ -302,6 +306,8 @@ public:
     QColor selectionColor();
     void setSelectionColor(const QColor &color);
 
+    void loadFile();
+
 protected:
     // Handle events
     void keyPressEvent(QKeyEvent *event);
@@ -322,6 +328,7 @@ private:
     void init();
     void readBuffers();
     QString toReadable(const QByteArray &ba);
+    bool saveFile(const QString &fileName);
 
 private slots:
     void adjust();                              // recalc pixel positions
@@ -381,6 +388,7 @@ private:
     bool _modified;                             // Is any data in editor modified?
     int _rowsShown;                             // lines of text shown
     UndoStack * _undoStack;                     // Stack to store edit actions for undo/redo
+    FileUnit *fileHandler;
     /*! \endcond docNever */
 };
 
