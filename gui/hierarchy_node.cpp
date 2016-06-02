@@ -23,13 +23,14 @@
 
 #include "hierarchy_node.hpp"
 
-HierarchyNode::HierarchyNode(Container *container, QTreeWidget *parent) : QTreeWidgetItem(parent)
+HierarchyNode::HierarchyNode(Container *container, QHexEdit *hexEditor, QTreeWidget *parent) :
+    QTreeWidgetItem(parent), hexEditor(hexEditor)
 {
     _HierarchyNode(container);
 }
 
-HierarchyNode::HierarchyNode(Container *container, QTreeWidgetItem *parent) :
-    QTreeWidgetItem(parent)
+HierarchyNode::HierarchyNode(Container *container, QHexEdit *hexEditor, QTreeWidgetItem *parent) :
+    QTreeWidgetItem(parent), hexEditor(hexEditor)
 {
     _HierarchyNode(container);
 }
@@ -52,7 +53,7 @@ bool HierarchyNode::createChildren()
         everExpanded = true;
         std::vector<Container *> children = container->getInnerContainers();
         for (unsigned int i = 0; i < children.size(); ++i)
-            addChild(new HierarchyNode(children[i], this));
+            addChild(new HierarchyNode(children[i], hexEditor, this));
         return true;
     }
     return false;
@@ -60,7 +61,7 @@ bool HierarchyNode::createChildren()
 
 QWidget *HierarchyNode::getSpecialRepresentation()
 {
-    return container->getSpecialRepresentation();
+    return container->getSpecialRepresentation(hexEditor);
 }
 
 bool HierarchyNode::keepSpecialRepresentation()

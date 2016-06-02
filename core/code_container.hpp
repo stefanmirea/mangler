@@ -41,7 +41,7 @@ public:
     CodeContainer(FileUnit *file, const std::pair<int, int> &interval);
     bool canInject();
     virtual std::vector<Container *> &getInnerContainers();
-    virtual QWidget *doSpecialRepresentation(bool &keepAfterNodeDeselection);
+    virtual QWidget *doSpecialRepresentation(QHexEdit *hexEditor, bool &keepAfterNodeDeselection);
     virtual void injectCode(size_t offset, std::string &newContent);
     virtual ~CodeContainer();
 

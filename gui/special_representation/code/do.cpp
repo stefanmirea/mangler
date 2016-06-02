@@ -32,13 +32,13 @@
  * Creates the contents of the right side of an open file subwindow when the selected HierarchyNode
  * represents a code area.
  */
-QWidget *CodeContainer::doSpecialRepresentation(bool &keepAfterNodeDeselection)
+QWidget *CodeContainer::doSpecialRepresentation(QHexEdit *hexEditor, bool &keepAfterNodeDeselection)
 {
     /* create disassembly area */
     QWidget *area = new QWidget();
 
     asmView = new ASMViewer(this, area);
-    asmBar = new ModifyASMBar(this, asmView, area);
+    asmBar = new ModifyASMBar(this, asmView, hexEditor, area);
 
     QObject::connect(asmView->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), asmBar,

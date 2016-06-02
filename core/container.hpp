@@ -24,6 +24,7 @@
 #ifndef CONTAINER_HPP_
 #define CONTAINER_HPP_
 
+#include "qhexedit.hpp"
 #include "file_unit.hpp"
 #include <string>
 #include <vector>
@@ -58,7 +59,7 @@ public:
     std::string &getName();
     void setName(const std::string &name);
     std::pair<int, int> &getInterval();
-    QWidget *getSpecialRepresentation();
+    QWidget *getSpecialRepresentation(QHexEdit *hexViewer);
     bool keepSpecialRepresentation();
 
     virtual std::vector<Container *> &getInnerContainers();
@@ -80,7 +81,7 @@ private:
     std::string name;
     bool _keepSpecialRepresentation;
     QWidget *specialRepresentation;
-    virtual QWidget *doSpecialRepresentation(bool &keepAfterNodeDeselection);
+    virtual QWidget *doSpecialRepresentation(QHexEdit *hexEditor, bool &keepAfterNodeDeselection);
 };
 
 #endif // CONTAINER_HPP_

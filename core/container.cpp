@@ -79,11 +79,11 @@ std::pair<int, int> &Container::getInterval()
     return interval;
 }
 
-QWidget *Container::getSpecialRepresentation()
+QWidget *Container::getSpecialRepresentation(QHexEdit *hexEditor)
 {
     if (_keepSpecialRepresentation)
         return specialRepresentation;
-    QWidget *representation = doSpecialRepresentation(_keepSpecialRepresentation);
+    QWidget *representation = doSpecialRepresentation(hexEditor, _keepSpecialRepresentation);
     if (_keepSpecialRepresentation)
         specialRepresentation = representation;
     return representation;
@@ -168,7 +168,7 @@ bool Container::addInnerContainer(Container *container, size_t position)
  *     use the received QWidget * at further selections. If you don't need to keep state, set to
  *     false to optimize memory usage.
  */
-QWidget *Container::doSpecialRepresentation(bool &keepAfterNodeDeselection)
+QWidget *Container::doSpecialRepresentation(QHexEdit *hexEditor, bool &keepAfterNodeDeselection)
 {
     keepAfterNodeDeselection = true;
     return nullptr;
