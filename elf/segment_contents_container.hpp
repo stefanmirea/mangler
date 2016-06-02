@@ -25,7 +25,7 @@
 #define SEGMENT_CONTENTS_CONTAINER_HPP_
 
 #include "container.hpp"
-#include "code_container.hpp"
+#include "elf_code_container.hpp"
 #include "elf_file.hpp"
 
 namespace elf

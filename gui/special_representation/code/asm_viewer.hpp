@@ -24,6 +24,9 @@
 #ifndef ASM_VIEWER_HPP_
 #define ASM_VIEWER_HPP_
 
+class ASMViewer;
+
+#include "code_container.hpp"
 #include <QWidget>
 #include <QTreeView>
 #include <QStandardItemModel>
@@ -34,9 +37,10 @@
 class ASMViewer : public QTreeView
 {
 public:
-    ASMViewer(QWidget *parent = 0);
+    ASMViewer(CodeContainer *container, QWidget *parent = 0);
     void editModel(int row, int col, QStandardItem *item);
 private:
+    CodeContainer *container;
     QStandardItemModel *model;
 };
 

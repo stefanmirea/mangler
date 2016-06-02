@@ -33,6 +33,7 @@ SOURCES +=\
     elf/section_header_table_container.cpp \
     elf/segment_contents_container.cpp \
     elf/section_contents_container.cpp \
+    elf/elf_code_container.cpp \
     dependencies/QHexEdit/qhexedit.cpp \
     dependencies/QHexEdit/chunks.cpp \
     dependencies/QHexEdit/commands.cpp \
@@ -59,6 +60,7 @@ HEADERS  += \
     elf/section_header_table_container.hpp \
     elf/segment_contents_container.hpp \
     elf/section_contents_container.hpp \
+    elf/elf_code_container.hpp \
     dependencies/elfio/elf_types.hpp \
     dependencies/elfio/elfio_utils.hpp \
     dependencies/elfio/elfio_symbols.hpp \

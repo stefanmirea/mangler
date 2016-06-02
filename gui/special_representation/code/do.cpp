@@ -37,8 +37,8 @@ QWidget *CodeContainer::doSpecialRepresentation(bool &keepAfterNodeDeselection)
     /* create disassembly area */
     QWidget *area = new QWidget();
 
-    asmView = new ASMViewer(area);
-    asmBar = new ModifyASMBar(asmView, area);
+    asmView = new ASMViewer(this, area);
+    asmBar = new ModifyASMBar(this, asmView, area);
 
     QObject::connect(asmView->selectionModel(),
         SIGNAL(selectionChanged(const QItemSelection &, const QItemSelection &)), asmBar,

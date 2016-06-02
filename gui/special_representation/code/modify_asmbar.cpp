@@ -26,8 +26,8 @@
 #include <iostream>
 #include <QDebug>
 
-ModifyASMBar::ModifyASMBar(ASMViewer *asmViewer, QWidget *parent) :
-    QWidget(parent), asmViewer(asmViewer)
+ModifyASMBar::ModifyASMBar(CodeContainer *container, ASMViewer *asmViewer, QWidget *parent) :
+    QWidget(parent), container(container), asmViewer(asmViewer)
 {
     modify = new QLabel(QString("Modify:"), this);
     text = new QLineEdit(this);
@@ -102,4 +102,8 @@ void ModifyASMBar::changeViewerSelection(const QItemSelection &selected,
 {
     QModelIndexList list = selected.indexes();
     text->setText(list[2].data().toString() + ' ' + list[3].data().toString());
+
+    bool ok;
+    unsigned long long address = list[0].data().toString().toULongLong(&ok, 16);
+    std::cerr << "Will select from: " << container->addressToOffset(address) << '\n';
 }

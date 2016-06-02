@@ -36,11 +36,16 @@ std::vector<Container *> &SegmentContentsContainer::getInnerContainers()
     {
         Container *container;
 
-        container = new CodeContainer(getFile(), std::make_pair(5, 15));
+        ELFFile *efile = dynamic_cast<ELFFile *>(getFile());
+#ifdef DEBUG
+        assert(efile != nullptr);
+#endif
+
+        container = new ELFCodeContainer(efile, std::make_pair(5, 15));
         container->setName("[test] code section 1");
         addInnerContainer(container);
 
-        container = new CodeContainer(getFile(), std::make_pair(15, 25));
+        container = new ELFCodeContainer(efile, std::make_pair(15, 25));
         container->setName("[test] code section 2");
         addInnerContainer(container);
     }

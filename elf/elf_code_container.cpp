@@ -21,40 +21,44 @@
  * SOFTWARE.
  */
 
-#ifndef MODIFY_ASMBAR_HPP_
-#define MODIFY_ASMBAR_HPP_
+#include "elf_code_container.hpp"
 
-class ModifyASMBar;
+using namespace elf;
 
-#include <QWidget>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QItemSelection>
-#include "asm_viewer.hpp"
-#include <file_assembly.hpp>
-
-/**
- * The Modify form at the bottom of the ASMViewer, used to replace the selected assembly
- * instruction.
- */
-class ModifyASMBar : public QWidget
+ELFCodeContainer::ELFCodeContainer(ELFFile *file, const std::pair<int, int> &interval) :
+    CodeContainer(file, interval)
 {
-    Q_OBJECT
-public:
-    explicit ModifyASMBar(CodeContainer *container, ASMViewer *asmViewer, QWidget *parent = 0);
+    injectionPossible = false;
+}
 
-signals:
+unsigned int ELFCodeContainer::addressToOffset(unsigned long long address)
+{
+    /* TODO */
+    return address - 0x400000;
+}
 
-public slots:
-    void editInstruction();
-    void changeViewerSelection(const QItemSelection &, const QItemSelection &);
-private:
-    CodeContainer *container;
-    QLabel *modify;
-    QLineEdit *text;
-    QPushButton *ok;
-    ASMViewer *asmViewer;
-};
+void ELFCodeContainer::getContent(std::vector<std::pair<unsigned long long, std::string>> &content)
+{
+    ELFFile *efile = dynamic_cast<ELFFile *>(getFile());
+#ifdef DEBUG
+    assert(efile != nullptr);
+#endif
+    /* TODO: populate content using ELFIO */
+    efile->getELFIO();
 
-#endif // MODIFY_ASMBAR_HPP_
+    content.clear();
+    content.push_back(std::make_pair(4220471, "AB"));
+    content.push_back(std::make_pair(4220477, "CDE"));
+}
+
+void ELFCodeContainer::overwrite(unsigned long long address, std::string newMachineCode)
+{
+    ELFFile *efile = dynamic_cast<ELFFile *>(getFile());
+#ifdef DEBUG
+    assert(efile != nullptr);
+#endif
+    /* TODO: update efile->getELFIO() */
+    efile->getELFIO();
+}
+
+ELFCodeContainer::~ELFCodeContainer() {}
