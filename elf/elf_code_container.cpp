@@ -68,7 +68,24 @@ void ELFCodeContainer::overwrite(unsigned long long address, std::string newMach
     assert(efile != nullptr);
 #endif
     /* TODO: update efile->getELFIO() */
-    efile->getELFIO();
+    ELFIO::elfio *interpretor = efile->getELFIO();
+    int num_sec = interpretor->get_sections_num();
+    int found = false;
+
+    for (int i = 0; i < num_sec && !found; i++)
+    {
+        ELFIO::section *currentSection = interpretor->sections[i];
+        if (currentSection->get_flags() & SHF_EXECINSTR)
+        {
+            if (currentSection->get_address() <= address &&
+                    currentSection->get_address() + currentSection->get_size() > address)
+            {
+                currentSection->set_data(newMachineCode.c_str(), address, newMachineCode.size());
+                found = true;
+            }
+        }
+    }
+
 }
 
 ELFCodeContainer::~ELFCodeContainer() {}
