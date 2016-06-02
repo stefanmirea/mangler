@@ -49,10 +49,44 @@ std::string FileAssembly::disassembleCode(const std::string &code)
         if (matches)
             return "mov eax,DWORD PTR [rbp-0xdc]";
     }
-    return std::string("nop");
+    std::string ret = "??? RAW:";
+    for (unsigned int i = 0; i < code.size(); ++i)
+    {
+        ret += QString::number((code[i] & 0xF0) >> 4, 16).toUpper().toStdString();
+        ret += QString::number(code[i] & 0xF, 16).toUpper().toStdString();
+    }
+    return ret;
 }
 
-std::string FileAssembly::assembleCode(const std::string &instruction)
+std::string FileAssembly::assembleCode(const std::string &instruction, bool &ok)
 {
-    return "";
+    /* Temporary usage:
+     * - the user provides the instruction machine code in hex (no spaces);
+     * - the method returns the corresponding binary string. */
+
+    std::string padded;
+    if (instruction.size() % 2 == 1)
+        padded = std::string("0") + instruction;
+    else
+        padded = instruction;
+    std::string ret;
+    bool digitOK;
+    for (unsigned int i = 0; i < padded.size(); i += 2)
+    {
+        char c = QString(padded[i]).toInt(&digitOK, 16) << 4;
+        if (!digitOK)
+        {
+            ok = false;
+            return "";
+        }
+        c |= QString(padded[i + 1]).toInt(&digitOK, 16);
+        if (!digitOK)
+        {
+            ok = false;
+            return "";
+        }
+        ret += c;
+    }
+    ok = true;
+    return ret;
 }
