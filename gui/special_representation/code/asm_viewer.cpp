@@ -51,39 +51,47 @@ ASMViewer::ASMViewer(CodeContainer *container, QWidget *parent) :
     {
         items.clear();
         items.append(new QStandardItem(QString::number(content[i].first, 16)));
-        QString machineCode;
-        for (unsigned int byte = 0; byte < content[i].second.size(); ++byte)
-        {
-            char c = content[i].second[byte];
-            machineCode += QString::number((c & 0xF0) >> 4, 16).toUpper();
-            machineCode += QString::number(c & 0xF, 16).toUpper();
-            if (byte != content[i].second.size() - 1)
-                machineCode += ' ';
-        }
-        items.append(new QStandardItem(machineCode));
-
-        std::string instruction = FileAssembly::disassembleCode(content[i].second);
-        size_t spacePos = instruction.find(' ');
+        items.append(new QStandardItem(bufferToHex(content[i].second)));
         std::string opcode, arguments;
-        if (spacePos == std::string::npos)
-        {
-            /* For example "nop" */
-            opcode = instruction;
-            arguments = "";
-        }
-        else
-        {
-            opcode = instruction.substr(0, spacePos);
-            arguments = instruction.substr(spacePos + 1);
-        }
+        splitInstruction(content[i].second, opcode, arguments);
         items.append(new QStandardItem(QString(opcode.c_str())));
         items.append(new QStandardItem(QString(arguments.c_str())));
         model->appendRow(items);
     }
 }
 
-void ASMViewer::editModel(int row, int col, QStandardItem *item)
+QStandardItemModel *ASMViewer::getModel()
 {
-    model->setItem(row, col, item);
+    return model;
 }
 
+QString ASMViewer::bufferToHex(const std::string &buffer)
+{
+    QString ret;
+    for (unsigned int byte = 0; byte < buffer.size(); ++byte)
+    {
+        char c = buffer[byte];
+        ret += QString::number((c & 0xF0) >> 4, 16);
+        ret += QString::number(c & 0xF, 16);
+        if (byte != buffer.size() - 1)
+            ret += ' ';
+    }
+    return ret;
+}
+
+void ASMViewer::splitInstruction(const std::string &binary, std::string &opcode, std::string &arguments)
+{
+    std::string instruction = FileAssembly::disassembleCode(binary);
+    size_t spacePos = instruction.find(' ');
+    if (spacePos == std::string::npos)
+    {
+        /* For example "nop" */
+        opcode = instruction;
+        arguments = "";
+    }
+    else
+    {
+        opcode = instruction.substr(0, spacePos);
+        arguments = instruction.substr(spacePos + 1);
+    }
+}
