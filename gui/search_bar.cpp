@@ -141,7 +141,7 @@ void SearchBar::findNext()
 
     if (newPosition == -1)
         QMessageBox::information(this, QString("Information"),
-        QString("Your search reached the end of the file."));
+        QString("Your search has reached the end of the file."));
 }
 
 void SearchBar::findPrev()
@@ -160,5 +160,5 @@ void SearchBar::findPrev()
 
     if (newPosition == -1)
         QMessageBox::information(this, QString("Information"),
-        QString("Your search reached the beginning of the file."));
+        QString("Your search has reached the beginning of the file."));
 }
