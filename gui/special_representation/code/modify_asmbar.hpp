@@ -31,6 +31,7 @@ class ModifyASMBar;
 #include <QLineEdit>
 #include <QPushButton>
 #include <QItemSelection>
+#include "qhexedit.hpp"
 #include "asm_viewer.hpp"
 #include <file_assembly.hpp>
 
@@ -42,7 +43,8 @@ class ModifyASMBar : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ModifyASMBar(CodeContainer *container, ASMViewer *asmViewer, QWidget *parent = 0);
+    explicit ModifyASMBar(CodeContainer *container, ASMViewer *asmViewer, QHexEdit *hexEditor,
+                          QWidget *parent = 0);
 
 signals:
 
@@ -55,6 +57,7 @@ private:
     QLineEdit *text;
     QPushButton *ok;
     ASMViewer *asmViewer;
+    QHexEdit *hexEditor;
 };
 
 #endif // MODIFY_ASMBAR_HPP_

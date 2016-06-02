@@ -40,14 +40,14 @@ HierarchicalViewer::HierarchicalViewer(QSplitter *split, QWidget *defaultSpecial
 
 HierarchyNode *HierarchicalViewer::addRoot(Container *container)
 {
-    HierarchyNode *item = new HierarchyNode(container, this);
+    HierarchyNode *item = new HierarchyNode(container, hexViewer, this);
     addTopLevelItem(item);
     return item;
 }
 
 HierarchyNode *HierarchicalViewer::addChild(HierarchyNode *parent, Container *container)
 {
-    HierarchyNode *item = new HierarchyNode(container, parent);
+    HierarchyNode *item = new HierarchyNode(container, hexViewer, parent);
     parent->addChild(item);
     return item;
 }

@@ -22,12 +22,14 @@
  */
 
 #include "modify_asmbar.hpp"
+#include "qhexedit.hpp"
 #include <QHBoxLayout>
 #include <iostream>
 #include <QDebug>
 
-ModifyASMBar::ModifyASMBar(CodeContainer *container, ASMViewer *asmViewer, QWidget *parent) :
-    QWidget(parent), container(container), asmViewer(asmViewer)
+ModifyASMBar::ModifyASMBar(CodeContainer *container, ASMViewer *asmViewer, QHexEdit *hexEditor,
+    QWidget *parent) : QWidget(parent), container(container), asmViewer(asmViewer),
+                       hexEditor(hexEditor)
 {
     modify = new QLabel(QString("Modify:"), this);
     text = new QLineEdit(this);
@@ -105,5 +107,5 @@ void ModifyASMBar::changeViewerSelection(const QItemSelection &selected,
 
     bool ok;
     unsigned long long address = list[0].data().toString().toULongLong(&ok, 16);
-    std::cerr << "Will select from: " << container->addressToOffset(address) << '\n';
+    hexEditor->selectData(container->addressToOffset(address), (list[1].data().toString().size() + 1) / 3);
 }

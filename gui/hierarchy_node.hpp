@@ -35,8 +35,8 @@
 class HierarchyNode : public QTreeWidgetItem
 {
 public:
-    explicit HierarchyNode(Container *container, QTreeWidget *parent = 0);
-    explicit HierarchyNode(Container *container, QTreeWidgetItem *parent = 0);
+    explicit HierarchyNode(Container *container, QHexEdit *hexEditor, QTreeWidget *parent = 0);
+    explicit HierarchyNode(Container *container, QHexEdit *hexEditor, QTreeWidgetItem *parent = 0);
     bool createChildren();
     QWidget *getSpecialRepresentation();
     bool keepSpecialRepresentation();
@@ -46,6 +46,7 @@ private:
     void _HierarchyNode(Container *container);
     Container *container;
     bool everExpanded;
+    QHexEdit *hexEditor;
 };
 
 #endif // HIERARCHY_NODE_HPP_

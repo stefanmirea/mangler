@@ -7,7 +7,6 @@
 
 #include "chunks.hpp"
 #include "commands.hpp"
-#include "file_unit.hpp"
 
 /** \mainpage
 QHexEdit is a binary editor widget for Qt.
