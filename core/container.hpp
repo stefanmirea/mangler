@@ -24,7 +24,6 @@
 #ifndef CONTAINER_HPP_
 #define CONTAINER_HPP_
 
-#include "qhexedit.hpp"
 #include "file_unit.hpp"
 #include <string>
 #include <vector>
@@ -38,6 +37,7 @@
 #define NO_INTERVAL -1
 
 class FileUnit;
+class QHexEdit;
 
 /**
  * Information associated with a HierarchyNode. While HierarchyNodes are arranged in a tree
