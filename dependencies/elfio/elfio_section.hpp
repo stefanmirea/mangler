@@ -49,7 +49,7 @@ class section
     virtual const char* get_data() const                                = 0;
     virtual void        set_data( const char* pData, Elf_Word size )    = 0;
     virtual void        set_data( const std::string& data )             = 0;
-    virtual void        set_data( const char* raw_data, Elf_Word dataSize, Elf64_Addr updateAddress ) = 0;
+    virtual void        set_data( const char* raw_data, Elf64_Addr updateAddress, Elf_Word dataSize ) = 0;
     virtual void        append_data( const char* pData, Elf_Word size ) = 0;
     virtual void        append_data( const std::string& data )          = 0;
 
@@ -166,7 +166,7 @@ class section_impl : public section
     }
 
     void
-    set_data( const char* raw_data, Elf_Word dataSize, Elf64_Addr updateAddress)
+    set_data( const char* raw_data, Elf64_Addr updateAddress, Elf_Word dataSize )
     {
         if (dataSize <= (get_address() + get_size() - updateAddress))
         {
