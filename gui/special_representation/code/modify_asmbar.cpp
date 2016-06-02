@@ -161,7 +161,8 @@ void ModifyASMBar::editInstruction()
     }
 
     bool ok;
-    unsigned long long address = list[0].data().toString().toULongLong(&ok, 16);
+    unsigned long long initialAddress = list[0].data().toString().toULongLong(&ok, 16);
+    unsigned long long address = initialAddress;
     int row = selectedRow;
 
     if (binaryCode != "")
@@ -182,6 +183,7 @@ void ModifyASMBar::editInstruction()
         ++row;
     }
 
+    std::string codeContainerUpdate = binaryCode;
     for (int i = 0; i < rest; ++i)
     {
         QList<QStandardItem *> newInstructionEntry {
@@ -190,6 +192,7 @@ void ModifyASMBar::editInstruction()
             new QStandardItem(QString("nop")),
             new QStandardItem(QString(""))
         };
+        codeContainerUpdate += (char)0x90;
         asmViewer->getModel()->insertRow(row, newInstructionEntry);
         ++address;
         ++row;
@@ -199,6 +202,7 @@ void ModifyASMBar::editInstruction()
 
     /* TODO: The input instruction will also be updated in the elfio backend
      * and hexedit */
+    container->overwrite(initialAddress, codeContainerUpdate);
 }
 
 void ModifyASMBar::changeViewerSelection(const QItemSelection &selected,
