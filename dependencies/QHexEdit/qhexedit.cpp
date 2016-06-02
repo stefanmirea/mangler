@@ -695,10 +695,12 @@ void QHexEdit::keyPressEvent(QKeyEvent *event)
     // Refresh Event
     if ((event->key() == Qt::Key_F5))
     {
-        bool saved = saveFile(QString("/home/adrian/tmp.out"));
+        std::string tmpName = fileHandler->getName() + ".tmp";
+        bool saved = saveFile(QString(tmpName.c_str()));
         if (saved)
         {
-
+            std::cerr << fileHandler->getName();
+            fileHandler->refresh(tmpName);
         }
     }
 
