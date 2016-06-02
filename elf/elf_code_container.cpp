@@ -47,8 +47,10 @@ void ELFCodeContainer::getContent(std::vector<std::pair<unsigned long long, std:
     efile->getELFIO();
 
     content.clear();
-    content.push_back(std::make_pair(4220471, "AB"));
-    content.push_back(std::make_pair(4220477, "CDE"));
+    char inst1[] = {0x89, 0x85, 0x24, 0xff, 0xff, 0xff};
+    char inst2[] = {0x8b, 0x85, 0x24, 0xff, 0xff, 0xff};
+    content.push_back(std::make_pair(4220471, std::string(inst1, 6)));
+    content.push_back(std::make_pair(4220477, std::string(inst2, 6)));
 }
 
 void ELFCodeContainer::overwrite(unsigned long long address, std::string newMachineCode)

@@ -54,8 +54,9 @@ ASMViewer::ASMViewer(CodeContainer *container, QWidget *parent) :
         QString machineCode;
         for (unsigned int byte = 0; byte < content[i].second.size(); ++byte)
         {
-            QString hex = QString::number((char)content[i].second[byte], 16).toUpper();
-            machineCode += hex;
+            char c = content[i].second[byte];
+            machineCode += QString::number((c & 0xF0) >> 4, 16).toUpper();
+            machineCode += QString::number(c & 0xF, 16).toUpper();
             if (byte != content[i].second.size() - 1)
                 machineCode += ' ';
         }
@@ -79,19 +80,6 @@ ASMViewer::ASMViewer(CodeContainer *container, QWidget *parent) :
         items.append(new QStandardItem(QString(arguments.c_str())));
         model->appendRow(items);
     }
-
-    /*items.append(new QStandardItem(QString("406637")));
-    items.append(new QStandardItem(QString("89 85 24 ff ff ff")));
-    items.append(new QStandardItem(QString("mov")));
-    items.append(new QStandardItem(QString("DWORD PTR [rbp-0xdc],eax")));
-    model->appendRow(items);
-
-    items.clear();
-    items.append(new QStandardItem(QString("40663d")));
-    items.append(new QStandardItem(QString("8b 85 24 ff ff ff")));
-    items.append(new QStandardItem(QString("mov")));
-    items.append(new QStandardItem(QString("eax,DWORD PTR [rbp-0xdc]")));
-    model->appendRow(items);*/
 }
 
 void ASMViewer::editModel(int row, int col, QStandardItem *item)
