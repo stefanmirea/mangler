@@ -36,6 +36,7 @@
 #include "hierarchical_viewer.hpp"
 #include "qhexedit.hpp"
 #include "search_bar.hpp"
+#include "main_window.hpp"
 
 #include "file_unit.hpp"
 
@@ -46,7 +47,8 @@ class ExecutableViewer : public QWidget
 {
     Q_OBJECT
 public:
-    ExecutableViewer(FileUnit *fileUnit, QWidget *parent = 0);
+    ExecutableViewer(MainWindow *mainWindow, FileUnit *fileUnit, QWidget *parent = 0);
+    MainWindow *getMainWindow();
     FileUnit *getFileUnit();
     bool loadFile(const QString &fileName) {return true;}
     bool save() {return true;}
@@ -54,13 +56,16 @@ public:
     bool saveFile(const QString &fileName) {return true;}
     QString userFriendlyCurrentFile() {return QString("a");}
     QString currentFile() { return QString("current"); }
-    bool refresh(std::string &tmpName);
+    bool isRefreshable();
+    void setRefreshable(bool refreshable);
+    bool refresh();
     virtual ~ExecutableViewer();
 
 signals:
 
 public slots:
 private:
+    MainWindow *mainWindow;
     QSplitter *split;
     HierarchicalViewer *hierarchicalViewer;
     QHexEdit *hexViewer;
@@ -68,6 +73,7 @@ private:
     FileUnit *fileUnit;
     QWidget *defaultSpecialRep;
     QWidget *createDefaultSpecialRep();
+    bool refreshable;
 };
 
 #endif // EXECUTABLE_VIEWER_HPP_

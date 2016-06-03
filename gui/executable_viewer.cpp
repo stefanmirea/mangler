@@ -29,8 +29,8 @@
 #include <iostream>
 #include <qdebug.h>
 
-ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
-    QWidget(parent), fileUnit(fileUnit)
+ExecutableViewer::ExecutableViewer(MainWindow *mainWindow, FileUnit *fileUnit, QWidget *parent) :
+    QWidget(parent), mainWindow(mainWindow), fileUnit(fileUnit)
 {
     setWindowModified(false);
     setWindowTitle(QString(fileUnit->getName().c_str()) + "[*]");
@@ -50,7 +50,7 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
 
     /* Center hex viewer and search bar */
     hexViewer = new QHexEdit(this, this);
-    hexViewer->loadFile();
+    hexViewer->loadFile(fileUnit->getName().c_str());
 
     hierarchicalViewer = new HierarchicalViewer(split, defaultSpecialRep, hexViewer, this);
 
@@ -77,6 +77,12 @@ ExecutableViewer::ExecutableViewer(FileUnit *fileUnit, QWidget *parent) :
     layout->addWidget(split);
 
     setLayout(layout);
+    refreshable = false;
+}
+
+MainWindow *ExecutableViewer::getMainWindow()
+{
+    return mainWindow;
 }
 
 FileUnit *ExecutableViewer::getFileUnit()
@@ -113,7 +119,18 @@ ExecutableViewer::~ExecutableViewer()
     delete fileUnit;
 }
 
-bool ExecutableViewer::refresh(std::string &tmpName)
+bool ExecutableViewer::isRefreshable()
 {
-    return fileUnit->refresh(tmpName);
+    return refreshable;
+}
+
+void ExecutableViewer::setRefreshable(bool refreshable)
+{
+    this->refreshable = refreshable;
+    mainWindow->updateActions();
+}
+
+bool ExecutableViewer::refresh()
+{
+    return hexViewer->refreshView();
 }
