@@ -41,11 +41,11 @@ std::vector<Container *> &SegmentContentsContainer::getInnerContainers()
         assert(efile != nullptr);
 #endif
 
-        container = new ELFCodeContainer(efile, std::make_pair(5, 15));
+        container = new ELFCodeContainer(efile, std::make_pair(5, 15), 12);
         container->setName("[test] code section 1");
         addInnerContainer(container);
 
-        container = new ELFCodeContainer(efile, std::make_pair(15, 25));
+        container = new ELFCodeContainer(efile, std::make_pair(15, 25), 13);
         container->setName("[test] code section 2");
         addInnerContainer(container);
     }
