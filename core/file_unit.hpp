@@ -40,6 +40,7 @@ public:
     FileUnit(const std::string &filename);
     std::string &getName();
     std::vector<Container *> &getTopLevelContainers();
+    void deleteTopLevelContainers();
 
     virtual bool getOpenStatus() = 0;
     virtual bool save(std::string &filename) = 0;
