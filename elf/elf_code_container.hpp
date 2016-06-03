@@ -37,11 +37,13 @@ namespace elf
 class ELFCodeContainer : public CodeContainer
 {
 public:
-    ELFCodeContainer(ELFFile *file, const std::pair<int, int> &interval);
+    ELFCodeContainer(ELFFile *file, const std::pair<int, int> &interval, unsigned int index);
     unsigned int addressToOffset(unsigned long long address);
     void getContent(std::vector<std::pair<unsigned long long, std::string>> &content);
     void overwrite(unsigned long long address, std::string newMachineCode);
     virtual ~ELFCodeContainer();
+
+    unsigned int index;
 };
 }
 

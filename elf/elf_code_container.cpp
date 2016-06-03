@@ -25,8 +25,9 @@
 
 using namespace elf;
 
-ELFCodeContainer::ELFCodeContainer(ELFFile *file, const std::pair<int, int> &interval) :
-    CodeContainer(file, interval)
+ELFCodeContainer::ELFCodeContainer(ELFFile *file, const std::pair<int, int> &interval,
+                                   unsigned int index) :
+    CodeContainer(file, interval), index(index)
 {
     injectionPossible = false;
 }
