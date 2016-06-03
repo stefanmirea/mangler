@@ -674,6 +674,7 @@ void QHexEdit::keyPressEvent(QKeyEvent *event)
             redo();
         }
 
+        executableViewer->setRefreshable(true);
     }
 
     /* Copy */
@@ -695,14 +696,7 @@ void QHexEdit::keyPressEvent(QKeyEvent *event)
 
     // Refresh Event
     if ((event->key() == Qt::Key_F5))
-    {
-        std::string tmpName = executableViewer->getFileUnit()->getName() + ".tmp";
-        bool saved = saveFile(QString(tmpName.c_str()));
-        if (saved)
-        {
-            saved = executableViewer->refresh(tmpName);
-        }
-    }
+        executableViewer->getMainWindow()->refresh();
 
     refresh();
 }
@@ -993,10 +987,10 @@ void QHexEdit::updateCursor()
     viewport()->update(_cursorRect);
 }
 
-void QHexEdit::loadFile()
+void QHexEdit::loadFile(const char *fileName)
 {
     QFile *file = new QFile();
-    file->setFileName(executableViewer->getFileUnit()->getName().c_str());
+    file->setFileName(fileName);
     file->open(QIODevice::ReadOnly);
     std::cerr << "--- " << file->isReadable() << " \n" << file->size() << "\n";
 
@@ -1024,4 +1018,12 @@ bool QHexEdit::saveFile(const QString &fileName)
     }
 
     return ret;
+}
+
+bool QHexEdit::refreshView()
+{
+    std::string tmpName = executableViewer->getFileUnit()->getName() + ".tmp";
+    bool saved = saveFile(QString(tmpName.c_str()));
+    if (saved)
+        return executableViewer->getFileUnit()->refresh(tmpName);
 }

@@ -44,6 +44,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
 
+    QMenu *viewMenu = menuBar()->addMenu(QString("View"));
+    viewMenu->addAction(refreshAction);
+
     QMenu *editMenu = menuBar()->addMenu(QString("Edit"));
     editMenu->addAction(undoAction);
     editMenu->addAction(redoAction);
@@ -76,6 +79,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     fileToolBar->addAction(openAction);
     fileToolBar->addAction(saveAction);
 
+    QToolBar *viewToolBar = new QToolBar();
+    addToolBar(viewToolBar);
+    viewToolBar->addAction(refreshAction);
+
     QToolBar *editToolBar = new QToolBar();
     addToolBar(editToolBar);
     editToolBar->addAction(undoAction);
@@ -102,6 +109,11 @@ void MainWindow::createActions()
     exitAction = new QAction(QString("Exit"), this);
     exitAction->setIcon(QIcon::fromTheme("application-exit", QIcon(":/icons/exit.png")));
     connect(exitAction, SIGNAL(triggered()), this, SLOT(exit()));
+
+    /* View menu */
+    refreshAction = new QAction(QString("Refresh"), this);
+    refreshAction->setIcon(QIcon::fromTheme("view-refresh", QIcon(":/icons/refresh.png")));
+    connect(refreshAction, SIGNAL(triggered()), this, SLOT(refresh()));
 
     /* Edit menu */
     undoAction = new QAction(QString("Undo"), this);
@@ -199,7 +211,7 @@ void MainWindow::open(const QString &filename)
         return;
     } while (false);
 
-    ExecutableViewer *viewer = new ExecutableViewer(file, mdiArea);
+    ExecutableViewer *viewer = new ExecutableViewer(this, file, mdiArea);
     mdiArea->addSubWindow(viewer);
     viewer->showMaximized();
 }
@@ -209,6 +221,17 @@ void MainWindow::save() {}
 void MainWindow::saveAs() {}
 
 void MainWindow::exit() {}
+
+void MainWindow::refresh()
+{
+    QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow();
+#ifdef DEBUG
+    assert(activeSubWindow != nullptr);
+#endif
+    qobject_cast<ExecutableViewer *>(activeSubWindow->widget())->refresh();
+
+    refreshAction->setEnabled(false);
+}
 
 void MainWindow::undo() {}
 
@@ -232,6 +255,17 @@ void MainWindow::updateActions()
 
     saveAction->setEnabled(hasActiveSubWindow);
     saveAsAction->setEnabled(hasActiveSubWindow);
+
+    if (hasActiveSubWindow)
+    {
+        QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow();
+        if (qobject_cast<ExecutableViewer *>(activeSubWindow->widget())->isRefreshable())
+            refreshAction->setEnabled(true);
+        else
+            refreshAction->setEnabled(false);
+    }
+    else
+        refreshAction->setEnabled(false);
 
     undoAction->setEnabled(false);
     redoAction->setEnabled(false);

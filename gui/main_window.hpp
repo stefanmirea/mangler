@@ -49,6 +49,7 @@ public slots:
     void save();
     void saveAs();
     void exit();
+    void refresh();
     void undo();
     void redo();
     void copy();
@@ -62,6 +63,7 @@ private:
 
     QMdiArea *mdiArea;
     QAction *openAction, *saveAction, *saveAsAction, *exitAction;
+    QAction *refreshAction;
     QAction *undoAction, *redoAction, *copyAction, *pasteAction;
     QAction *closeAction, *closeAllAction, *tileAction, *cascadeAction, *nextAction,
             *previousAction;
