@@ -50,6 +50,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     editMenu->addSeparator();
     editMenu->addAction(copyAction);
     editMenu->addAction(pasteAction);
+    editMenu->addSeparator();
+    editMenu->addAction(refreshAction);
 
     windowMenu = menuBar()->addMenu(QString("Window"));
     connect(windowMenu, SIGNAL(aboutToShow()), this, SLOT(updateCheckableWindows()));
@@ -82,6 +84,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     editToolBar->addAction(redoAction);
     editToolBar->addAction(copyAction);
     editToolBar->addAction(pasteAction);
+    editToolBar->addAction(refreshAction);
 }
 
 void MainWindow::createActions()
@@ -119,6 +122,10 @@ void MainWindow::createActions()
     pasteAction = new QAction(QString("Paste Hex"), this);
     pasteAction->setIcon(QIcon::fromTheme("edit-paste", QIcon(":/icons/paste.png")));
     connect(pasteAction, SIGNAL(triggered()), this, SLOT(paste()));
+
+    refreshAction = new QAction(QString("Refresh"), this);
+    refreshAction->setIcon(QIcon::fromTheme("view-refresh", QIcon(":/icons/refresh.png")));
+    connect(refreshAction, SIGNAL(triggered()), this, SLOT(refresh()));
 
     /* Window menu */
     closeAction = new QAction(QString("Close"), this);
@@ -218,6 +225,8 @@ void MainWindow::copy() {}
 
 void MainWindow::paste() {}
 
+void MainWindow::refresh() {}
+
 void MainWindow::about()
 {
     QMessageBox::about(this, QString("About"),
@@ -237,6 +246,7 @@ void MainWindow::updateActions()
     redoAction->setEnabled(false);
     copyAction->setEnabled(false);
     pasteAction->setEnabled(false);
+    refreshAction->setEnabled(true);
 
     closeAction->setEnabled(hasActiveSubWindow);
     closeAllAction->setEnabled(hasActiveSubWindow);

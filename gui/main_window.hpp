@@ -53,6 +53,7 @@ public slots:
     void redo();
     void copy();
     void paste();
+    void refresh();
     void about();
     void updateActions();
     void updateCheckableWindows();
@@ -62,7 +63,7 @@ private:
 
     QMdiArea *mdiArea;
     QAction *openAction, *saveAction, *saveAsAction, *exitAction;
-    QAction *undoAction, *redoAction, *copyAction, *pasteAction;
+    QAction *undoAction, *redoAction, *copyAction, *pasteAction, *refreshAction;
     QAction *closeAction, *closeAllAction, *tileAction, *cascadeAction, *nextAction,
             *previousAction;
     QAction *aboutAction;
