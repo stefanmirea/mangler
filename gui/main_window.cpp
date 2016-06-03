@@ -44,14 +44,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     fileMenu->addSeparator();
     fileMenu->addAction(exitAction);
 
+    QMenu *viewMenu = menuBar()->addMenu(QString("View"));
+    viewMenu->addAction(refreshAction);
+
     QMenu *editMenu = menuBar()->addMenu(QString("Edit"));
     editMenu->addAction(undoAction);
     editMenu->addAction(redoAction);
     editMenu->addSeparator();
     editMenu->addAction(copyAction);
     editMenu->addAction(pasteAction);
-    editMenu->addSeparator();
-    editMenu->addAction(refreshAction);
 
     windowMenu = menuBar()->addMenu(QString("Window"));
     connect(windowMenu, SIGNAL(aboutToShow()), this, SLOT(updateCheckableWindows()));
@@ -78,13 +79,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     fileToolBar->addAction(openAction);
     fileToolBar->addAction(saveAction);
 
+    QToolBar *viewToolBar = new QToolBar();
+    addToolBar(viewToolBar);
+    viewToolBar->addAction(refreshAction);
+
     QToolBar *editToolBar = new QToolBar();
     addToolBar(editToolBar);
     editToolBar->addAction(undoAction);
     editToolBar->addAction(redoAction);
     editToolBar->addAction(copyAction);
     editToolBar->addAction(pasteAction);
-    editToolBar->addAction(refreshAction);
 }
 
 void MainWindow::createActions()
@@ -106,6 +110,11 @@ void MainWindow::createActions()
     exitAction->setIcon(QIcon::fromTheme("application-exit", QIcon(":/icons/exit.png")));
     connect(exitAction, SIGNAL(triggered()), this, SLOT(exit()));
 
+    /* View menu */
+    refreshAction = new QAction(QString("Refresh"), this);
+    refreshAction->setIcon(QIcon::fromTheme("view-refresh", QIcon(":/icons/refresh.png")));
+    connect(refreshAction, SIGNAL(triggered()), this, SLOT(refresh()));
+
     /* Edit menu */
     undoAction = new QAction(QString("Undo"), this);
     undoAction->setIcon(QIcon::fromTheme("edit-undo", QIcon(":/icons/undo.png")));
@@ -122,10 +131,6 @@ void MainWindow::createActions()
     pasteAction = new QAction(QString("Paste Hex"), this);
     pasteAction->setIcon(QIcon::fromTheme("edit-paste", QIcon(":/icons/paste.png")));
     connect(pasteAction, SIGNAL(triggered()), this, SLOT(paste()));
-
-    refreshAction = new QAction(QString("Refresh"), this);
-    refreshAction->setIcon(QIcon::fromTheme("view-refresh", QIcon(":/icons/refresh.png")));
-    connect(refreshAction, SIGNAL(triggered()), this, SLOT(refresh()));
 
     /* Window menu */
     closeAction = new QAction(QString("Close"), this);
@@ -217,6 +222,8 @@ void MainWindow::saveAs() {}
 
 void MainWindow::exit() {}
 
+void MainWindow::refresh() {}
+
 void MainWindow::undo() {}
 
 void MainWindow::redo() {}
@@ -224,8 +231,6 @@ void MainWindow::redo() {}
 void MainWindow::copy() {}
 
 void MainWindow::paste() {}
-
-void MainWindow::refresh() {}
 
 void MainWindow::about()
 {
@@ -242,11 +247,12 @@ void MainWindow::updateActions()
     saveAction->setEnabled(hasActiveSubWindow);
     saveAsAction->setEnabled(hasActiveSubWindow);
 
+    refreshAction->setEnabled(true);
+
     undoAction->setEnabled(false);
     redoAction->setEnabled(false);
     copyAction->setEnabled(false);
     pasteAction->setEnabled(false);
-    refreshAction->setEnabled(true);
 
     closeAction->setEnabled(hasActiveSubWindow);
     closeAllAction->setEnabled(hasActiveSubWindow);
