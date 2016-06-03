@@ -113,11 +113,6 @@ ExecutableViewer::~ExecutableViewer()
     delete fileUnit;
 }
 
-std::string &ExecutableViewer::getFileName()
-{
-    return fileUnit->getName();
-}
-
 bool ExecutableViewer::refresh(std::string &tmpName)
 {
     return fileUnit->refresh(tmpName);

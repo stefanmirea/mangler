@@ -74,17 +74,16 @@ ELFIO::elfio *ELFFile::getELFIO()
 
 bool ELFFile::refresh(std::string &tmpName)
 {
-    filename = tmpName;
-
     /* Delete the old file and its containers */
     delete file;
     file = nullptr;
+    std::vector<Container *> &topLevelContainers = getTopLevelContainers();
     for (unsigned int i = 0; i < topLevelContainers.size(); ++i)
         delete topLevelContainers[i];
 
     /* Load the new file and the containers */
     file = new ELFIO::elfio();
-    open = file->load(filename);
+    open = file->load(tmpName);
     if (open && file->get_type() != ET_EXEC)
         open = false;
 
