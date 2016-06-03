@@ -44,6 +44,7 @@ public:
     bool save(std::string &filename);
     void modifyHex(size_t offset, std::string &newContent);
     ELFIO::elfio *getELFIO();
+    bool refresh(std::string &tmpName);
 
     virtual ~ELFFile();
 

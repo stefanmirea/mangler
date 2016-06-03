@@ -28,6 +28,7 @@
 #include "segment_contents_container.hpp"
 #include "section_contents_container.hpp"
 #include <utility>
+#include <iostream>
 
 using namespace elf;
 
@@ -69,4 +70,33 @@ void ELFFile::modifyHex(size_t offset, std::string &newContent) {}
 ELFIO::elfio *ELFFile::getELFIO()
 {
     return file;
+}
+
+bool ELFFile::refresh(std::string &tmpName)
+{
+    filename = tmpName;
+
+    /* Delete the old file and its containers */
+    delete file;
+    file = nullptr;
+    for (unsigned int i = 0; i < topLevelContainers.size(); ++i)
+        delete topLevelContainers[i];
+
+    /* Load the new file and the containers */
+    file = new ELFIO::elfio();
+    open = file->load(filename);
+    if (open && file->get_type() != ET_EXEC)
+        open = false;
+
+    if (open)
+    {
+        std::vector<Container *> &topLevelContainers = getTopLevelContainers();
+        topLevelContainers.push_back(new ELFHeaderContainer(this, std::make_pair(0, file->get_header_size())));
+        topLevelContainers.push_back(new ProgramHeaderTableContainer(this, std::make_pair(10, 20)));
+        topLevelContainers.push_back(new SectionHeaderTableContainer(this, std::make_pair(20, 30)));
+        topLevelContainers.push_back(new SegmentContentsContainer(this));
+        topLevelContainers.push_back(new SectionContentsContainer(this));
+    }
+
+    return open;
 }

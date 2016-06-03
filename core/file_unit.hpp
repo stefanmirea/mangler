@@ -45,8 +45,9 @@ public:
     virtual bool save(std::string &filename) = 0;
     virtual void modifyHex(size_t offset, std::string &newContent) = 0;
     virtual ~FileUnit();
+    virtual bool refresh(std::string &filename) = 0;
 
-private:
+protected:
     std::string filename;
     std::vector<Container *> topLevelContainers;
 };
