@@ -34,20 +34,7 @@ using namespace elf;
 
 ELFFile::ELFFile(const std::string &filename) : FileUnit(filename)
 {
-    file = new ELFIO::elfio();
-    open = file->load(filename);
-    if (open && file->get_type() != ET_EXEC)
-        open = false;
-
-    if (open)
-    {
-        std::vector<Container *> &topLevelContainers = getTopLevelContainers();
-        topLevelContainers.push_back(new ELFHeaderContainer(this, std::make_pair(0, file->get_header_size())));
-        topLevelContainers.push_back(new ProgramHeaderTableContainer(this, std::make_pair(10, 20)));
-        topLevelContainers.push_back(new SectionHeaderTableContainer(this, std::make_pair(20, 30)));
-        topLevelContainers.push_back(new SegmentContentsContainer(this));
-        topLevelContainers.push_back(new SectionContentsContainer(this));
-    }
+    loadFile(filename);
 }
 
 ELFFile::~ELFFile()
@@ -72,18 +59,10 @@ ELFIO::elfio *ELFFile::getELFIO()
     return file;
 }
 
-bool ELFFile::refresh(std::string &tmpName)
+bool ELFFile::loadFile(const std::string &filename)
 {
-    /* Delete the old file and its containers */
-    delete file;
-    file = nullptr;
-    std::vector<Container *> &topLevelContainers = getTopLevelContainers();
-    for (unsigned int i = 0; i < topLevelContainers.size(); ++i)
-        delete topLevelContainers[i];
-
-    /* Load the new file and the containers */
     file = new ELFIO::elfio();
-    open = file->load(tmpName);
+    open = file->load(filename);
     if (open && file->get_type() != ET_EXEC)
         open = false;
 
@@ -98,4 +77,15 @@ bool ELFFile::refresh(std::string &tmpName)
     }
 
     return open;
+}
+
+bool ELFFile::refresh(std::string &tmpName)
+{
+    /* Delete the old file and its containers */
+    delete file;
+    file = nullptr;
+    deleteTopLevelContainers();
+
+    /* Load the new file and the containers */
+    return loadFile(tmpName);
 }
