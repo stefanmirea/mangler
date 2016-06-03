@@ -48,7 +48,6 @@ class ExecutableViewer : public QWidget
 public:
     ExecutableViewer(FileUnit *fileUnit, QWidget *parent = 0);
     FileUnit *getFileUnit();
-    std::string &getFileName();
     bool loadFile(const QString &fileName) {return true;}
     bool save() {return true;}
     bool saveAs() {return true;}

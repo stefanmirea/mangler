@@ -696,7 +696,7 @@ void QHexEdit::keyPressEvent(QKeyEvent *event)
     // Refresh Event
     if ((event->key() == Qt::Key_F5))
     {
-        std::string tmpName = executableViewer->getFileName() + ".tmp";
+        std::string tmpName = executableViewer->getFileUnit()->getName() + ".tmp";
         bool saved = saveFile(QString(tmpName.c_str()));
         if (saved)
         {
@@ -996,7 +996,7 @@ void QHexEdit::updateCursor()
 void QHexEdit::loadFile()
 {
     QFile *file = new QFile();
-    file->setFileName(executableViewer->getFileName().c_str());
+    file->setFileName(executableViewer->getFileUnit()->getName().c_str());
     file->open(QIODevice::ReadOnly);
     std::cerr << "--- " << file->isReadable() << " \n" << file->size() << "\n";
 
