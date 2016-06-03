@@ -47,7 +47,7 @@ public:
     virtual ~FileUnit();
     virtual bool refresh(std::string &filename) = 0;
 
-protected:
+private:
     std::string filename;
     std::vector<Container *> topLevelContainers;
 };
