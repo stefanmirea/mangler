@@ -306,7 +306,8 @@ public:
     QColor selectionColor();
     void setSelectionColor(const QColor &color);
 
-    void loadFile();
+    void loadFile(const char *fileName);
+    bool refreshView();
 
 protected:
     // Handle events

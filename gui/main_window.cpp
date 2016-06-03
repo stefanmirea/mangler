@@ -211,7 +211,7 @@ void MainWindow::open(const QString &filename)
         return;
     } while (false);
 
-    ExecutableViewer *viewer = new ExecutableViewer(file, mdiArea);
+    ExecutableViewer *viewer = new ExecutableViewer(this, file, mdiArea);
     mdiArea->addSubWindow(viewer);
     viewer->showMaximized();
 }
@@ -222,7 +222,16 @@ void MainWindow::saveAs() {}
 
 void MainWindow::exit() {}
 
-void MainWindow::refresh() {}
+void MainWindow::refresh()
+{
+    QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow();
+#ifdef DEBUG
+    assert(activeSubWindow != nullptr);
+#endif
+    qobject_cast<ExecutableViewer *>(activeSubWindow->widget())->refresh();
+
+    refreshAction->setEnabled(false);
+}
 
 void MainWindow::undo() {}
 
@@ -247,7 +256,16 @@ void MainWindow::updateActions()
     saveAction->setEnabled(hasActiveSubWindow);
     saveAsAction->setEnabled(hasActiveSubWindow);
 
-    refreshAction->setEnabled(true);
+    if (hasActiveSubWindow)
+    {
+        QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow();
+        if (qobject_cast<ExecutableViewer *>(activeSubWindow->widget())->isRefreshable())
+            refreshAction->setEnabled(true);
+        else
+            refreshAction->setEnabled(false);
+    }
+    else
+        refreshAction->setEnabled(false);
 
     undoAction->setEnabled(false);
     redoAction->setEnabled(false);
