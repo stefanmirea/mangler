@@ -34,8 +34,19 @@ ELFCodeContainer::ELFCodeContainer(ELFFile *file, const std::pair<int, int> &int
 
 unsigned int ELFCodeContainer::addressToOffset(unsigned long long address)
 {
-    /* TODO */
-    return address - 0x406000;
+    ELFFile *efile = dynamic_cast<ELFFile *>(getFile());
+#ifdef DEBUG
+    assert(efile != nullptr);
+#endif
+    ELFIO::elfio *interpretor = efile->getELFIO();
+    ELFIO::section *currentSection = interpretor->sections[index];
+
+    unsigned long long baseAddress = currentSection->get_address();
+    if (address >= baseAddress && (baseAddress + currentSection->get_size()) > address)
+        return address - baseAddress;
+
+    else
+        return -1;
 }
 
 void ELFCodeContainer::getContent(std::vector<std::pair<unsigned long long, std::string>> &content)
@@ -68,9 +79,8 @@ void ELFCodeContainer::overwrite(unsigned long long address, std::string newMach
 #ifdef DEBUG
     assert(efile != nullptr);
 #endif
-    /* TODO: update efile->getELFIO() */
-    ELFIO::elfio *interpretor = efile->getELFIO();
 
+    ELFIO::elfio *interpretor = efile->getELFIO();
     ELFIO::section *currentSection = interpretor->sections[index];
     if (currentSection->get_address() <= address &&
                     currentSection->get_address() + currentSection->get_size() > address)
