@@ -27,6 +27,7 @@
 #include "elfio/elfio.hpp"
 #include "code_container.hpp"
 #include "elf_file.hpp"
+#include "file_assembly.hpp"
 
 namespace elf
 {
