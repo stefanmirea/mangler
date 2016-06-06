@@ -169,11 +169,12 @@ void ModifyASMBar::editInstruction()
     {
         std::string opcode;
         std::string arguments;
-        ASMViewer::splitInstruction(binaryCode, opcode, arguments);
+        std::string assembled;
+        ASMViewer::splitInstruction(binaryCode, assembled, opcode, arguments);
 
         QList<QStandardItem *> newInstructionEntry {
             new QStandardItem(QString::number(address, 16)),
-            new QStandardItem(ASMViewer::bufferToHex(binaryCode)),
+            new QStandardItem(QString(assembled.c_str())),
             new QStandardItem(QString(opcode.c_str())),
             new QStandardItem(QString(arguments.c_str()))
         };
