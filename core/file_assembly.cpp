@@ -24,6 +24,156 @@
 #include "file_assembly.hpp"
 #include <QString>
 
+#include <iostream>
+#include <cstdlib>
+#include <cstdio>
+#include <string>
+#include <cstring>
+#include <vector>
+#include <map>
+
+#define MAXSIZE 5000
+
+void FileAssembly::disassemble_section(const std::string &filename, const std::string &sectionName,
+                         std::map<std::string, unsigned long long> &labels,
+                         std::vector<asmInstr> &instructions)
+{
+    char buffer[MAXSIZE];
+    FILE *fp;
+    std::string cmd;
+    bool found_section = false;
+
+    cmd = "objdump -s -j " + sectionName + " -M intel -D " + filename;
+
+    if ((fp = popen(cmd.data(), "r")) == NULL)
+    {
+        printf("Error on pipe opening.\n");
+        return;
+    }
+
+    instructions.clear();
+    labels.clear();
+
+    while (fgets(buffer, MAXSIZE, fp) != NULL)
+    {
+        if (found_section == false)
+        {
+            if (strstr(buffer, "Disassembly of section"))
+            {
+                found_section = true;
+                continue;
+            }
+
+            else
+                continue;
+        }
+
+        else
+        if (found_section == true)
+        {
+            /* Search for labels */
+            if (strstr(buffer, ">:\n"))
+            {
+                char *token;
+
+                token = strtok(buffer, " ");
+                if (token)
+                {
+                    char *end;
+                    unsigned long long addr = strtoull(token, &end, 16);
+
+                    token = strtok(NULL, " ");
+                    if (token)
+                    {
+                        char *endtoken = strstr(token, ">:");
+                        if (endtoken)
+                        {
+                            endtoken[1] = '\0';
+                        }
+
+                        labels.insert(std::pair<std::string, unsigned long long>(std::string(token), addr));
+                    }
+                }
+            }
+
+            /* Search for instructions */
+            else
+            if (strstr(buffer, ":\t"))
+            {
+                char *token;
+                token = strtok(buffer + 1, "\t");
+
+                if (token)
+                {
+                    asmInstr instr;
+                    char *end;
+
+                    /* Remove ':' */
+                    token[strlen(token) - 1] = '\0';
+
+                    /* Store the address of the instruction */
+                    instr.address = strtoull(token, &end, 16);
+                    token = strtok(NULL, "\t");
+
+                    if (token)
+                    {
+                        /* Remove trailing spaces */
+                        unsigned int iterator = strlen(token) - 1;
+                        while (token[iterator] == ' ')
+                            iterator--;
+
+                        if (iterator < strlen(token) - 1)
+                            token[iterator + 1] = '\0';
+
+                        /* Store the assembled content */
+                        instr.assembled = std::string(token);
+
+                        token = strtok(NULL, "\t");
+                        if (token)
+                        {
+                            /* Remove newline */
+                            token[(strlen(token) - 1)] = '\0';
+
+                            if (token)
+                            {
+                                char *opcode = strtok(token, " ");
+                                if (opcode)
+                                {
+                                    /* Store the instruction opcode */
+                                    instr.opcode = std::string(opcode);
+
+                                    /* Store the arguments */
+                                    char *arg = strtok(NULL, " ");
+                                    while (arg)
+                                    {
+                                        instr.args += std::string(arg);
+                                        instr.args += " ";
+                                        arg = strtok(NULL, " ");
+                                    }
+
+                                    if (instr.args.size() > 0)
+                                    {
+                                        instr.args.pop_back();
+                                    }
+                                }
+                            }
+                        }
+
+                        instructions.push_back(instr);
+                    }
+                }
+            }
+        }
+    }
+
+    if (pclose(fp))
+    {
+        printf("Error on pipe exit.\n");
+        return;
+    }
+}
+
+
 std::string FileAssembly::disassembleCode(const std::string &code)
 {
     char instr1[] = {0x89, 0x85, 0x24, 0xff, 0xff, 0xff};
