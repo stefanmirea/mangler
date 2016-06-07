@@ -26,16 +26,29 @@
 
 #include <cstdint>
 #include <string>
-
+#include <map>
+#include <vector>
 /**
  * Provides methods for converting from machine code instructions to assembly language and vice
  * versa.
  */
+
+struct asmInstr
+{
+    unsigned long long address;
+    std::string assembled;
+    std::string opcode;
+    std::string args;
+};
+
 class FileAssembly
 {
 public:
     static std::string disassembleCode(const std::string &machineCode);
     static std::string assembleCode(const std::string &instruction, bool &ok);
+    static void disassemble_section(const std::string &filename, const std::string &sectionName,
+                             std::map<std::string, unsigned long long> &labels,
+                             std::vector<asmInstr> &instructions);
 };
 
 #endif // FILE_ASSEMBLY_HPP_

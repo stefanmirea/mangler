@@ -44,16 +44,18 @@ ASMViewer::ASMViewer(CodeContainer *container, QWidget *parent) :
         resizeColumnToContents(column);
 
     std::vector<std::pair<unsigned long long, std::string>> content;
+
     container->getContent(content);
 
     QList<QStandardItem *> items;
+
     for (unsigned int i = 0; i < content.size(); ++i)
     {
         items.clear();
         items.append(new QStandardItem(QString::number(content[i].first, 16)));
-        items.append(new QStandardItem(bufferToHex(content[i].second)));
-        std::string opcode, arguments;
-        splitInstruction(content[i].second, opcode, arguments);
+        std::string assembled, opcode, arguments;
+        splitInstruction(content[i].second, assembled, opcode, arguments);
+        items.append(new QStandardItem(QString(assembled.c_str())));
         items.append(new QStandardItem(QString(opcode.c_str())));
         items.append(new QStandardItem(QString(arguments.c_str())));
         model->appendRow(items);
@@ -79,19 +81,25 @@ QString ASMViewer::bufferToHex(const std::string &buffer)
     return ret;
 }
 
-void ASMViewer::splitInstruction(const std::string &binary, std::string &opcode, std::string &arguments)
+void ASMViewer::splitInstruction(const std::string &instruction, std::string &assembled,
+                                 std::string &opcode, std::string &arguments)
 {
-    std::string instruction = FileAssembly::disassembleCode(binary);
-    size_t spacePos = instruction.find(' ');
+    //std::string instruction = FileAssembly::disassembleCode(binary);
+    size_t caretPos = instruction.find('^');
+    assembled = instruction.substr(0, caretPos);
+
+    std::string disassembled = instruction.substr(caretPos + 1);
+
+    size_t spacePos = disassembled.find(' ');
     if (spacePos == std::string::npos)
     {
         /* For example "nop" */
-        opcode = instruction;
+        opcode = disassembled;
         arguments = "";
     }
     else
     {
-        opcode = instruction.substr(0, spacePos);
-        arguments = instruction.substr(spacePos + 1);
+        opcode = disassembled.substr(0, spacePos);
+        arguments = disassembled.substr(spacePos + 1);
     }
 }

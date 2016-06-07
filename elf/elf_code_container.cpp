@@ -55,12 +55,24 @@ void ELFCodeContainer::getContent(std::vector<std::pair<unsigned long long, std:
 #ifdef DEBUG
     assert(efile != nullptr);
 #endif
-    /* TODO: populate content using ELFIO */
-    efile->getELFIO();
 
-    content.clear();
+    ELFIO::elfio *elfReader = efile->getELFIO();
+    ELFIO::section *currentSection = elfReader->sections[index];
 
-    char inst1[] = {0x41, 0x57};
+    std::map<std::string, unsigned long long> labels;
+    std::vector<asmInstr> instructions;
+
+    FileAssembly::disassemble_section(efile->getName(), currentSection->get_name(),
+                                      labels, instructions);
+
+    for (int i = 0; i < instructions.size(); i++)
+    {
+        content.push_back(std::make_pair(instructions[i].address,
+                          std::string(instructions[i].assembled + "^"+
+                                      instructions[i].opcode + " " + instructions[i].args)));
+    }
+
+    /*char inst1[] = {0x41, 0x57};
     char inst2[] = {0x89, 0x85, 0x24, 0xff, 0xff, 0xff};
     char inst3[] = {0x4c, 0x29, 0xe5};
     char inst4[] = {0x53};
@@ -70,7 +82,7 @@ void ELFCodeContainer::getContent(std::vector<std::pair<unsigned long long, std:
     content.push_back(std::make_pair(0x406639, std::string(inst2, 6)));
     content.push_back(std::make_pair(0x40663f, std::string(inst3, 3)));
     content.push_back(std::make_pair(0x406642, std::string(inst4, 1)));
-    content.push_back(std::make_pair(0x406643, std::string(inst5, 6)));
+    content.push_back(std::make_pair(0x406643, std::string(inst5, 6)));*/
 }
 
 void ELFCodeContainer::overwrite(unsigned long long address, std::string newMachineCode)
