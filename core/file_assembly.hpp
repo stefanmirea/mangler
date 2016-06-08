@@ -39,6 +39,14 @@ struct asmInstr
     std::string assembled;
     std::string opcode;
     std::string args;
+
+    void clear()
+    {
+        address = 0LL;
+        assembled.clear();
+        opcode.clear();
+        args.clear();
+    }
 };
 
 class FileAssembly
