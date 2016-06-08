@@ -48,7 +48,7 @@ void FileAssembly::disassemble_section(const std::string &filename, const std::s
 
     if ((fp = popen(cmd.data(), "r")) == NULL)
     {
-        printf("Error on pipe opening.\n");
+        std::cerr << "Error on pipe opening." << std::endl;
         return;
     }
 
@@ -169,7 +169,7 @@ void FileAssembly::disassemble_section(const std::string &filename, const std::s
 
     if (pclose(fp))
     {
-        printf("Error on pipe exit.\n");
+        std::cerr << "Error on pipe exit." << std::endl;
         return;
     }
 }
@@ -197,7 +197,7 @@ void assemble_instruction(const std::string &instruction, asmInstr &result)
 
         if ((fp = popen(cmd.data(), "r")) == NULL)
         {
-            printf("Error on pipe opening.\n");
+            std::cerr << "Error on pipe opening." << std::endl;
             return;
         }
 
@@ -274,8 +274,7 @@ void assemble_instruction(const std::string &instruction, asmInstr &result)
 
         if (pclose(fp))
         {
-            printf("Error on pipe exit.\n");
-            return;
+            std::cerr << "Error on pipe exit." << std::endl;
         }
     }
 
