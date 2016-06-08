@@ -57,6 +57,7 @@ public:
     static void disassemble_section(const std::string &filename, const std::string &sectionName,
                              std::map<std::string, unsigned long long> &labels,
                              std::vector<asmInstr> &instructions);
+    static void assemble_instruction(const std::string &instruction, asmInstr &result);
 };
 
 #endif // FILE_ASSEMBLY_HPP_
