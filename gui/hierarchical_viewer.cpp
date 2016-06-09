@@ -24,8 +24,8 @@
 #include "hierarchical_viewer.hpp"
 
 HierarchicalViewer::HierarchicalViewer(QSplitter *split, QWidget *defaultSpecialRep,
-    QWidget *parent) : QTreeWidget(parent), defaultSpecialRep(defaultSpecialRep),
-                                            split(split)
+    QHexEdit *hexViewer, QWidget *parent) : QTreeWidget(parent), defaultSpecialRep(defaultSpecialRep),
+                                            split(split), hexViewer(hexViewer)
 {
     headerItem()->setHidden(true);
     setFont(QFont("Monospace", 10));
@@ -50,11 +50,6 @@ HierarchyNode *HierarchicalViewer::addChild(HierarchyNode *parent, Container *co
     HierarchyNode *item = new HierarchyNode(container, hexViewer, parent);
     parent->addChild(item);
     return item;
-}
-
-void HierarchicalViewer::setHexViewer(QHexEdit* hexViewer)
-{
-    this->hexViewer = hexViewer;
 }
 
 void HierarchicalViewer::expand(QTreeWidgetItem *item)

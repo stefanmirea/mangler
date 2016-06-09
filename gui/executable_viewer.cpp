@@ -49,11 +49,11 @@ ExecutableViewer::ExecutableViewer(MainWindow *mainWindow, FileUnit *fileUnit, Q
     left->setLayout(hv);
 
     /* Center hex viewer and search bar */
-    hierarchicalViewer = new HierarchicalViewer(split, defaultSpecialRep, this);
     hexViewer = new QHexEdit(this, this);
     hexViewer->loadFile(fileUnit->getName().c_str());
 
-    hierarchicalViewer->setHexViewer(hexViewer);
+    hierarchicalViewer = new HierarchicalViewer(split, defaultSpecialRep, hexViewer, this);
+
     std::vector<Container *> rootContainers = fileUnit->getTopLevelContainers();
     for (unsigned int i = 0; i < rootContainers.size(); ++i)
         hierarchicalViewer->addRoot(rootContainers[i]);
