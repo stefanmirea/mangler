@@ -1026,4 +1026,5 @@ bool QHexEdit::refreshView()
     bool saved = saveFile(QString(tmpName.c_str()));
     if (saved)
         return executableViewer->getFileUnit()->refresh(tmpName);
+    return false;
 }
