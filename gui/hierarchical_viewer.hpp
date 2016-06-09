@@ -41,9 +41,10 @@ class HierarchicalViewer : public QTreeWidget
     Q_OBJECT
 public:
     explicit HierarchicalViewer(QSplitter *split, QWidget *defaultSpecialRep,
-                                QHexEdit* hexViewer, QWidget *parent = 0);
+                                QWidget *parent = 0);
     HierarchyNode *addRoot(Container *container);
     HierarchyNode *addChild(HierarchyNode *parent, Container *container);
+    void setHexViewer(QHexEdit* hexViewer);
 signals:
 
 public slots:
