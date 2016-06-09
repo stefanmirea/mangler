@@ -85,8 +85,16 @@ QByteArray SearchBar::getInput()
     {
         if (hex->isChecked() == true)
         {
-            input =  QByteArray::fromHex(text->text().toLatin1());
-            std::cerr << "HEX\n";
+            QRegularExpression hexValue("^[0-9A-F]+$", QRegularExpression::CaseInsensitiveOption);
+            if (!hexValue.match(text->text()).hasMatch())
+                QMessageBox::critical(this, QString("Error"),
+                                      QString("\"%1\" is not a valid hexadecimal value.")
+                                      .arg(text->text()));
+            else
+            {
+                input = QByteArray::fromHex(text->text().toLatin1());
+                std::cerr << "HEX\n";
+            }
         }
         else if (dec->isChecked() == true)
         {
@@ -94,7 +102,7 @@ QByteArray SearchBar::getInput()
             qulonglong value = text->text().toULongLong(&ok);
             if (!ok)
                 QMessageBox::critical(this, QString("Error"),
-                                      QString("%1 is not a valid decimal value.")
+                                      QString("\"%1\" is not a valid decimal value.")
                                       .arg(text->text()));
             else if (value == 0)
                 input.fill(0, 1);
@@ -121,6 +129,8 @@ QByteArray SearchBar::getInput()
             std::cerr << "STR\n";
         }
     }
+    else
+        QMessageBox::critical(this, QString("Error"), QString("Please enter a search query."));
 
     qDebug(text->text().toLatin1());
     return input;
