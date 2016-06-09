@@ -34,6 +34,7 @@ SearchBar::SearchBar(QHexEdit *hexedit, QWidget *parent) :
     text = new QLineEdit(this);
     radiobox = new QGroupBox(this);
     hex = new QRadioButton(QString("Hex"), this);
+    hex->setChecked(true);
     dec = new QRadioButton(QString("Dec"), this);
     string = new QRadioButton(QString("String"), this);
     direction = new QCheckBox("Backwards", this);
