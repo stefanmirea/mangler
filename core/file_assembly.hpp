@@ -39,6 +39,14 @@ struct asmInstr
     std::string assembled;
     std::string opcode;
     std::string args;
+
+    void clear()
+    {
+        address = 0LL;
+        assembled.clear();
+        opcode.clear();
+        args.clear();
+    }
 };
 
 class FileAssembly
@@ -49,6 +57,7 @@ public:
     static void disassemble_section(const std::string &filename, const std::string &sectionName,
                              std::map<std::string, unsigned long long> &labels,
                              std::vector<asmInstr> &instructions);
+    static void assemble_instruction(const std::string &instruction, asmInstr &result);
 };
 
 #endif // FILE_ASSEMBLY_HPP_

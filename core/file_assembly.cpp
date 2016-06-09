@@ -31,6 +31,7 @@
 #include <cstring>
 #include <vector>
 #include <map>
+#include <fstream>
 
 #define MAXSIZE 5000
 
@@ -47,7 +48,7 @@ void FileAssembly::disassemble_section(const std::string &filename, const std::s
 
     if ((fp = popen(cmd.data(), "r")) == NULL)
     {
-        printf("Error on pipe opening.\n");
+        std::cerr << "Error on pipe opening." << std::endl;
         return;
     }
 
@@ -168,9 +169,119 @@ void FileAssembly::disassemble_section(const std::string &filename, const std::s
 
     if (pclose(fp))
     {
-        printf("Error on pipe exit.\n");
+        std::cerr << "Error on pipe exit." << std::endl;
         return;
     }
+}
+
+void assemble_instruction(const std::string &instruction, asmInstr &result)
+{
+    std::string filename = "tmpasm";
+
+    result.clear();
+
+    std::ofstream asmfile(filename + ".s", std::ofstream::out);
+    asmfile << ".intel_syntax noprefix" << std::endl << "main:"
+            << std::endl << instruction << std::endl;
+    asmfile.close();
+
+    std::system(std::string("gcc -c " + filename + ".s " + "-o " + filename + ".o").data());
+
+    std::ifstream assembled(filename + ".o", std::ifstream::in);
+    if (assembled.good())
+    {
+        std::string cmd = "objdump -M intel -d " + filename + ".o";
+        FILE *fp;
+        char buffer[MAXSIZE];
+        bool found_instr = false;
+
+        if ((fp = popen(cmd.data(), "r")) == NULL)
+        {
+            std::cerr << "Error on pipe opening." << std::endl;
+            return;
+        }
+
+        while (fgets(buffer, MAXSIZE, fp) != NULL)
+        {
+            if (found_instr == false)
+            {
+                if (strstr(buffer, "<main>:"))
+                {
+                    found_instr = true;
+                    continue;
+                }
+
+                else
+                    continue;
+            }
+
+            else
+            {
+                char *token = strtok(buffer, "\t");
+
+                if (token)
+                {
+                    token = strtok(NULL, "\t");
+
+                    if (token)
+                    {
+                        unsigned int iterator = strlen(token) - 1;
+                        while (token[iterator] == ' ')
+                            iterator--;
+
+                        if (iterator < strlen(token) - 1)
+                            token[iterator + 1] = '\0';
+
+                        /* Store the assembled content */
+                        result.assembled = std::string(token);
+                        token = strtok(NULL, "\t");
+
+                        if (token)
+                        {
+                            /* Remove newline */
+                            token[(strlen(token) - 1)] = '\0';
+
+                            if (token)
+                            {
+                                char *opcode = strtok(token, " ");
+                                if (opcode)
+                                {
+                                    /* Store the instruction opcode */
+                                    result.opcode = std::string(opcode);
+
+                                    /* Store the arguments */
+                                    char *arg = strtok(NULL, " ");
+                                    while (arg)
+                                    {
+                                        result.args += std::string(arg);
+                                        result.args += " ";
+                                        arg = strtok(NULL, " ");
+                                    }
+
+                                    if (result.args.size() > 0)
+                                    {
+                                        result.args.pop_back();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                break;
+            }
+        }
+
+        if (pclose(fp))
+        {
+            std::cerr << "Error on pipe exit." << std::endl;
+        }
+    }
+
+    assembled.close();
+
+    std::remove(std::string(filename + ".s").data());
+    std::remove(std::string(filename + ".o").data());
 }
 
 
