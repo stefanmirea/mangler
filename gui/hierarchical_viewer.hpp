@@ -48,13 +48,12 @@ signals:
 
 public slots:
     void expand(QTreeWidgetItem *item);
-    void change(QTreeWidgetItem *current, QTreeWidgetItem *previous);
     void select();
 private:
     QWidget *defaultSpecialRep;
     QSplitter *split;
     QHexEdit *hexViewer;
-    bool firstSelection;
+    HierarchyNode *previous;
 };
 
 #endif // HIERACHICAL_VIEWER_HPP_

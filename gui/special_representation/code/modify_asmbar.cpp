@@ -210,9 +210,13 @@ void ModifyASMBar::changeViewerSelection(const QItemSelection &selected,
                                          const QItemSelection &deselected)
 {
     QModelIndexList list = selected.indexes();
+    if (list.empty())
+        return;
+
     text->setText(list[2].data().toString() + ' ' + list[3].data().toString());
 
     bool ok;
     unsigned long long address = list[0].data().toString().toULongLong(&ok, 16);
-    hexEditor->selectData(container->addressToOffset(address), (list[1].data().toString().size() + 1) / 3);
+    hexEditor->selectData(container->addressToOffset(address),
+                          (list[1].data().toString().size() + 1) / 3);
 }

@@ -71,7 +71,7 @@ bool HierarchyNode::keepSpecialRepresentation()
 
 bool HierarchyNode::sharesContainer(HierarchyNode *node)
 {
-    return container == node->container;
+    return node && container == node->container;
 }
 
 std::pair<int, int> &HierarchyNode::getInterval()
