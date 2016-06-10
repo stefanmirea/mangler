@@ -46,7 +46,7 @@ public:
     virtual bool save(std::string &filename) = 0;
     virtual void modifyHex(size_t offset, std::string &newContent) = 0;
     virtual ~FileUnit();
-    virtual bool refresh(std::string &filename) = 0;
+    virtual void refresh(std::string &filename, std::string &warnings) = 0;
 
 private:
     std::string filename;

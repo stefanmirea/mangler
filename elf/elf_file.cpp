@@ -79,7 +79,7 @@ bool ELFFile::loadFile(const std::string &filename)
     return open;
 }
 
-bool ELFFile::refresh(std::string &tmpName)
+void ELFFile::refresh(std::string &tmpName, std::string &warnings)
 {
     /* Delete the old file and its containers */
     delete file;
@@ -87,5 +87,9 @@ bool ELFFile::refresh(std::string &tmpName)
     deleteTopLevelContainers();
 
     /* Load the new file and the containers */
-    return loadFile(tmpName);
+    if (!loadFile(tmpName))
+        warnings = "The file is not a valid ELF executable in the current form.\n"
+            "While you can keep editing using the hexadecimal editor, you will not be able to "
+            "take advantage of the hierarchical viewer. Make sure that your file is a valid "
+            "ELF executable, then refresh your view.";
 }

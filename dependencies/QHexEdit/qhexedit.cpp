@@ -1005,17 +1005,14 @@ bool QHexEdit::saveFile(const QString &fileName)
 {
     bool ret = true;
     if (QFile::exists(fileName))
-    {
-       ret = QFile::remove(fileName);
-    }
+        ret = QFile::remove(fileName);
 
     QFile savedFile(fileName);
     ret = this->write(savedFile);
 
     if (!ret)
-    {
-        QMessageBox::warning(this, QString("QHexEdit"), QString("Unable to save file!"));
-    }
+        QMessageBox::critical(this, QString("Error"),
+            QString("Unable to create temporary file. Cannot refresh the view."));
 
     return ret;
 }
@@ -1023,8 +1020,13 @@ bool QHexEdit::saveFile(const QString &fileName)
 bool QHexEdit::refreshView()
 {
     std::string tmpName = executableViewer->getFileUnit()->getName() + ".tmp";
-    bool saved = saveFile(QString(tmpName.c_str()));
-    if (saved)
-        return executableViewer->getFileUnit()->refresh(tmpName);
+    if (saveFile(QString(tmpName.c_str())))
+    {
+        std::string warnings;
+        executableViewer->getFileUnit()->refresh(tmpName, warnings);
+        if (warnings != "")
+            QMessageBox::warning(this, QString("Warning"), QString(warnings.c_str()));
+        return true;
+    }
     return false;
 }
