@@ -25,6 +25,7 @@
 #include "QDesktopWidget"
 #include "QApplication"
 #include <QFile>
+#include <QMessageBox>
 #include "qhexedit.hpp"
 #include <iostream>
 #include <qdebug.h>
@@ -132,5 +133,19 @@ void ExecutableViewer::setRefreshable(bool refreshable)
 
 bool ExecutableViewer::refresh()
 {
-    return hexViewer->refreshView();
+    std::string tmpName = fileUnit->getName() + ".tmp";
+    if (!hexViewer->saveFile(QString(tmpName.c_str())))
+    {
+        QMessageBox::critical(this, QString("Error"),
+            QString("Unable to create temporary file. Cannot refresh the view."));
+        return false;
+    }
+
+    if (!fileUnit->loadFile(tmpName))
+        QMessageBox::warning(this, QString("Warning"),
+            QString("The file is not a valid %1 executable in the current form.\nWhile you can "
+                "keep editing using the hexadecimal editor, you will not be able to take advantage "
+                "of the hierarchical viewer. Make sure that your file is a valid %1 executable, "
+                "then refresh your view.").arg(fileUnit->getFormatName().c_str()));
+    return true;
 }

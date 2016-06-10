@@ -307,7 +307,7 @@ public:
     void setSelectionColor(const QColor &color);
 
     void loadFile(const char *fileName);
-    bool refreshView();
+    bool saveFile(const QString &fileName);
 
 protected:
     // Handle events
@@ -329,7 +329,6 @@ private:
     void init();
     void readBuffers();
     QString toReadable(const QByteArray &ba);
-    bool saveFile(const QString &fileName);
 
 private slots:
     void adjust();                              // recalc pixel positions

@@ -32,9 +32,14 @@
 
 using namespace elf;
 
-ELFFile::ELFFile(const std::string &filename) : FileUnit(filename)
+ELFFile::ELFFile(const std::string &filename) : FileUnit(filename), formatName("ELF")
 {
     loadFile(filename);
+}
+
+const std::string &ELFFile::getFormatName()
+{
+    return formatName;
 }
 
 ELFFile::~ELFFile()
@@ -77,19 +82,4 @@ bool ELFFile::loadFile(const std::string &filename)
     }
 
     return open;
-}
-
-void ELFFile::refresh(std::string &tmpName, std::string &warnings)
-{
-    /* Delete the old file and its containers */
-    delete file;
-    file = nullptr;
-    deleteTopLevelContainers();
-
-    /* Load the new file and the containers */
-    if (!loadFile(tmpName))
-        warnings = "The file is not a valid ELF executable in the current form.\n"
-            "While you can keep editing using the hexadecimal editor, you will not be able to "
-            "take advantage of the hierarchical viewer. Make sure that your file is a valid "
-            "ELF executable, then refresh your view.";
 }

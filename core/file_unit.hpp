@@ -39,6 +39,7 @@ class FileUnit
 public:
     FileUnit(const std::string &filename);
     std::string &getName();
+    virtual const std::string &getFormatName() = 0;
     std::vector<Container *> &getTopLevelContainers();
     void deleteTopLevelContainers();
 
@@ -46,7 +47,7 @@ public:
     virtual bool save(std::string &filename) = 0;
     virtual void modifyHex(size_t offset, std::string &newContent) = 0;
     virtual ~FileUnit();
-    virtual void refresh(std::string &filename, std::string &warnings) = 0;
+    virtual bool loadFile(const std::string &filename) = 0; /* Creates the top-level containers. */
 
 private:
     std::string filename;

@@ -1010,23 +1010,5 @@ bool QHexEdit::saveFile(const QString &fileName)
     QFile savedFile(fileName);
     ret = this->write(savedFile);
 
-    if (!ret)
-        QMessageBox::critical(this, QString("Error"),
-            QString("Unable to create temporary file. Cannot refresh the view."));
-
     return ret;
-}
-
-bool QHexEdit::refreshView()
-{
-    std::string tmpName = executableViewer->getFileUnit()->getName() + ".tmp";
-    if (saveFile(QString(tmpName.c_str())))
-    {
-        std::string warnings;
-        executableViewer->getFileUnit()->refresh(tmpName, warnings);
-        if (warnings != "")
-            QMessageBox::warning(this, QString("Warning"), QString(warnings.c_str()));
-        return true;
-    }
-    return false;
 }
