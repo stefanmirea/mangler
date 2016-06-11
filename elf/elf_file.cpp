@@ -28,7 +28,6 @@
 #include "segment_contents_container.hpp"
 #include "section_contents_container.hpp"
 #include <utility>
-#include <iostream>
 
 using namespace elf;
 
@@ -71,9 +70,11 @@ bool ELFFile::loadFile(const std::string &filename)
     if (open && file->get_type() != ET_EXEC)
         open = false;
 
+    std::vector<Container *> &topLevelContainers = getTopLevelContainers();
+    topLevelContainers.clear();
+
     if (open)
     {
-        std::vector<Container *> &topLevelContainers = getTopLevelContainers();
         topLevelContainers.push_back(new ELFHeaderContainer(this, std::make_pair(0, file->get_header_size())));
         topLevelContainers.push_back(new ProgramHeaderTableContainer(this, std::make_pair(10, 20)));
         topLevelContainers.push_back(new SectionHeaderTableContainer(this, std::make_pair(20, 30)));

@@ -55,7 +55,7 @@ ExecutableViewer::ExecutableViewer(MainWindow *mainWindow, FileUnit *fileUnit, Q
 
     hierarchicalViewer = new HierarchicalViewer(split, defaultSpecialRep, hexViewer, this);
 
-    std::vector<Container *> rootContainers = fileUnit->getTopLevelContainers();
+    std::vector<Container *> &rootContainers = fileUnit->getTopLevelContainers();
     for (unsigned int i = 0; i < rootContainers.size(); ++i)
         hierarchicalViewer->addRoot(rootContainers[i]);
 
@@ -133,6 +133,7 @@ void ExecutableViewer::setRefreshable(bool refreshable)
 
 bool ExecutableViewer::refresh()
 {
+    /* Create a temporary copy of the modified file. */
     std::string tmpName = fileUnit->getName() + ".tmp";
     if (!hexViewer->saveFile(QString(tmpName.c_str())))
     {
@@ -141,11 +142,41 @@ bool ExecutableViewer::refresh()
         return false;
     }
 
+    /* Destroy HierarchicalViewer nodes. */
+    HierarchyNode *nodeOfInterest = hierarchicalViewer->getNodeOfInterest();
+    bool keepSpecialRepresentation = nodeOfInterest && nodeOfInterest->keepSpecialRepresentation();
+    hierarchicalViewer->clear();
+
+    /* Create new top-level containers. */
+    std::vector<Container *> oldRootContainers;
+    oldRootContainers.swap(fileUnit->getTopLevelContainers());
+
     if (!fileUnit->loadFile(tmpName))
         QMessageBox::warning(this, QString("Warning"),
             QString("The file is not a valid %1 executable in the current form.\nWhile you can "
                 "keep editing using the hexadecimal editor, you will not be able to take advantage "
                 "of the hierarchical viewer. Make sure that your file is a valid %1 executable, "
                 "then refresh your view.").arg(fileUnit->getFormatName().c_str()));
+
+    /* Create new HierarchicalViewer top-level nodes. */
+    std::vector<Container *> &rootContainers = fileUnit->getTopLevelContainers();
+    for (unsigned int i = 0; i < rootContainers.size(); ++i)
+        hierarchicalViewer->addRoot(rootContainers[i]);
+    hierarchicalViewer->reset();
+
+    /* Replace the current special representation with the default one. */
+    QWidget *currentSpecialRep = split->widget(2);
+    if (currentSpecialRep != defaultSpecialRep)
+    {
+        currentSpecialRep->setParent(Q_NULLPTR);
+        if (!keepSpecialRepresentation)
+            delete currentSpecialRep;
+        /* else, it will be deallocated in the container's destructor */
+        split->addWidget(defaultSpecialRep);
+    }
+
+    /* Delete all of the old containers. */
+    Container::deleteGraph(oldRootContainers);
+
     return true;
 }

@@ -44,6 +44,9 @@ public:
                                 QHexEdit* hexViewer, QWidget *parent = 0);
     HierarchyNode *addRoot(Container *container);
     HierarchyNode *addChild(HierarchyNode *parent, Container *container);
+    void reset();
+    void setDeletingContent(bool deletingContent);
+    HierarchyNode *getNodeOfInterest();
 signals:
 
 public slots:
