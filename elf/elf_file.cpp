@@ -70,8 +70,14 @@ bool ELFFile::loadFile(const std::string &filename)
     {
         std::vector<Container *> &topLevelContainers = getTopLevelContainers();
         topLevelContainers.push_back(new ELFHeaderContainer(this, std::make_pair(0, file->get_header_size())));
-        topLevelContainers.push_back(new ProgramHeaderTableContainer(this, std::make_pair(10, 20)));
-        topLevelContainers.push_back(new SectionHeaderTableContainer(this, std::make_pair(20, 30)));
+
+        int phtBegin = file->get_segments_offset();
+        int phtEnd = file->get_segments_offset() + file->get_segments_num() * file->get_segment_entry_size();
+        topLevelContainers.push_back(new ProgramHeaderTableContainer(this, std::make_pair(phtBegin, phtEnd)));
+
+        int shtBegin = file->get_sections_offset();
+        int shtEnd = file->get_sections_offset() + file->get_sections_num() * file->get_section_entry_size();
+        topLevelContainers.push_back(new SectionHeaderTableContainer(this, std::make_pair(shtBegin, shtEnd)));
         topLevelContainers.push_back(new SegmentContentsContainer(this));
         topLevelContainers.push_back(new SectionContentsContainer(this));
     }
