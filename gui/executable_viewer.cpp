@@ -168,6 +168,45 @@ bool ExecutableViewer::refresh()
     std::unordered_map<Container *, Container *> counterparts;
     Container::resemble(oldRootContainers, rootContainers, counterparts);
 
+    /* Create new special representations for the identified containers whose old counterparts had
+     * such representations. */
+    QWidget *specialRepToShow = nullptr;
+    for (std::unordered_map<Container *, Container *>::iterator u = counterparts.begin();
+            u != counterparts.end(); ++u)
+    {
+        bool keptSpecial = u->second->keepSpecialRepresentation() &&
+                           u->second->getSpecialRepresentation(hexViewer);
+        bool ofInterest = nodeOfInterest && nodeOfInterest->hasContainer(u->second);
+        if (keptSpecial || ofInterest)
+        {
+            RepresentationState *state = nullptr;
+            if (ofInterest)
+            {
+                /* The old representation can be temporary in this case. */
+                QWidget *specialRep = split->widget(2);
+                if (specialRep != defaultSpecialRep)
+                    u->second->getRepresentationState(specialRep, state);
+            }
+            else
+                u->second->getRepresentationState(u->second->getSpecialRepresentation(hexViewer),
+                                                  state);
+            QWidget *newSpecialRep = u->first->getSpecialRepresentation(hexViewer);
+            if (!ofInterest && !u->first->keepSpecialRepresentation())
+            {
+                if (newSpecialRep)
+                    delete newSpecialRep;
+                continue;
+            }
+            if (newSpecialRep && state)
+                u->first->applyRepresentationState(newSpecialRep, state);
+            if (ofInterest)
+                /* newSpecialRep can be any of nullptr, kept or temporary (not kept). */
+                specialRepToShow = newSpecialRep;
+        }
+    }
+    if (!specialRepToShow)
+        specialRepToShow = defaultSpecialRep;
+
     /* Restore previous HierarchicalViewer nodes expansion state. */
     HierarchyNode *toBeSelected = nullptr;
     std::stack<std::pair<HierarchyNode *, HierarchyNode *>> nodes;
@@ -224,26 +263,20 @@ bool ExecutableViewer::refresh()
     hierarchicalViewer->setHandleSelection(true);
 
     /* Update the current selection and special representation. */
-    QWidget *newSpecialRep = nullptr;
+    hierarchicalViewer->setHandleSelection(false);
+    hierarchicalViewer->clearSelection();
     if (toBeSelected != nullptr)
-    {
-        hierarchicalViewer->setHandleSelection(false);
-        hierarchicalViewer->clearSelection();
         toBeSelected->setSelected(true);
-        hierarchicalViewer->setHandleSelection(true);
-        newSpecialRep = toBeSelected->getSpecialRepresentation();
-    }
-    if (newSpecialRep == nullptr)
-        newSpecialRep = defaultSpecialRep;
+    hierarchicalViewer->setHandleSelection(true);
 
     QWidget *currentSpecialRep = split->widget(2);
-    if (currentSpecialRep != newSpecialRep)
+    if (currentSpecialRep != specialRepToShow)
     {
         currentSpecialRep->setParent(Q_NULLPTR);
         if (!keepSpecialRepresentation)
             delete currentSpecialRep;
         /* else, it will be deallocated in the container's destructor */
-        split->addWidget(newSpecialRep);
+        split->addWidget(specialRepToShow);
     }
 
     /* Delete all of the old containers. */

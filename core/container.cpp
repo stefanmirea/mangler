@@ -203,6 +203,16 @@ void Container::resemble(std::vector<Container *> &oldTopLevel,
     }
 }
 
+void Container::getRepresentationState(QWidget *specialRepresentation, RepresentationState *&state)
+{
+    state = nullptr;
+}
+
+bool Container::applyRepresentationState(QWidget *specialRepresentation, RepresentationState *state)
+{
+    return false;
+}
+
 bool Container::isValidInterval(std::pair<int, int> &interval)
 {
     return interval.first != NO_INTERVAL;

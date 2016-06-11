@@ -44,6 +44,7 @@ public:
     bool sharesContainer(HierarchyNode *node);
     bool hasContainerCounterpart(HierarchyNode *oldNode,
                                  std::unordered_map<Container *, Container *> &counterparts);
+    bool hasContainer(Container *container);
     bool getEverExpanded();
 private:
     void _HierarchyNode(Container *container);

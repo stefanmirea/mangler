@@ -80,6 +80,11 @@ bool HierarchyNode::hasContainerCounterpart(HierarchyNode *oldNode,
     return counterparts[container] == oldNode->container;
 }
 
+bool HierarchyNode::hasContainer(Container *container)
+{
+    return this->container == container;
+}
+
 bool HierarchyNode::getEverExpanded()
 {
     return everExpanded;

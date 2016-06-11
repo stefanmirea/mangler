@@ -46,4 +46,83 @@ std::vector<Container *> &CodeContainer::getInnerContainers()
  */
 void CodeContainer::injectCode(size_t offset, std::string &newContent) {}
 
+bool CodeContainer::getASMWidgets(QWidget *specialRepresentation, ASMViewer *&asmView,
+                                  ModifyASMBar *&asmBar)
+{
+    asmView = nullptr;
+    asmBar = nullptr;
+
+    const QObjectList &children = specialRepresentation->children();
+    for (QList<QObject *>::const_iterator u = children.begin(); u != children.end(); ++u)
+    {
+        if (!asmView)
+        {
+            ASMViewer *tempAsmView = dynamic_cast<ASMViewer *>(*u);
+            if (tempAsmView)
+                asmView = tempAsmView;
+        }
+        if (!asmBar)
+        {
+            ModifyASMBar *tempAsmBar = dynamic_cast<ModifyASMBar *>(*u);
+            if (tempAsmBar)
+                asmBar = tempAsmBar;
+        }
+    }
+
+    return asmView && asmBar;
+}
+
+void CodeContainer::getRepresentationState(QWidget *specialRepresentation,
+                                           RepresentationState *&state)
+{
+    ASMViewer *asmView;
+    ModifyASMBar *asmBar;
+
+    if (!getASMWidgets(specialRepresentation, asmView, asmBar))
+        state = nullptr;
+    else
+    {
+        CodeRepresentationState *codeState = new CodeRepresentationState;
+        QModelIndexList list = asmView->selectionModel()->selectedIndexes();
+        if (!list.size())
+            codeState->selectedIndex = -1;
+        else
+            codeState->selectedIndex = list[0].row();
+        codeState->modifyBarContent = asmBar->getText();
+        state = codeState;
+    }
+}
+
+bool CodeContainer::applyRepresentationState(QWidget *specialRepresentation,
+                                             RepresentationState *state)
+{
+    CodeRepresentationState *codeState = dynamic_cast<CodeRepresentationState *>(state);
+    if (!codeState)
+        return false;
+
+    ASMViewer *asmView;
+    ModifyASMBar *asmBar;
+    if (!getASMWidgets(specialRepresentation, asmView, asmBar))
+        return false;
+
+    if (codeState->selectedIndex > -1)
+    {
+        QStandardItemModel *model = asmView->getModel();
+        int row = codeState->selectedIndex;
+        if (row >= model->rowCount())
+            row = model->rowCount() - 1;
+
+        asmBar->setHandleSelection(false);
+        asmView->selectionModel()->select(QItemSelection(
+                model->index(row, 0),
+                model->index(row, model->columnCount() - 1)),
+            QItemSelectionModel::Select);
+        asmBar->setHandleSelection(true);
+
+        asmView->scrollTo(model->index(row, 0), QAbstractItemView::PositionAtCenter);
+    }
+    asmBar->setText(codeState->modifyBarContent);
+    return true;
+}
+
 CodeContainer::~CodeContainer() {}

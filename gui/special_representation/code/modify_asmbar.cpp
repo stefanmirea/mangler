@@ -35,6 +35,7 @@ ModifyASMBar::ModifyASMBar(CodeContainer *container, ASMViewer *asmViewer, QHexE
     modify = new QLabel(QString("Modify:"), this);
     text = new QLineEdit(this);
     ok = new QPushButton(QString("OK"), this);
+    handleSelection = true;
 
     QHBoxLayout *layout = new QHBoxLayout;
     layout->setContentsMargins(QMargins());
@@ -45,6 +46,21 @@ ModifyASMBar::ModifyASMBar(CodeContainer *container, ASMViewer *asmViewer, QHexE
     setMaximumHeight(80);
 
     connect(ok, SIGNAL(clicked()), this, SLOT(editInstruction()));
+}
+
+QString ModifyASMBar::getText()
+{
+    return text->text();
+}
+
+void ModifyASMBar::setText(QString &text)
+{
+    this->text->setText(text);
+}
+
+void ModifyASMBar::setHandleSelection(bool handleSelection)
+{
+    this->handleSelection = handleSelection;
 }
 
 void ModifyASMBar::editInstruction()
@@ -209,6 +225,9 @@ void ModifyASMBar::editInstruction()
 void ModifyASMBar::changeViewerSelection(const QItemSelection &selected,
                                          const QItemSelection &deselected)
 {
+    if (!handleSelection)
+        return;
+
     QModelIndexList list = selected.indexes();
     if (list.empty())
         return;

@@ -37,12 +37,23 @@ class CodeContainer;
 class CodeContainer : public Container
 {
 public:
+    class CodeRepresentationState : public RepresentationState
+    {
+    public:
+        int selectedIndex;
+        QString modifyBarContent;
+        virtual ~CodeRepresentationState() {}
+    };
+
     CodeContainer(FileUnit *file);
     CodeContainer(FileUnit *file, const std::pair<int, int> &interval);
     bool canInject();
     virtual std::vector<Container *> &getInnerContainers();
     virtual QWidget *doSpecialRepresentation(QHexEdit *hexEditor, bool &keepAfterNodeDeselection);
     virtual void injectCode(size_t offset, std::string &newContent);
+    virtual void getRepresentationState(QWidget *specialRepresentation, RepresentationState *&state);
+    virtual bool applyRepresentationState(QWidget *specialRepresentation,
+                                          RepresentationState *state);
     virtual ~CodeContainer();
 
     virtual unsigned int addressToOffset(unsigned long long address) = 0;
@@ -55,6 +66,7 @@ protected:
 private:
     ASMViewer *asmView;
     ModifyASMBar *asmBar;
+    bool getASMWidgets(QWidget *specialRepresentation, ASMViewer *&asmView, ModifyASMBar *&asmBar);
 };
 
 #endif // CODE_CONTAINER_HPP_

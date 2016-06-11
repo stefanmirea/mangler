@@ -45,6 +45,9 @@ class ModifyASMBar : public QWidget
 public:
     explicit ModifyASMBar(CodeContainer *container, ASMViewer *asmViewer, QHexEdit *hexEditor,
                           QWidget *parent = 0);
+    QString getText();
+    void setText(QString &text);
+    void setHandleSelection(bool handleSelection);
 
 signals:
 
@@ -58,6 +61,7 @@ private:
     QPushButton *ok;
     ASMViewer *asmViewer;
     QHexEdit *hexEditor;
+    bool handleSelection;
 };
 
 #endif // MODIFY_ASMBAR_HPP_

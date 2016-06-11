@@ -38,6 +38,7 @@
 
 class FileUnit;
 class QHexEdit;
+class RepresentationState;
 
 /**
  * Information associated with a HierarchyNode. While HierarchyNodes are arranged in a tree
@@ -68,6 +69,10 @@ public:
     static void resemble(std::vector<Container *> &oldTopLevel,
                          std::vector<Container *> &newTopLevel,
                          std::unordered_map<Container *, Container *> &counterparts);
+    virtual void getRepresentationState(QWidget *specialRepresentation,
+                                        RepresentationState *&state);
+    virtual bool applyRepresentationState(QWidget *specialRepresentation,
+                                          RepresentationState *state);
 
     static bool isValidInterval(std::pair<int, int> &interval);
     static void invalidateInterval(std::pair<int, int> &interval);
@@ -86,6 +91,16 @@ private:
     bool _keepSpecialRepresentation;
     QWidget *specialRepresentation;
     virtual QWidget *doSpecialRepresentation(QHexEdit *hexEditor, bool &keepAfterNodeDeselection);
+};
+
+/**
+ * Describes the state of the special representation of a container in order to restore it after
+ * refresh.
+ */
+class RepresentationState
+{
+public:
+    virtual ~RepresentationState() {}
 };
 
 #endif // CONTAINER_HPP_
