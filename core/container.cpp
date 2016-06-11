@@ -139,26 +139,23 @@ Container::~Container()
 void Container::deleteGraph(std::vector<Container *> &topLevelContainers)
 {
     std::unordered_set<Container *> containers;
+    std::queue<Container *> queue;
     for (unsigned int i = 0; i < topLevelContainers.size(); ++i)
     {
-        std::queue<Container *> queue;
-        if (containers.find(topLevelContainers[i]) == containers.end())
-        {
-            containers.insert(topLevelContainers[i]);
-            queue.push(topLevelContainers[i]);
-        }
-        while (!queue.empty())
-        {
-            Container *first = queue.front();
-            queue.pop();
-            std::vector<Container *> &successors = first->innerContainers;
-            for (unsigned int j = 0; j < successors.size(); ++j)
-                if (containers.find(successors[j]) == containers.end())
-                {
-                    containers.insert(successors[j]);
-                    queue.push(successors[j]);
-                }
-        }
+        containers.insert(topLevelContainers[i]);
+        queue.push(topLevelContainers[i]);
+    }
+    while (!queue.empty())
+    {
+        Container *first = queue.front();
+        queue.pop();
+        std::vector<Container *> &successors = first->innerContainers;
+        for (unsigned int j = 0; j < successors.size(); ++j)
+            if (containers.find(successors[j]) == containers.end())
+            {
+                containers.insert(successors[j]);
+                queue.push(successors[j]);
+            }
     }
     for (std::unordered_set<Container *>::iterator u = containers.begin();
             u != containers.end(); ++u)
