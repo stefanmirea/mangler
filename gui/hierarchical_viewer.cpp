@@ -30,6 +30,7 @@ HierarchicalViewer::HierarchicalViewer(QSplitter *split, QWidget *defaultSpecial
     headerItem()->setHidden(true);
     setFont(QFont("Monospace", 10));
     previous = nullptr;
+    deletingContent = false;
 
     connect(this, SIGNAL(itemExpanded(QTreeWidgetItem *)),
             this, SLOT(expand(QTreeWidgetItem *)));
@@ -53,6 +54,11 @@ HierarchyNode *HierarchicalViewer::addChild(HierarchyNode *parent, Container *co
 void HierarchicalViewer::reset()
 {
     previous = nullptr;
+}
+
+void HierarchicalViewer::setDeletingContent(bool deletingContent)
+{
+    this->deletingContent = deletingContent;
 }
 
 /* getNodeOfInterest() vs. selected node:
@@ -80,6 +86,9 @@ void HierarchicalViewer::select()
 {
     if (!selectedItems().size())
         /* After deselection using Ctrl + click. */
+        return;
+
+    if (deletingContent)
         return;
 
     HierarchyNode *current = dynamic_cast<HierarchyNode *>(selectedItems()[0]);

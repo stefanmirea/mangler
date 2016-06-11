@@ -74,6 +74,12 @@ bool HierarchyNode::sharesContainer(HierarchyNode *node)
     return node && container == node->container;
 }
 
+bool HierarchyNode::hasContainerCounterpart(HierarchyNode *oldNode,
+    std::unordered_map<Container *, Container *> &counterparts)
+{
+    return counterparts[container] == oldNode->container;
+}
+
 std::pair<int, int> &HierarchyNode::getInterval()
 {
     return container->getInterval();

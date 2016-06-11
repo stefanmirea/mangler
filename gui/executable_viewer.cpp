@@ -142,10 +142,9 @@ bool ExecutableViewer::refresh()
         return false;
     }
 
-    /* Destroy HierarchicalViewer nodes. */
     HierarchyNode *nodeOfInterest = hierarchicalViewer->getNodeOfInterest();
     bool keepSpecialRepresentation = nodeOfInterest && nodeOfInterest->keepSpecialRepresentation();
-    hierarchicalViewer->clear();
+    int oldTopLevelItemCount = hierarchicalViewer->topLevelItemCount();
 
     /* Create new top-level containers. */
     std::vector<Container *> oldRootContainers;
@@ -163,6 +162,55 @@ bool ExecutableViewer::refresh()
     for (unsigned int i = 0; i < rootContainers.size(); ++i)
         hierarchicalViewer->addRoot(rootContainers[i]);
     hierarchicalViewer->reset();
+
+    /* Identify new container graph with the old one. */
+    std::unordered_map<Container *, Container *> counterparts;
+    Container::resemble(oldRootContainers, rootContainers, counterparts);
+
+    /* Restore previous HierarchicalViewer nodes expansion state. */
+    std::queue<std::pair<HierarchyNode *, HierarchyNode *>> nodes;
+    for (int i = 0; i < hierarchicalViewer->topLevelItemCount() - oldTopLevelItemCount &&
+        i < oldTopLevelItemCount; ++i)
+    {
+        HierarchyNode *oldNode = dynamic_cast<HierarchyNode *>(hierarchicalViewer->topLevelItem(i));
+        HierarchyNode *newNode = dynamic_cast<HierarchyNode *>(
+            hierarchicalViewer->topLevelItem(i + oldTopLevelItemCount)
+        );
+#ifdef DEBUG
+        assert(oldNode != nullptr && newNode != nullptr);
+#endif
+        if (newNode->hasContainerCounterpart(oldNode, counterparts) && oldNode->isExpanded() &&
+                newNode->childIndicatorPolicy() == QTreeWidgetItem::ShowIndicator)
+            nodes.push(std::make_pair(newNode, oldNode));
+    }
+    while (!nodes.empty())
+    {
+        HierarchyNode *newFirst = nodes.front().first;
+        HierarchyNode *oldFirst = nodes.front().second;
+        nodes.pop();
+        hierarchicalViewer->expandItem(newFirst);
+        for (int i = 0; i < newFirst->childCount() && i < oldFirst->childCount(); ++i)
+        {
+            HierarchyNode *oldNode = dynamic_cast<HierarchyNode *>(oldFirst->child(i));
+            HierarchyNode *newNode = dynamic_cast<HierarchyNode *>(newFirst->child(i));
+#ifdef DEBUG
+            assert(oldNode != nullptr && newNode != nullptr);
+#endif
+
+            if (newNode->hasContainerCounterpart(oldNode, counterparts) && oldNode->isExpanded() &&
+                    newNode->childIndicatorPolicy() == QTreeWidgetItem::ShowIndicator)
+                nodes.push(std::make_pair(newNode, oldNode));
+        }
+    }
+
+    /* Destroy old HierarchicalViewer nodes */
+    hierarchicalViewer->setDeletingContent(true);
+    for (int i = 0; i < oldTopLevelItemCount; ++i)
+    {
+        QTreeWidgetItem *oldNode = hierarchicalViewer->takeTopLevelItem(0);
+        delete oldNode;
+    }
+    hierarchicalViewer->setDeletingContent(false);
 
     /* Replace the current special representation with the default one. */
     QWidget *currentSpecialRep = split->widget(2);

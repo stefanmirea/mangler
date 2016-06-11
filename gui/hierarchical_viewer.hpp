@@ -57,6 +57,7 @@ private:
     QSplitter *split;
     QHexEdit *hexViewer;
     HierarchyNode *previous;
+    bool deletingContent;
 };
 
 #endif // HIERACHICAL_VIEWER_HPP_
