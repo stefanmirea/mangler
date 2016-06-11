@@ -66,7 +66,18 @@ ELFIO::elfio *ELFFile::getELFIO()
 bool ELFFile::loadFile(const std::string &filename)
 {
     file = new ELFIO::elfio();
-    open = file->load(filename);
+    try
+    {
+        open = file->load(filename);
+    }
+    catch (std::exception &e)
+    {
+#ifdef DEBUG
+        std::cerr << "Caught " << e.what() << " in LEFIO::load.\n";
+#endif
+        open = false;
+    }
+
     if (open && file->get_type() != ET_EXEC)
         open = false;
 
