@@ -217,9 +217,13 @@ void ModifyASMBar::editInstruction()
 
     asmViewer->getModel()->removeRows(row, fullyCovered + (rest ? 1 : 0));
 
-    /* TODO: The input instruction will also be updated in the elfio backend
+    /* The input instruction will also be updated in the elfio backend
      * and hexedit */
     container->overwrite(initialAddress, codeContainerUpdate);
+
+    QByteArray byteArray(codeContainerUpdate.data(), codeContainerUpdate.size());
+    hexEditor->replace(container->addressToOffset(initialAddress), codeContainerUpdate.size(),
+                       byteArray);
 }
 
 void ModifyASMBar::changeViewerSelection(const QItemSelection &selected,
