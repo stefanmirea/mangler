@@ -45,7 +45,7 @@ public:
     HierarchyNode *addRoot(Container *container);
     HierarchyNode *addChild(HierarchyNode *parent, Container *container);
     void reset();
-    void setDeletingContent(bool deletingContent);
+    void setHandleSelection(bool handleSelection);
     HierarchyNode *getNodeOfInterest();
 signals:
 
@@ -57,7 +57,7 @@ private:
     QSplitter *split;
     QHexEdit *hexViewer;
     HierarchyNode *previous;
-    bool deletingContent;
+    bool handleSelection;
 };
 
 #endif // HIERACHICAL_VIEWER_HPP_

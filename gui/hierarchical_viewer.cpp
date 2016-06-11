@@ -30,7 +30,7 @@ HierarchicalViewer::HierarchicalViewer(QSplitter *split, QWidget *defaultSpecial
     headerItem()->setHidden(true);
     setFont(QFont("Monospace", 10));
     previous = nullptr;
-    deletingContent = false;
+    handleSelection = true;
 
     connect(this, SIGNAL(itemExpanded(QTreeWidgetItem *)),
             this, SLOT(expand(QTreeWidgetItem *)));
@@ -56,9 +56,9 @@ void HierarchicalViewer::reset()
     previous = nullptr;
 }
 
-void HierarchicalViewer::setDeletingContent(bool deletingContent)
+void HierarchicalViewer::setHandleSelection(bool handleSelection)
 {
-    this->deletingContent = deletingContent;
+    this->handleSelection = handleSelection;
 }
 
 /* getNodeOfInterest() vs. selected node:
@@ -88,39 +88,39 @@ void HierarchicalViewer::select()
         /* After deselection using Ctrl + click. */
         return;
 
-    if (deletingContent)
-        return;
-
     HierarchyNode *current = dynamic_cast<HierarchyNode *>(selectedItems()[0]);
 #ifdef DEBUG
     assert(current != nullptr);
 #endif
 
-    if (!current->sharesContainer(previous))
+    if (handleSelection)
     {
-        QWidget *currentSpecialRep = split->widget(2);
-
-        QWidget *newSpecialRep = current->getSpecialRepresentation();
-        if (!newSpecialRep)
-            newSpecialRep = defaultSpecialRep;
-
-        if (newSpecialRep != currentSpecialRep)
+        if (!current->sharesContainer(previous))
         {
-            if (previous && !previous->keepSpecialRepresentation())
-                delete currentSpecialRep;
-            else
-                /* If the previous representation was the default one, it will be deallocated in the
-                 * ExecutableViewer destructor; else, in the destructor of the Container which kept
-                 * the QWidget. */
-                currentSpecialRep->setParent(Q_NULLPTR);
+            QWidget *currentSpecialRep = split->widget(2);
 
-            split->addWidget(newSpecialRep);
+            QWidget *newSpecialRep = current->getSpecialRepresentation();
+            if (!newSpecialRep)
+                newSpecialRep = defaultSpecialRep;
+
+            if (newSpecialRep != currentSpecialRep)
+            {
+                if (previous && !previous->keepSpecialRepresentation())
+                    delete currentSpecialRep;
+                else
+                    /* If the previous representation was the default one, it will be deallocated in
+                     * the ExecutableViewer destructor; else, in the destructor of the Container
+                     * which kept the QWidget. */
+                    currentSpecialRep->setParent(Q_NULLPTR);
+
+                split->addWidget(newSpecialRep);
+            }
         }
-    }
 
-    std::pair<int, int> interval = current->getInterval();
-    if (Container::isValidInterval(interval))
-        hexViewer->selectData(interval.first, interval.second - interval.first);
+        std::pair<int, int> interval = current->getInterval();
+        if (Container::isValidInterval(interval))
+            hexViewer->selectData(interval.first, interval.second - interval.first);
+    }
 
     previous = current;
 }

@@ -169,6 +169,7 @@ bool ExecutableViewer::refresh()
     Container::resemble(oldRootContainers, rootContainers, counterparts);
 
     /* Restore previous HierarchicalViewer nodes expansion state. */
+    HierarchyNode *toBeSelected = nullptr;
     std::stack<std::pair<HierarchyNode *, HierarchyNode *>> nodes;
     for (int i = 0; i < hierarchicalViewer->topLevelItemCount() - oldTopLevelItemCount &&
         i < oldTopLevelItemCount; ++i)
@@ -180,9 +181,14 @@ bool ExecutableViewer::refresh()
 #ifdef DEBUG
         assert(oldNode != nullptr && newNode != nullptr);
 #endif
-        if (newNode->hasContainerCounterpart(oldNode, counterparts) && oldNode->getEverExpanded() &&
-                newNode->childIndicatorPolicy() == QTreeWidgetItem::ShowIndicator)
-            nodes.push(std::make_pair(newNode, oldNode));
+        if (newNode->hasContainerCounterpart(oldNode, counterparts))
+        {
+            if (oldNode->getEverExpanded() &&
+                    newNode->childIndicatorPolicy() == QTreeWidgetItem::ShowIndicator)
+                nodes.push(std::make_pair(newNode, oldNode));
+            if (oldNode == nodeOfInterest)
+                toBeSelected = newNode;
+        }
     }
     while (!nodes.empty())
     {
@@ -198,33 +204,46 @@ bool ExecutableViewer::refresh()
             assert(oldNode != nullptr && newNode != nullptr);
 #endif
 
-            if (newNode->hasContainerCounterpart(oldNode, counterparts) &&
-                    oldNode->getEverExpanded() &&
-                    newNode->childIndicatorPolicy() == QTreeWidgetItem::ShowIndicator)
-                nodes.push(std::make_pair(newNode, oldNode));
+            if (newNode->hasContainerCounterpart(oldNode, counterparts))
+            {
+                if (oldNode->getEverExpanded() &&
+                        newNode->childIndicatorPolicy() == QTreeWidgetItem::ShowIndicator)
+                    nodes.push(std::make_pair(newNode, oldNode));
+                if (oldNode == nodeOfInterest)
+                    toBeSelected = newNode;
+            }
         }
         if (!oldFirst->isExpanded())
             hierarchicalViewer->collapseItem(newFirst);
     }
 
     /* Destroy old HierarchicalViewer nodes */
-    hierarchicalViewer->setDeletingContent(true);
+    hierarchicalViewer->setHandleSelection(false);
     for (int i = 0; i < oldTopLevelItemCount; ++i)
-    {
-        QTreeWidgetItem *oldNode = hierarchicalViewer->takeTopLevelItem(0);
-        delete oldNode;
-    }
-    hierarchicalViewer->setDeletingContent(false);
+        delete hierarchicalViewer->takeTopLevelItem(0);
+    hierarchicalViewer->setHandleSelection(true);
 
-    /* Replace the current special representation with the default one. */
+    /* Update the current selection and special representation. */
+    QWidget *newSpecialRep = nullptr;
+    if (toBeSelected != nullptr)
+    {
+        hierarchicalViewer->setHandleSelection(false);
+        hierarchicalViewer->clearSelection();
+        toBeSelected->setSelected(true);
+        hierarchicalViewer->setHandleSelection(true);
+        newSpecialRep = toBeSelected->getSpecialRepresentation();
+    }
+    if (newSpecialRep == nullptr)
+        newSpecialRep = defaultSpecialRep;
+
     QWidget *currentSpecialRep = split->widget(2);
-    if (currentSpecialRep != defaultSpecialRep)
+    if (currentSpecialRep != newSpecialRep)
     {
         currentSpecialRep->setParent(Q_NULLPTR);
         if (!keepSpecialRepresentation)
             delete currentSpecialRep;
         /* else, it will be deallocated in the container's destructor */
-        split->addWidget(defaultSpecialRep);
+        split->addWidget(newSpecialRep);
     }
 
     /* Delete all of the old containers. */
