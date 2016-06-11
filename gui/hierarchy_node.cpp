@@ -80,6 +80,11 @@ bool HierarchyNode::hasContainerCounterpart(HierarchyNode *oldNode,
     return counterparts[container] == oldNode->container;
 }
 
+bool HierarchyNode::getEverExpanded()
+{
+    return everExpanded;
+}
+
 std::pair<int, int> &HierarchyNode::getInterval()
 {
     return container->getInterval();

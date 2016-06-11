@@ -29,6 +29,7 @@
 #include "qhexedit.hpp"
 #include <iostream>
 #include <qdebug.h>
+#include <stack>
 
 ExecutableViewer::ExecutableViewer(MainWindow *mainWindow, FileUnit *fileUnit, QWidget *parent) :
     QWidget(parent), mainWindow(mainWindow), fileUnit(fileUnit)
@@ -168,7 +169,7 @@ bool ExecutableViewer::refresh()
     Container::resemble(oldRootContainers, rootContainers, counterparts);
 
     /* Restore previous HierarchicalViewer nodes expansion state. */
-    std::queue<std::pair<HierarchyNode *, HierarchyNode *>> nodes;
+    std::stack<std::pair<HierarchyNode *, HierarchyNode *>> nodes;
     for (int i = 0; i < hierarchicalViewer->topLevelItemCount() - oldTopLevelItemCount &&
         i < oldTopLevelItemCount; ++i)
     {
@@ -179,14 +180,14 @@ bool ExecutableViewer::refresh()
 #ifdef DEBUG
         assert(oldNode != nullptr && newNode != nullptr);
 #endif
-        if (newNode->hasContainerCounterpart(oldNode, counterparts) && oldNode->isExpanded() &&
+        if (newNode->hasContainerCounterpart(oldNode, counterparts) && oldNode->getEverExpanded() &&
                 newNode->childIndicatorPolicy() == QTreeWidgetItem::ShowIndicator)
             nodes.push(std::make_pair(newNode, oldNode));
     }
     while (!nodes.empty())
     {
-        HierarchyNode *newFirst = nodes.front().first;
-        HierarchyNode *oldFirst = nodes.front().second;
+        HierarchyNode *newFirst = nodes.top().first;
+        HierarchyNode *oldFirst = nodes.top().second;
         nodes.pop();
         hierarchicalViewer->expandItem(newFirst);
         for (int i = 0; i < newFirst->childCount() && i < oldFirst->childCount(); ++i)
@@ -197,10 +198,13 @@ bool ExecutableViewer::refresh()
             assert(oldNode != nullptr && newNode != nullptr);
 #endif
 
-            if (newNode->hasContainerCounterpart(oldNode, counterparts) && oldNode->isExpanded() &&
+            if (newNode->hasContainerCounterpart(oldNode, counterparts) &&
+                    oldNode->getEverExpanded() &&
                     newNode->childIndicatorPolicy() == QTreeWidgetItem::ShowIndicator)
                 nodes.push(std::make_pair(newNode, oldNode));
         }
+        if (!oldFirst->isExpanded())
+            hierarchicalViewer->collapseItem(newFirst);
     }
 
     /* Destroy old HierarchicalViewer nodes */
