@@ -43,7 +43,7 @@ unsigned int ELFCodeContainer::addressToOffset(unsigned long long address)
 
     unsigned long long baseAddress = currentSection->get_address();
     if (address >= baseAddress && (baseAddress + currentSection->get_size()) > address)
-        return address - baseAddress;
+        return currentSection->get_offset() + address - baseAddress;
 
     else
         return -1;
