@@ -64,6 +64,7 @@ public:
 
     virtual std::vector<Container *> &getInnerContainers();
     virtual ~Container();
+    static void deleteGraph(std::vector<Container *> &topLevelContainers);
 
     static bool isValidInterval(std::pair<int, int> &interval);
     static void invalidateInterval(std::pair<int, int> &interval);

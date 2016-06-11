@@ -39,13 +39,7 @@ std::vector<Container *> &FileUnit::getTopLevelContainers()
     return topLevelContainers;
 }
 
-void FileUnit::deleteTopLevelContainers()
-{
-    for (unsigned int i = 0; i < topLevelContainers.size(); ++i)
-        delete topLevelContainers[i];
-}
-
 FileUnit::~FileUnit()
 {
-    deleteTopLevelContainers();
+    Container::deleteGraph(topLevelContainers);
 }

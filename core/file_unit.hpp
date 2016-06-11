@@ -41,7 +41,6 @@ public:
     std::string &getName();
     virtual const std::string &getFormatName() = 0;
     std::vector<Container *> &getTopLevelContainers();
-    void deleteTopLevelContainers();
 
     virtual bool getOpenStatus() = 0;
     virtual bool save(std::string &filename) = 0;

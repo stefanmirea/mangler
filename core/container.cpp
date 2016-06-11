@@ -22,6 +22,7 @@
  */
 
 #include "container.hpp"
+#include <unordered_set>
 
 Container::Container(FileUnit *file, bool expandable) :
     file(file), expandable(expandable)
@@ -108,7 +109,7 @@ Container::~Container()
             specialRepresentation != nullptr)
         delete specialRepresentation;
 
-    for (unsigned int i = 0; i < parents.size(); ++i)
+    /*for (unsigned int i = 0; i < parents.size(); ++i)
     {
         std::vector<Container *> &siblings = parents[i]->getInnerContainers();
         siblings.erase(std::remove(siblings.begin(), siblings.end(), this),
@@ -132,7 +133,36 @@ Container::~Container()
         }
         if (first != this)
             delete first;
+    }*/
+}
+
+void Container::deleteGraph(std::vector<Container *> &topLevelContainers)
+{
+    std::unordered_set<Container *> containers;
+    for (unsigned int i = 0; i < topLevelContainers.size(); ++i)
+    {
+        std::queue<Container *> queue;
+        if (containers.find(topLevelContainers[i]) == containers.end())
+        {
+            containers.insert(topLevelContainers[i]);
+            queue.push(topLevelContainers[i]);
+        }
+        while (!queue.empty())
+        {
+            Container *first = queue.front();
+            queue.pop();
+            std::vector<Container *> &successors = first->innerContainers;
+            for (unsigned int j = 0; j < successors.size(); ++j)
+                if (containers.find(successors[j]) == containers.end())
+                {
+                    containers.insert(successors[j]);
+                    queue.push(successors[j]);
+                }
+        }
     }
+    for (std::unordered_set<Container *>::iterator u = containers.begin();
+            u != containers.end(); ++u)
+        delete *u;
 }
 
 bool Container::isValidInterval(std::pair<int, int> &interval)
