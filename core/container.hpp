@@ -31,8 +31,8 @@
 #include <cassert>
 #include <algorithm>
 #include <queue>
-
 #include <QWidget>
+#include <unordered_map>
 
 #define NO_INTERVAL -1
 
@@ -65,6 +65,9 @@ public:
     virtual std::vector<Container *> &getInnerContainers();
     virtual ~Container();
     static void deleteGraph(std::vector<Container *> &topLevelContainers);
+    static void resemble(std::vector<Container *> &oldTopLevel,
+                         std::vector<Container *> &newTopLevel,
+                         std::unordered_map<Container *, Container *> &counterparts);
 
     static bool isValidInterval(std::pair<int, int> &interval);
     static void invalidateInterval(std::pair<int, int> &interval);

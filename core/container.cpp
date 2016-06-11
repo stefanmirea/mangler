@@ -162,6 +162,47 @@ void Container::deleteGraph(std::vector<Container *> &topLevelContainers)
         delete *u;
 }
 
+void Container::resemble(std::vector<Container *> &oldTopLevel,
+                         std::vector<Container *> &newTopLevel,
+                         std::unordered_map<Container *, Container *> &counterparts)
+{
+    std::unordered_map<Container *, Container *> oldToNew;
+    std::unordered_map<Container *, Container *> &newToOld = counterparts;
+
+    newToOld.clear();
+    std::queue<Container *> queue;
+
+    unsigned int minSize = std::min(oldTopLevel.size(), newTopLevel.size());
+    for (unsigned int i = 0; i < minSize; ++i)
+    {
+        oldToNew[oldTopLevel[i]] = newTopLevel[i];
+        newToOld[newTopLevel[i]] = oldTopLevel[i];
+        queue.push(oldTopLevel[i]);
+    }
+
+    while (!queue.empty())
+    {
+        Container *first = queue.front();
+        queue.pop();
+
+        std::vector<Container *> &oldSuccessors = first->innerContainers;
+        if (oldSuccessors.size() > 0)
+        {
+            std::vector<Container *> &newSuccessors = oldToNew[first]->getInnerContainers();
+
+            unsigned int minSize = std::min(oldSuccessors.size(), newSuccessors.size());
+            for (unsigned int i = 0; i < minSize; ++i)
+                if (oldToNew.find(oldSuccessors[i]) == oldToNew.end() &&
+                    newToOld.find(newSuccessors[i]) == newToOld.end())
+                {
+                    oldToNew[oldSuccessors[i]] = newSuccessors[i];
+                    newToOld[newSuccessors[i]] = oldSuccessors[i];
+                    queue.push(oldSuccessors[i]);
+                }
+        }
+    }
+}
+
 bool Container::isValidInterval(std::pair<int, int> &interval)
 {
     return interval.first != NO_INTERVAL;
