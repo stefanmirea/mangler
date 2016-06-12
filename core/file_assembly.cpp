@@ -35,14 +35,14 @@
 
 #define MAXSIZE 5000
 
-void FileAssembly::disassemble_section(const std::string &filename, const std::string &sectionName,
+void FileAssembly::disassembleSection(const std::string &filename, const std::string &sectionName,
                          std::map<std::string, unsigned long long> &labels,
                          std::vector<asmInstr> &instructions)
 {
     char buffer[MAXSIZE];
     FILE *fp;
     std::string cmd;
-    bool found_section = false;
+    bool foundSection = false;
 
     cmd = "objdump -s -j " + sectionName + " -M intel -D " + filename;
 
@@ -57,11 +57,11 @@ void FileAssembly::disassemble_section(const std::string &filename, const std::s
 
     while (fgets(buffer, MAXSIZE, fp) != NULL)
     {
-        if (found_section == false)
+        if (foundSection == false)
         {
             if (strstr(buffer, "Disassembly of section"))
             {
-                found_section = true;
+                foundSection = true;
                 continue;
             }
 
@@ -70,7 +70,7 @@ void FileAssembly::disassemble_section(const std::string &filename, const std::s
         }
 
         else
-        if (found_section == true)
+        if (foundSection == true)
         {
             /* Search for labels */
             if (strstr(buffer, ">:\n"))
@@ -174,7 +174,7 @@ void FileAssembly::disassemble_section(const std::string &filename, const std::s
     }
 }
 
-void assemble_instruction(const std::string &instruction, asmInstr &result)
+void assembleInstruction(const std::string &instruction, asmInstr &result)
 {
     std::string filename = "tmpasm";
 
@@ -193,7 +193,7 @@ void assemble_instruction(const std::string &instruction, asmInstr &result)
         std::string cmd = "objdump -M intel -d " + filename + ".o";
         FILE *fp;
         char buffer[MAXSIZE];
-        bool found_instr = false;
+        bool foundInstr = false;
 
         if ((fp = popen(cmd.data(), "r")) == NULL)
         {
@@ -203,11 +203,11 @@ void assemble_instruction(const std::string &instruction, asmInstr &result)
 
         while (fgets(buffer, MAXSIZE, fp) != NULL)
         {
-            if (found_instr == false)
+            if (foundInstr == false)
             {
                 if (strstr(buffer, "<main>:"))
                 {
-                    found_instr = true;
+                    foundInstr = true;
                     continue;
                 }
 
