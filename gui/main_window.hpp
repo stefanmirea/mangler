@@ -60,6 +60,8 @@ public slots:
     void updateActions();
     void updateCheckableWindows();
     void selectWindow(QWidget *subWindow);
+protected:
+    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 private:
     void createActions();
     ExecutableViewer *activeExecutableViewer();

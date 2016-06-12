@@ -108,7 +108,7 @@ void MainWindow::createActions()
 
     exitAction = new QAction(QString("Exit"), this);
     exitAction->setIcon(QIcon::fromTheme("application-exit", QIcon(":/icons/exit.png")));
-    connect(exitAction, SIGNAL(triggered()), this, SLOT(exit()));
+    connect(exitAction, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
 
     /* View menu */
     refreshAction = new QAction(QString("Refresh"), this);
@@ -233,12 +233,8 @@ void MainWindow::save()
     assert(executableViewer != nullptr);
 #endif
 
-    std::string &name = executableViewer->getFileUnit()->getName();
-    if (executableViewer->refresh(name))
+    if (executableViewer->save())
         refreshAction->setEnabled(false);
-    else
-        QMessageBox::critical(executableViewer, QString("Error"),
-            QString("Unable to save file %1.").arg(name.c_str()));
 }
 
 void MainWindow::saveAs()
@@ -248,21 +244,8 @@ void MainWindow::saveAs()
     assert(executableViewer != nullptr);
 #endif
 
-    QString originalName = QFileDialog::getSaveFileName(this, QString("Save As"),
-        QString::fromStdString(executableViewer->getFileUnit()->getName()));
-    if (originalName == "")
-        return;
-
-    std::string name = QFileInfo(originalName).canonicalFilePath().toStdString();
-    if (executableViewer->refresh(name))
-    {
+    if (executableViewer->saveAs())
         refreshAction->setEnabled(false);
-        executableViewer->getFileUnit()->getName() = name;
-        executableViewer->setWindowTitle(QString(name.c_str()) + "[*]");
-    }
-    else
-        QMessageBox::critical(executableViewer, QString("Error"),
-            QString("Unable to save file %1.").arg(name.c_str()));
 }
 
 void MainWindow::exit() {}
@@ -385,4 +368,10 @@ void MainWindow::selectWindow(QWidget *subWindow)
 #endif
 
     mdiArea->setActiveSubWindow(mdiSubWindow);
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    mdiArea->closeAllSubWindows();
+    mdiArea->currentSubWindow() ? event->ignore() : event->accept();
 }

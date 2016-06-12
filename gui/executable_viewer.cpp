@@ -98,18 +98,18 @@ ExecutableViewer::~ExecutableViewer()
     {
         delete defaultSpecialRep;
 
-        HierarchyNode *currentItem = dynamic_cast<HierarchyNode *>(
-            hierarchicalViewer->currentItem()
+        HierarchyNode *nodeOfInterest = dynamic_cast<HierarchyNode *>(
+            hierarchicalViewer->getNodeOfInterest()
         );
 
 #ifdef DEBUG
-        assert(currentItem != nullptr);
+        assert(nodeOfInterest != nullptr);
 #endif
 
         /* If the currently selected HierarchyNode's container wanted to keep its special
          * representation after being deselected, the QWidget will be deallocated in that
          * container's destructor. */
-        if (currentItem->keepSpecialRepresentation())
+        if (nodeOfInterest->keepSpecialRepresentation())
 
         /* The widget must be disconnected from the splitter, otherwise the splitter will
          * try to deallocate it too. Setting the parent to null is safe as the splitter will get
@@ -284,4 +284,61 @@ bool ExecutableViewer::refresh(const std::string &fileName)
     refreshable = false;
 
     return true;
+}
+
+bool ExecutableViewer::save()
+{
+    return saveFile(fileUnit->getName());
+}
+
+bool ExecutableViewer::saveAs()
+{
+    QString originalName = QFileDialog::getSaveFileName(this, QString("Save As"),
+        QString::fromStdString(fileUnit->getName()));
+    if (originalName == "")
+        return false;
+
+    std::string name = QFileInfo(originalName).canonicalFilePath().toStdString();
+    if (saveFile(name))
+    {
+        fileUnit->getName() = name;
+        setWindowTitle(QString(name.c_str()) + "[*]");
+        return true;
+    }
+
+    return false;
+}
+
+bool ExecutableViewer::saveFile(const std::string &fileName)
+{
+    if (!refresh(fileName))
+    {
+        QMessageBox::critical(this, QString("Error"),
+            QString("Unable to save file %1.").arg(fileName.c_str()));
+        return false;
+    }
+    setWindowModified(false);
+    return true;
+}
+
+void ExecutableViewer::closeEvent(QCloseEvent *event)
+{
+    bool accept;
+
+    if (!isWindowModified())
+        accept = true;
+    else
+    {
+        QMessageBox::StandardButton response = QMessageBox::warning(this, QString("Warning"),
+            QString("\"%1\" has been modified. Save changes before closing?").
+                arg(fileUnit->getName().c_str()),
+            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+
+        if (response == QMessageBox::Save)
+            accept = saveFile(fileUnit->getName());
+        else
+            accept = response == QMessageBox::Discard;
+    }
+
+    accept ? event->accept() : event->ignore();
 }
