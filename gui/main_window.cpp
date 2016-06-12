@@ -241,7 +241,29 @@ void MainWindow::save()
             QString("Unable to save file %1.").arg(name.c_str()));
 }
 
-void MainWindow::saveAs() {}
+void MainWindow::saveAs()
+{
+    ExecutableViewer *executableViewer = activeExecutableViewer();
+#ifdef DEBUG
+    assert(executableViewer != nullptr);
+#endif
+
+    QString originalName = QFileDialog::getSaveFileName(this, QString("Save As"),
+        QString::fromStdString(executableViewer->getFileUnit()->getName()));
+    if (originalName == "")
+        return;
+
+    std::string name = QFileInfo(originalName).canonicalFilePath().toStdString();
+    if (executableViewer->refresh(name))
+    {
+        refreshAction->setEnabled(false);
+        executableViewer->getFileUnit()->getName() = name;
+        executableViewer->setWindowTitle(QString(name.c_str()) + "[*]");
+    }
+    else
+        QMessageBox::critical(executableViewer, QString("Error"),
+            QString("Unable to save file %1.").arg(name.c_str()));
+}
 
 void MainWindow::exit() {}
 
