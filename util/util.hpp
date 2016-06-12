@@ -2,6 +2,6 @@
 #define UTIL_HPP_
 #include <string>
 
-std::string &printHex(int value);
+std::string printHex(int value);
 
 #endif // UTIL_HPP_
