@@ -1,6 +1,5 @@
 #include "sht_entry_container.hpp"
-#include <sstream>
-#include <iomanip>
+#include "util/util.hpp"
 
 using namespace elf;
 
@@ -141,9 +140,8 @@ std::vector<Container *> &ShtEntryContainer::getInnerContainers()
         offset += sizeof(ELFIO::Elf32_Word);
 
         container = new Container(getFile(), false, std::make_pair(offset, offset + sizeof(ELFIO::Elf32_Addr)));
-        std::stringstream ss;
-        ss << std::hex << std::showbase << entry->get_address();
-        container->setName("sh_addr: " + ss.str());
+        int sh_addr = entry->get_address();
+        container->setName("sh_addr: " + printHex(sh_addr));
         addInnerContainer(container);
         offset += sizeof(ELFIO::Elf32_Addr);
 
