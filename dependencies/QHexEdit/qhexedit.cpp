@@ -674,6 +674,7 @@ void QHexEdit::keyPressEvent(QKeyEvent *event)
             redo();
         }
 
+        executableViewer->setWindowModified(true);
         executableViewer->setRefreshable(true);
     }
 

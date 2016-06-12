@@ -54,10 +54,10 @@ class FileAssembly
 public:
     static std::string disassembleCode(const std::string &machineCode);
     static std::string assembleCode(const std::string &instruction, bool &ok);
-    static void disassemble_section(const std::string &filename, const std::string &sectionName,
+    static void disassembleSection(const std::string &filename, const std::string &sectionName,
                              std::map<std::string, unsigned long long> &labels,
                              std::vector<asmInstr> &instructions);
-    static void assemble_instruction(const std::string &instruction, asmInstr &result);
+    static void assembleInstruction(const std::string &instruction, asmInstr &result);
 };
 
 #endif // FILE_ASSEMBLY_HPP_
