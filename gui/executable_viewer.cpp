@@ -195,6 +195,8 @@ bool ExecutableViewer::refresh()
             {
                 if (newSpecialRep)
                     delete newSpecialRep;
+                if (state)
+                    delete state;
                 continue;
             }
             if (newSpecialRep && state)
@@ -202,6 +204,8 @@ bool ExecutableViewer::refresh()
             if (ofInterest)
                 /* newSpecialRep can be any of nullptr, kept or temporary (not kept). */
                 specialRepToShow = newSpecialRep;
+            if (state)
+                delete state;
         }
     }
     if (!specialRepToShow)
