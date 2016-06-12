@@ -45,7 +45,8 @@ SOURCES +=\
     gui/special_representation/code/asm_viewer.cpp \
     gui/special_representation/code/modify_asmbar.cpp \
     gui/special_representation/code/do.cpp \
-    gui/special_representation/default.cpp
+    gui/special_representation/default.cpp \
+    elf/sht_entry_container.cpp
 
 HEADERS  += \
     core/code_container.hpp \
@@ -82,7 +83,8 @@ HEADERS  += \
     gui/search_bar.hpp \
     gui/hierarchy_node.hpp \
     gui/special_representation/code/asm_viewer.hpp \
-    gui/special_representation/code/modify_asmbar.hpp
+    gui/special_representation/code/modify_asmbar.hpp \
+    elf/sht_entry_container.hpp
 
 RESOURCES += \
     gui/mangler.qrc
