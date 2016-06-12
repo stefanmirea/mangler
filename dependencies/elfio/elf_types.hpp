@@ -87,7 +87,7 @@ typedef uint64_t Elf64_Off;
 #define EM_386           3   // Intel 80386
 #define EM_68K           4   // Motorola m68k family
 #define EM_88K           5   // Motorola m88k family
-#define EM_486           6   // Intel 80486// Reserved for future use
+#define EM_IAMCU         6   // Intel MCU
 #define EM_860           7   // Intel 80860
 #define EM_MIPS          8   // MIPS R3000 (officially, big-endian only)
 #define EM_S370          9   // IBM System/370
@@ -98,7 +98,7 @@ typedef uint64_t Elf64_Off;
 #define EM_res014        14  // Reserved
 #define EM_PARISC        15  // HPPA
 #define EM_res016        16  // Reserved
-#define EM_VPP550        17  // Fujitsu VPP500
+#define EM_VPP500      	 17  // Fujitsu VPP500
 #define EM_SPARC32PLUS   18  // Sun's "v8plus"
 #define EM_960           19  // Intel 80960
 #define EM_PPC           20  // PowerPC
@@ -123,7 +123,7 @@ typedef uint64_t Elf64_Off;
 #define EM_MCORE         39  // Motorola M*Core // May also be taken by Fujitsu MMA
 #define EM_RCE           39  // Old name for MCore
 #define EM_ARM           40  // ARM
-#define EM_OLD_ALPHA     41  // Digital Alpha
+#define EM_ALPHA     41  // Digital Alpha
 #define EM_SH            42  // Renesas (formerly Hitachi) / SuperH SH
 #define EM_SPARCV9       43  // SPARC v9 64-bit
 #define EM_TRICORE       44  // Siemens Tricore embedded processor
@@ -175,7 +175,7 @@ typedef uint64_t Elf64_Off;
 #define EM_MN10200       90  // Matsushita MN10200
 #define EM_PJ            91  // picoJava
 #define EM_OPENRISC      92  // OpenRISC 32-bit embedded processor
-#define EM_ARC_A5        93  // ARC Cores Tangent-A5
+#define EM_ARC_COMPACT   93  // ARC Cores Tangent-A5
 #define EM_XTENSA        94  // Tensilica Xtensa Architecture
 #define EM_VIDEOCORE     95  // Alphamosaic VideoCore processor
 #define EM_TMM_GPP       96  // Thompson Multimedia General Purpose Processor
@@ -215,7 +215,7 @@ typedef uint64_t Elf64_Off;
 #define EM_res130        130 // Reserved
 #define EM_TSK3000       131 // Altium TSK3000 core
 #define EM_RS08          132 // Freescale RS08 embedded processor
-#define EM_res133        133 // Reserved
+#define EM_SHARC       	 133 // Reserved
 #define EM_ECOG2         134 // Cyan Technology eCOG2 microprocessor
 #define EM_SCORE         135 // Sunplus Score
 #define EM_SCORE7        135 // Sunplus S+core7 RISC processor
@@ -226,8 +226,8 @@ typedef uint64_t Elf64_Off;
 #define EM_TI_C6000      140 // Texas Instruments TMS320C6000 DSP family
 #define EM_TI_C2000      141 // Texas Instruments TMS320C2000 DSP family
 #define EM_TI_C5500      142 // Texas Instruments TMS320C55x DSP family
-#define EM_res143        143 // Reserved
-#define EM_res144        144 // Reserved
+#define EM_TI_ARP32      143 // Reserved
+#define EM_TI_PRU        144 // Reserved
 #define EM_res145        145 // Reserved
 #define EM_res146        146 // Reserved
 #define EM_res147        147 // Reserved
@@ -264,18 +264,52 @@ typedef uint64_t Elf64_Off;
 #define EM_CR16          177 // National Semiconductor CompactRISC 16-bit processor
 #define EM_ETPU          178 // Freescale Extended Time Processing Unit
 #define EM_SLE9X         179 // Infineon Technologies SLE9X core
-#define EM_L1OM          180 // Intel L1OM
-#define EM_INTEL181      181 // Reserved by Intel
+#define EM_L10M          180 // Intel L1OM
+#define EM_K10M	         181 // Reserved by Intel
 #define EM_INTEL182      182 // Reserved by Intel
-#define EM_res183        183 // Reserved by ARM
+#define EM_AARCH64       183 // Reserved by ARM
 #define EM_res184        184 // Reserved by ARM
 #define EM_AVR32         185 // Atmel Corporation 32-bit microprocessor family
 #define EM_STM8          186 // STMicroeletronics STM8 8-bit microcontroller
 #define EM_TILE64        187 // Tilera TILE64 multicore architecture family
 #define EM_TILEPRO       188 // Tilera TILEPro multicore architecture family
 #define EM_MICROBLAZE    189 // Xilinx MicroBlaze 32-bit RISC soft processor core
-#define EM_CUDA          190 // NVIDIA CUDA architecture 
-
+#define EM_CUDA			 190
+#define EM_TILEGX        191
+#define EM_CLOUDSHIELD   192
+#define EM_COREA_1ST  	 193
+#define EM_COREA_2ND     194
+#define EM_ARC_COMPACT2  195 
+#define EM_OPEN8         196 
+#define EM_RL78          197 
+#define EM_VIDEOCORE5    198 
+#define EM_78KOR         199 
+#define EM_56800EX       200 
+#define EM_BA1           201 
+#define EM_BA2           202 
+#define EM_XCORE         203
+#define EM_MCHP_PIC      204 
+#define EM_INTEL205      205
+#define EM_INTEL206      206
+#define EM_INTEL207      207
+#define EM_INTEL208      208
+#define EM_INTEL209      209
+#define EM_KM32          210
+#define EM_KMX32         211 
+#define EM_KMX16         212
+#define EM_KMX8          213
+#define EM_KVARC         214
+#define EM_CDP           215
+#define EM_COGE          216 
+#define EM_COOL          217
+#define EM_NORC          218
+#define EM_CSR_KALIMBA   219
+#define EM_Z80           220
+#define EM_VISIUM        221
+#define EM_FT32          222
+#define EM_MOXIE         223 
+#define EM_AMDGPU        224
+#define EM_RISCV         243
 
 // File version
 #define EV_NONE    0

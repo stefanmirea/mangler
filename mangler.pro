@@ -17,7 +17,7 @@ INCLUDEPATH += \
     $$PWD/dependencies \
     $$PWD/dependencies/QHexEdit \
     $$PWD/elf \
-    $$PWD/gui
+    $$PWD/gui \
     $$PWD/util
 
 SOURCES +=\
