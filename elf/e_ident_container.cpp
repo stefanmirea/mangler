@@ -22,8 +22,8 @@
  */
 
 #include "e_ident_container.hpp"
+#include "util.hpp"
 #include <iostream>
-#include <sstream>
 
 using namespace elf;
 
@@ -50,9 +50,7 @@ std::vector<Container *> &EIdentContainer::getInnerContainers()
             elfmag0_string = "ELFMAG0";
         else
         {
-            std::stringstream ss;
-            ss << std::hex << std::showbase << elfmag0;
-            elfmag0_string = ss.str();
+            elfmag0_string = printHex(elfmag0);
         }
 
         container->setName("e_ident[EI_MAG0]: " + elfmag0_string);
@@ -67,9 +65,7 @@ std::vector<Container *> &EIdentContainer::getInnerContainers()
             elfmag1_string = "ELFMAG1";
         else
         {
-            std::stringstream ss;
-            ss << std::hex << std::showbase << elfmag1;
-            elfmag1_string = ss.str();
+            elfmag1_string = printHex(elfmag1);
         }
 
         container->setName("e_ident[EI_MAG1]: " + elfmag1_string);
@@ -84,9 +80,7 @@ std::vector<Container *> &EIdentContainer::getInnerContainers()
             elfmag2_string = "ELFMAG2";
         else
         {
-            std::stringstream ss;
-            ss << std::hex << std::showbase << elfmag2;
-            elfmag2_string = ss.str();
+            elfmag2_string = printHex(elfmag2);
         }
         container->setName("e_ident[EI_MAG2]: " + elfmag2_string);
         addInnerContainer(container);
@@ -100,9 +94,7 @@ std::vector<Container *> &EIdentContainer::getInnerContainers()
             elfmag3_string = "ELFMAG3";
         else
         {
-            std::stringstream ss;
-            ss << std::hex << std::showbase << elfmag3;
-            elfmag3_string = ss.str();
+            elfmag3_string = printHex(elfmag3);
         }
         container->setName("e_ident[EI_MAG3]: " + elfmag3_string);
         addInnerContainer(container);
@@ -124,7 +116,7 @@ std::vector<Container *> &EIdentContainer::getInnerContainers()
                 ei_class_string = "ELFCLASS64";
                 break;
             default:
-                ei_class_string = std::to_string(ei_class);
+                ei_class_string = printHex(ei_class);
                 break;
         }
 
@@ -148,7 +140,7 @@ std::vector<Container *> &EIdentContainer::getInnerContainers()
                 ei_data_string = "ELFDATA2MSB";
                 break;
             default:
-                ei_data_string = std::to_string(ei_data);
+                ei_data_string = printHex(ei_data);
                 break;
         }
         container->setName("e_ident[EI_DATA]: " + ei_data_string);
@@ -168,7 +160,7 @@ std::vector<Container *> &EIdentContainer::getInnerContainers()
                 ei_version_string = "EV_CURRENT";
                 break;
             default:
-                ei_version_string = std::to_string(ei_version);
+                ei_version_string = printHex(ei_version);
                 break;
         }
 
@@ -228,7 +220,7 @@ std::vector<Container *> &EIdentContainer::getInnerContainers()
                 ei_osabi_string = "ELFOSABI_FENIXOS";
                 break;
             default:
-                ei_osabi_string = std::to_string(ei_class);
+                ei_osabi_string = printHex(ei_class);
                 break;
         }
 
@@ -237,7 +229,7 @@ std::vector<Container *> &EIdentContainer::getInnerContainers()
         offset++;
 
         container = new Container(getFile(), false, std::make_pair(offset, offset + 1));
-        container->setName("e_ident[EI_ABIVERSION]: " + std::to_string(elfio->get_abi_version()));
+        container->setName("e_ident[EI_ABIVERSION]: " + printHex(elfio->get_abi_version()));
         addInnerContainer(container);
         offset++;
 
