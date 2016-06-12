@@ -30,6 +30,7 @@ HierarchicalViewer::HierarchicalViewer(QSplitter *split, QWidget *defaultSpecial
     headerItem()->setHidden(true);
     setFont(QFont("Monospace", 10));
     previous = nullptr;
+    handleSelection = true;
 
     connect(this, SIGNAL(itemExpanded(QTreeWidgetItem *)),
             this, SLOT(expand(QTreeWidgetItem *)));
@@ -50,6 +51,28 @@ HierarchyNode *HierarchicalViewer::addChild(HierarchyNode *parent, Container *co
     return item;
 }
 
+void HierarchicalViewer::reset()
+{
+    previous = nullptr;
+}
+
+void HierarchicalViewer::setHandleSelection(bool handleSelection)
+{
+    this->handleSelection = handleSelection;
+}
+
+/* getNodeOfInterest() vs. selected node:
+ *     if the user pressed Ctrl + click to deselect the node, getNodeOfInterest() will still return
+ *     that node's address, although no node will be selected at that time;
+ * getNodeOfInterest() vs. current node:
+ *     if the HierarchicalViewer has received focus before the first manual user selection, the
+ *     current node will be the first one by default, while getNodeOfInterest() will return nullptr.
+ */
+HierarchyNode *HierarchicalViewer::getNodeOfInterest()
+{
+    return previous;
+}
+
 void HierarchicalViewer::expand(QTreeWidgetItem *item)
 {
     HierarchyNode *node = dynamic_cast<HierarchyNode *>(item);
@@ -61,39 +84,43 @@ void HierarchicalViewer::expand(QTreeWidgetItem *item)
 
 void HierarchicalViewer::select()
 {
-    HierarchyNode *current = dynamic_cast<HierarchyNode *>(currentItem());
+    if (!selectedItems().size())
+        /* After deselection using Ctrl + click. */
+        return;
+
+    HierarchyNode *current = dynamic_cast<HierarchyNode *>(selectedItems()[0]);
 #ifdef DEBUG
     assert(current != nullptr);
 #endif
-    if (current == previous)
-        /* After deselection using Ctrl */
-        return;
 
-    if (!current->sharesContainer(previous))
+    if (handleSelection)
     {
-        QWidget *currentSpecialRep = split->widget(2);
-
-        QWidget *newSpecialRep = current->getSpecialRepresentation();
-        if (!newSpecialRep)
-            newSpecialRep = defaultSpecialRep;
-
-        if (newSpecialRep != currentSpecialRep)
+        if (!current->sharesContainer(previous))
         {
-            if (previous && !previous->keepSpecialRepresentation())
-                delete currentSpecialRep;
-            else
-                /* If the previous representation was the default one, it will be deallocated in the
-                 * ExecutableViewer destructor; else, in the destructor of the Container which kept
-                 * the QWidget. */
-                currentSpecialRep->setParent(Q_NULLPTR);
+            QWidget *currentSpecialRep = split->widget(2);
 
-            split->addWidget(newSpecialRep);
+            QWidget *newSpecialRep = current->getSpecialRepresentation();
+            if (!newSpecialRep)
+                newSpecialRep = defaultSpecialRep;
+
+            if (newSpecialRep != currentSpecialRep)
+            {
+                if (previous && !previous->keepSpecialRepresentation())
+                    delete currentSpecialRep;
+                else
+                    /* If the previous representation was the default one, it will be deallocated in
+                     * the ExecutableViewer destructor; else, in the destructor of the Container
+                     * which kept the QWidget. */
+                    currentSpecialRep->setParent(Q_NULLPTR);
+
+                split->addWidget(newSpecialRep);
+            }
         }
-    }
 
-    std::pair<int, int> interval = current->getInterval();
-    if (Container::isValidInterval(interval))
-        hexViewer->selectData(interval.first, interval.second - interval.first);
+        std::pair<int, int> interval = current->getInterval();
+        if (Container::isValidInterval(interval))
+            hexViewer->selectData(interval.first, interval.second - interval.first);
+    }
 
     previous = current;
 }

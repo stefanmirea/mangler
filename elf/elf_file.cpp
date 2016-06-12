@@ -28,13 +28,18 @@
 #include "segment_contents_container.hpp"
 #include "section_contents_container.hpp"
 #include <utility>
-#include <iostream>
 
 using namespace elf;
 
-ELFFile::ELFFile(const std::string &filename) : FileUnit(filename)
+ELFFile::ELFFile(const std::string &filename) : FileUnit(filename), formatName("ELF")
 {
+    file = nullptr;
     loadFile(filename);
+}
+
+const std::string &ELFFile::getFormatName()
+{
+    return formatName;
 }
 
 ELFFile::~ELFFile()
@@ -61,14 +66,30 @@ ELFIO::elfio *ELFFile::getELFIO()
 
 bool ELFFile::loadFile(const std::string &filename)
 {
+    if (file)
+        delete file;
+
     file = new ELFIO::elfio();
-    open = file->load(filename);
+    try
+    {
+        open = file->load(filename);
+    }
+    catch (std::exception &e)
+    {
+#ifdef DEBUG
+        std::cerr << "Caught " << e.what() << " in LEFIO::load.\n";
+#endif
+        open = false;
+    }
+
     if (open && file->get_type() != ET_EXEC)
         open = false;
 
+    std::vector<Container *> &topLevelContainers = getTopLevelContainers();
+    topLevelContainers.clear();
+
     if (open)
     {
-        std::vector<Container *> &topLevelContainers = getTopLevelContainers();
         topLevelContainers.push_back(new ELFHeaderContainer(this, std::make_pair(0, file->get_header_size())));
 
         int phtBegin = file->get_segments_offset();
@@ -83,15 +104,4 @@ bool ELFFile::loadFile(const std::string &filename)
     }
 
     return open;
-}
-
-bool ELFFile::refresh(std::string &tmpName)
-{
-    /* Delete the old file and its containers */
-    delete file;
-    file = nullptr;
-    deleteTopLevelContainers();
-
-    /* Load the new file and the containers */
-    return loadFile(tmpName);
 }

@@ -1005,26 +1005,10 @@ bool QHexEdit::saveFile(const QString &fileName)
 {
     bool ret = true;
     if (QFile::exists(fileName))
-    {
-       ret = QFile::remove(fileName);
-    }
+        ret = QFile::remove(fileName);
 
     QFile savedFile(fileName);
     ret = this->write(savedFile);
 
-    if (!ret)
-    {
-        QMessageBox::warning(this, QString("QHexEdit"), QString("Unable to save file!"));
-    }
-
     return ret;
-}
-
-bool QHexEdit::refreshView()
-{
-    std::string tmpName = executableViewer->getFileUnit()->getName() + ".tmp";
-    bool saved = saveFile(QString(tmpName.c_str()));
-    if (saved)
-        return executableViewer->getFileUnit()->refresh(tmpName);
-    return false;
 }

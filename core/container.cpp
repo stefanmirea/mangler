@@ -22,6 +22,7 @@
  */
 
 #include "container.hpp"
+#include <unordered_set>
 
 Container::Container(FileUnit *file, bool expandable) :
     file(file), expandable(expandable)
@@ -108,7 +109,7 @@ Container::~Container()
             specialRepresentation != nullptr)
         delete specialRepresentation;
 
-    for (unsigned int i = 0; i < parents.size(); ++i)
+    /*for (unsigned int i = 0; i < parents.size(); ++i)
     {
         std::vector<Container *> &siblings = parents[i]->getInnerContainers();
         siblings.erase(std::remove(siblings.begin(), siblings.end(), this),
@@ -132,7 +133,84 @@ Container::~Container()
         }
         if (first != this)
             delete first;
+    }*/
+}
+
+void Container::deleteGraph(std::vector<Container *> &topLevelContainers)
+{
+    std::unordered_set<Container *> containers;
+    std::queue<Container *> queue;
+    for (unsigned int i = 0; i < topLevelContainers.size(); ++i)
+    {
+        containers.insert(topLevelContainers[i]);
+        queue.push(topLevelContainers[i]);
     }
+    while (!queue.empty())
+    {
+        Container *first = queue.front();
+        queue.pop();
+        std::vector<Container *> &successors = first->innerContainers;
+        for (unsigned int j = 0; j < successors.size(); ++j)
+            if (containers.find(successors[j]) == containers.end())
+            {
+                containers.insert(successors[j]);
+                queue.push(successors[j]);
+            }
+    }
+    for (std::unordered_set<Container *>::iterator u = containers.begin();
+            u != containers.end(); ++u)
+        delete *u;
+}
+
+void Container::resemble(std::vector<Container *> &oldTopLevel,
+                         std::vector<Container *> &newTopLevel,
+                         std::unordered_map<Container *, Container *> &counterparts)
+{
+    std::unordered_map<Container *, Container *> oldToNew;
+    std::unordered_map<Container *, Container *> &newToOld = counterparts;
+
+    newToOld.clear();
+    std::queue<Container *> queue;
+
+    unsigned int minSize = std::min(oldTopLevel.size(), newTopLevel.size());
+    for (unsigned int i = 0; i < minSize; ++i)
+    {
+        oldToNew[oldTopLevel[i]] = newTopLevel[i];
+        newToOld[newTopLevel[i]] = oldTopLevel[i];
+        queue.push(oldTopLevel[i]);
+    }
+
+    while (!queue.empty())
+    {
+        Container *first = queue.front();
+        queue.pop();
+
+        std::vector<Container *> &oldSuccessors = first->innerContainers;
+        if (oldSuccessors.size() > 0)
+        {
+            std::vector<Container *> &newSuccessors = oldToNew[first]->getInnerContainers();
+
+            unsigned int minSize = std::min(oldSuccessors.size(), newSuccessors.size());
+            for (unsigned int i = 0; i < minSize; ++i)
+                if (oldToNew.find(oldSuccessors[i]) == oldToNew.end() &&
+                    newToOld.find(newSuccessors[i]) == newToOld.end())
+                {
+                    oldToNew[oldSuccessors[i]] = newSuccessors[i];
+                    newToOld[newSuccessors[i]] = oldSuccessors[i];
+                    queue.push(oldSuccessors[i]);
+                }
+        }
+    }
+}
+
+void Container::getRepresentationState(QWidget *specialRepresentation, RepresentationState *&state)
+{
+    state = nullptr;
+}
+
+bool Container::applyRepresentationState(QWidget *specialRepresentation, RepresentationState *state)
+{
+    return false;
 }
 
 bool Container::isValidInterval(std::pair<int, int> &interval)

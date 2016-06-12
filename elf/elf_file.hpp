@@ -40,16 +40,17 @@ class ELFFile : public FileUnit
 {
 public:
     ELFFile(const std::string &filename);
+    const std::string &getFormatName();
     bool getOpenStatus();
     bool save(std::string &filename);
     void modifyHex(size_t offset, std::string &newContent);
     ELFIO::elfio *getELFIO();
-    bool refresh(std::string &tmpName);
     bool loadFile(const std::string &filename);
 
     virtual ~ELFFile();
 
 private:
+    const std::string formatName;
     ELFIO::elfio *file;
     bool open;
 };

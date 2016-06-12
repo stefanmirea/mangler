@@ -42,6 +42,10 @@ public:
     bool keepSpecialRepresentation();
     std::pair<int, int> &getInterval();
     bool sharesContainer(HierarchyNode *node);
+    bool hasContainerCounterpart(HierarchyNode *oldNode,
+                                 std::unordered_map<Container *, Container *> &counterparts);
+    bool hasContainer(Container *container);
+    bool getEverExpanded();
 private:
     void _HierarchyNode(Container *container);
     Container *container;

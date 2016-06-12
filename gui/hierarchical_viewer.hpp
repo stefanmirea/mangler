@@ -44,6 +44,9 @@ public:
                                 QHexEdit* hexViewer, QWidget *parent = 0);
     HierarchyNode *addRoot(Container *container);
     HierarchyNode *addChild(HierarchyNode *parent, Container *container);
+    void reset();
+    void setHandleSelection(bool handleSelection);
+    HierarchyNode *getNodeOfInterest();
 signals:
 
 public slots:
@@ -54,6 +57,7 @@ private:
     QSplitter *split;
     QHexEdit *hexViewer;
     HierarchyNode *previous;
+    bool handleSelection;
 };
 
 #endif // HIERACHICAL_VIEWER_HPP_

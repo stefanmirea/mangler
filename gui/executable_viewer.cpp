@@ -25,9 +25,11 @@
 #include "QDesktopWidget"
 #include "QApplication"
 #include <QFile>
+#include <QMessageBox>
 #include "qhexedit.hpp"
 #include <iostream>
 #include <qdebug.h>
+#include <stack>
 
 ExecutableViewer::ExecutableViewer(MainWindow *mainWindow, FileUnit *fileUnit, QWidget *parent) :
     QWidget(parent), mainWindow(mainWindow), fileUnit(fileUnit)
@@ -54,7 +56,7 @@ ExecutableViewer::ExecutableViewer(MainWindow *mainWindow, FileUnit *fileUnit, Q
 
     hierarchicalViewer = new HierarchicalViewer(split, defaultSpecialRep, hexViewer, this);
 
-    std::vector<Container *> rootContainers = fileUnit->getTopLevelContainers();
+    std::vector<Container *> &rootContainers = fileUnit->getTopLevelContainers();
     for (unsigned int i = 0; i < rootContainers.size(); ++i)
         hierarchicalViewer->addRoot(rootContainers[i]);
 
@@ -132,5 +134,157 @@ void ExecutableViewer::setRefreshable(bool refreshable)
 
 bool ExecutableViewer::refresh()
 {
-    return hexViewer->refreshView();
+    /* Create a temporary copy of the modified file. */
+    std::string tmpName = fileUnit->getName() + ".tmp";
+    if (!hexViewer->saveFile(QString(tmpName.c_str())))
+    {
+        QMessageBox::critical(this, QString("Error"),
+            QString("Unable to create temporary file. Cannot refresh the view."));
+        return false;
+    }
+
+    HierarchyNode *nodeOfInterest = hierarchicalViewer->getNodeOfInterest();
+    bool keepSpecialRepresentation = nodeOfInterest && nodeOfInterest->keepSpecialRepresentation();
+    int oldTopLevelItemCount = hierarchicalViewer->topLevelItemCount();
+
+    /* Create new top-level containers. */
+    std::vector<Container *> oldRootContainers;
+    oldRootContainers.swap(fileUnit->getTopLevelContainers());
+
+    if (!fileUnit->loadFile(tmpName))
+        QMessageBox::warning(this, QString("Warning"),
+            QString("The file is not a valid %1 executable in the current form.\nWhile you can "
+                "keep editing using the hexadecimal editor, you will not be able to take advantage "
+                "of the hierarchical viewer. Make sure that your file is a valid %1 executable, "
+                "then refresh your view.").arg(fileUnit->getFormatName().c_str()));
+
+    /* Create new HierarchicalViewer top-level nodes. */
+    std::vector<Container *> &rootContainers = fileUnit->getTopLevelContainers();
+    for (unsigned int i = 0; i < rootContainers.size(); ++i)
+        hierarchicalViewer->addRoot(rootContainers[i]);
+    hierarchicalViewer->reset();
+
+    /* Identify new container graph with the old one. */
+    std::unordered_map<Container *, Container *> counterparts;
+    Container::resemble(oldRootContainers, rootContainers, counterparts);
+
+    /* Create new special representations for the identified containers whose old counterparts had
+     * such representations. */
+    QWidget *specialRepToShow = nullptr;
+    for (std::unordered_map<Container *, Container *>::iterator u = counterparts.begin();
+            u != counterparts.end(); ++u)
+    {
+        bool keptSpecial = u->second->keepSpecialRepresentation() &&
+                           u->second->getSpecialRepresentation(hexViewer);
+        bool ofInterest = nodeOfInterest && nodeOfInterest->hasContainer(u->second);
+        if (keptSpecial || ofInterest)
+        {
+            RepresentationState *state = nullptr;
+            if (ofInterest)
+            {
+                /* The old representation can be temporary in this case. */
+                QWidget *specialRep = split->widget(2);
+                if (specialRep != defaultSpecialRep)
+                    u->second->getRepresentationState(specialRep, state);
+            }
+            else
+                u->second->getRepresentationState(u->second->getSpecialRepresentation(hexViewer),
+                                                  state);
+            QWidget *newSpecialRep = u->first->getSpecialRepresentation(hexViewer);
+            if (!ofInterest && !u->first->keepSpecialRepresentation())
+            {
+                if (newSpecialRep)
+                    delete newSpecialRep;
+                if (state)
+                    delete state;
+                continue;
+            }
+            if (newSpecialRep && state)
+                u->first->applyRepresentationState(newSpecialRep, state);
+            if (ofInterest)
+                /* newSpecialRep can be any of nullptr, kept or temporary (not kept). */
+                specialRepToShow = newSpecialRep;
+            if (state)
+                delete state;
+        }
+    }
+    if (!specialRepToShow)
+        specialRepToShow = defaultSpecialRep;
+
+    /* Restore previous HierarchicalViewer nodes expansion state. */
+    HierarchyNode *toBeSelected = nullptr;
+    std::stack<std::pair<HierarchyNode *, HierarchyNode *>> nodes;
+    for (int i = 0; i < hierarchicalViewer->topLevelItemCount() - oldTopLevelItemCount &&
+        i < oldTopLevelItemCount; ++i)
+    {
+        HierarchyNode *oldNode = dynamic_cast<HierarchyNode *>(hierarchicalViewer->topLevelItem(i));
+        HierarchyNode *newNode = dynamic_cast<HierarchyNode *>(
+            hierarchicalViewer->topLevelItem(i + oldTopLevelItemCount)
+        );
+#ifdef DEBUG
+        assert(oldNode != nullptr && newNode != nullptr);
+#endif
+        if (newNode->hasContainerCounterpart(oldNode, counterparts))
+        {
+            if (oldNode->getEverExpanded() &&
+                    newNode->childIndicatorPolicy() == QTreeWidgetItem::ShowIndicator)
+                nodes.push(std::make_pair(newNode, oldNode));
+            if (oldNode == nodeOfInterest)
+                toBeSelected = newNode;
+        }
+    }
+    while (!nodes.empty())
+    {
+        HierarchyNode *newFirst = nodes.top().first;
+        HierarchyNode *oldFirst = nodes.top().second;
+        nodes.pop();
+        hierarchicalViewer->expandItem(newFirst);
+        for (int i = 0; i < newFirst->childCount() && i < oldFirst->childCount(); ++i)
+        {
+            HierarchyNode *oldNode = dynamic_cast<HierarchyNode *>(oldFirst->child(i));
+            HierarchyNode *newNode = dynamic_cast<HierarchyNode *>(newFirst->child(i));
+#ifdef DEBUG
+            assert(oldNode != nullptr && newNode != nullptr);
+#endif
+
+            if (newNode->hasContainerCounterpart(oldNode, counterparts))
+            {
+                if (oldNode->getEverExpanded() &&
+                        newNode->childIndicatorPolicy() == QTreeWidgetItem::ShowIndicator)
+                    nodes.push(std::make_pair(newNode, oldNode));
+                if (oldNode == nodeOfInterest)
+                    toBeSelected = newNode;
+            }
+        }
+        if (!oldFirst->isExpanded())
+            hierarchicalViewer->collapseItem(newFirst);
+    }
+
+    /* Destroy old HierarchicalViewer nodes */
+    hierarchicalViewer->setHandleSelection(false);
+    for (int i = 0; i < oldTopLevelItemCount; ++i)
+        delete hierarchicalViewer->takeTopLevelItem(0);
+    hierarchicalViewer->setHandleSelection(true);
+
+    /* Update the current selection and special representation. */
+    hierarchicalViewer->setHandleSelection(false);
+    hierarchicalViewer->clearSelection();
+    if (toBeSelected != nullptr)
+        toBeSelected->setSelected(true);
+    hierarchicalViewer->setHandleSelection(true);
+
+    QWidget *currentSpecialRep = split->widget(2);
+    if (currentSpecialRep != specialRepToShow)
+    {
+        currentSpecialRep->setParent(Q_NULLPTR);
+        if (!keepSpecialRepresentation)
+            delete currentSpecialRep;
+        /* else, it will be deallocated in the container's destructor */
+        split->addWidget(specialRepToShow);
+    }
+
+    /* Delete all of the old containers. */
+    Container::deleteGraph(oldRootContainers);
+
+    return true;
 }
