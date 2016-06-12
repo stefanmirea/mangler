@@ -248,8 +248,6 @@ void MainWindow::saveAs()
         refreshAction->setEnabled(false);
 }
 
-void MainWindow::exit() {}
-
 void MainWindow::refresh()
 {
     ExecutableViewer *executableViewer = activeExecutableViewer();

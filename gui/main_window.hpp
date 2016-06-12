@@ -50,7 +50,6 @@ public slots:
     void open();
     void save();
     void saveAs();
-    void exit();
     void refresh();
     void undo();
     void redo();

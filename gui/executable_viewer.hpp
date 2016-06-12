@@ -51,12 +51,9 @@ public:
     ExecutableViewer(MainWindow *mainWindow, FileUnit *fileUnit, QWidget *parent = 0);
     MainWindow *getMainWindow();
     FileUnit *getFileUnit();
-    bool loadFile(const QString &fileName) {return true;}
     bool save();
     bool saveAs();
     bool saveFile(const std::string &fileName);
-    QString userFriendlyCurrentFile() {return QString("a");}
-    QString currentFile() { return QString("current"); }
     bool isRefreshable();
     void setRefreshable(bool refreshable);
     bool refresh(const std::string &fileName);

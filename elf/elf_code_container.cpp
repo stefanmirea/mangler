@@ -65,7 +65,7 @@ void ELFCodeContainer::getContent(std::vector<std::pair<unsigned long long, std:
     FileAssembly::disassemble_section(efile->getName(), currentSection->get_name(),
                                       labels, instructions);
 
-    for (int i = 0; i < instructions.size(); i++)
+    for (unsigned int i = 0; i < instructions.size(); i++)
     {
         content.push_back(std::make_pair(instructions[i].address,
                           std::string(instructions[i].assembled + "^"+

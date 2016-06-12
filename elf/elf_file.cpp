@@ -52,11 +52,6 @@ bool ELFFile::getOpenStatus()
     return open;
 }
 
-bool ELFFile::save(std::string &filename)
-{
-    return file->save(filename);
-}
-
 void ELFFile::modifyHex(size_t offset, std::string &newContent) {}
 
 ELFIO::elfio *ELFFile::getELFIO()
