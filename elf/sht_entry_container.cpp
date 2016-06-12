@@ -1,5 +1,5 @@
 #include "sht_entry_container.hpp"
-#include "util/util.hpp"
+#include "util.hpp"
 
 using namespace elf;
 
@@ -140,13 +140,12 @@ std::vector<Container *> &ShtEntryContainer::getInnerContainers()
         offset += sizeof(ELFIO::Elf32_Word);
 
         container = new Container(getFile(), false, std::make_pair(offset, offset + sizeof(ELFIO::Elf32_Addr)));
-        int sh_addr = entry->get_address();
-        container->setName("sh_addr: " + printHex(sh_addr));
+        container->setName("sh_addr: " + printHex(entry->get_address()));
         addInnerContainer(container);
         offset += sizeof(ELFIO::Elf32_Addr);
 
         container = new Container(getFile(), false, std::make_pair(offset, offset + sizeof(ELFIO::Elf32_Off)));
-        container->setName("sh_offset: " + std::to_string(entry->get_offset()));
+        container->setName("sh_offset: " + printHex(entry->get_offset()));
         addInnerContainer(container);
         offset += sizeof(ELFIO::Elf32_Off);
 
