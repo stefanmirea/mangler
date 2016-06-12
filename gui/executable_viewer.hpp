@@ -58,7 +58,7 @@ public:
     QString currentFile() { return QString("current"); }
     bool isRefreshable();
     void setRefreshable(bool refreshable);
-    bool refresh();
+    bool refresh(const std::string &fileName);
     virtual ~ExecutableViewer();
 
 signals:

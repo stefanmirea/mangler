@@ -33,6 +33,8 @@
 #include <QMdiSubWindow>
 #include <QSignalMapper>
 
+class ExecutableViewer;
+
 /**
  * The main window of the application.
  */
@@ -60,6 +62,7 @@ public slots:
     void selectWindow(QWidget *subWindow);
 private:
     void createActions();
+    ExecutableViewer *activeExecutableViewer();
 
     QMdiArea *mdiArea;
     QAction *openAction, *saveAction, *saveAsAction, *exitAction;

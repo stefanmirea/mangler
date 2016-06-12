@@ -132,16 +132,11 @@ void ExecutableViewer::setRefreshable(bool refreshable)
     mainWindow->updateActions();
 }
 
-bool ExecutableViewer::refresh()
+bool ExecutableViewer::refresh(const std::string &fileName)
 {
-    /* Create a temporary copy of the modified file. */
-    std::string tmpName = fileUnit->getName() + ".tmp";
-    if (!hexViewer->saveFile(QString(tmpName.c_str())))
-    {
-        QMessageBox::critical(this, QString("Error"),
-            QString("Unable to create temporary file. Cannot refresh the view."));
+    /* Save the modified file. */
+    if (!hexViewer->saveFile(QString(fileName.c_str())))
         return false;
-    }
 
     HierarchyNode *nodeOfInterest = hierarchicalViewer->getNodeOfInterest();
     bool keepSpecialRepresentation = nodeOfInterest && nodeOfInterest->keepSpecialRepresentation();
@@ -151,7 +146,7 @@ bool ExecutableViewer::refresh()
     std::vector<Container *> oldRootContainers;
     oldRootContainers.swap(fileUnit->getTopLevelContainers());
 
-    if (!fileUnit->loadFile(tmpName))
+    if (!fileUnit->loadFile(fileName))
         QMessageBox::warning(this, QString("Warning"),
             QString("The file is not a valid %1 executable in the current form.\nWhile you can "
                 "keep editing using the hexadecimal editor, you will not be able to take advantage "
@@ -162,7 +157,6 @@ bool ExecutableViewer::refresh()
     std::vector<Container *> &rootContainers = fileUnit->getTopLevelContainers();
     for (unsigned int i = 0; i < rootContainers.size(); ++i)
         hierarchicalViewer->addRoot(rootContainers[i]);
-    hierarchicalViewer->reset();
 
     /* Identify new container graph with the old one. */
     std::unordered_map<Container *, Container *> counterparts;
@@ -269,6 +263,7 @@ bool ExecutableViewer::refresh()
     /* Update the current selection and special representation. */
     hierarchicalViewer->setHandleSelection(false);
     hierarchicalViewer->clearSelection();
+    hierarchicalViewer->reset();
     if (toBeSelected != nullptr)
         toBeSelected->setSelected(true);
     hierarchicalViewer->setHandleSelection(true);
@@ -285,6 +280,8 @@ bool ExecutableViewer::refresh()
 
     /* Delete all of the old containers. */
     Container::deleteGraph(oldRootContainers);
+
+    refreshable = false;
 
     return true;
 }
