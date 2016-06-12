@@ -33,6 +33,8 @@
 #include <QMdiSubWindow>
 #include <QSignalMapper>
 
+class ExecutableViewer;
+
 /**
  * The main window of the application.
  */
@@ -48,7 +50,6 @@ public slots:
     void open();
     void save();
     void saveAs();
-    void exit();
     void refresh();
     void undo();
     void redo();
@@ -58,8 +59,11 @@ public slots:
     void updateActions();
     void updateCheckableWindows();
     void selectWindow(QWidget *subWindow);
+protected:
+    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
 private:
     void createActions();
+    ExecutableViewer *activeExecutableViewer();
 
     QMdiArea *mdiArea;
     QAction *openAction, *saveAction, *saveAsAction, *exitAction;

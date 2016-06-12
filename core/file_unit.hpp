@@ -43,7 +43,6 @@ public:
     std::vector<Container *> &getTopLevelContainers();
 
     virtual bool getOpenStatus() = 0;
-    virtual bool save(std::string &filename) = 0;
     virtual void modifyHex(size_t offset, std::string &newContent) = 0;
     virtual ~FileUnit();
     virtual bool loadFile(const std::string &filename) = 0; /* Creates the top-level containers. */

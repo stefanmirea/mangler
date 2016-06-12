@@ -98,18 +98,18 @@ ExecutableViewer::~ExecutableViewer()
     {
         delete defaultSpecialRep;
 
-        HierarchyNode *currentItem = dynamic_cast<HierarchyNode *>(
-            hierarchicalViewer->currentItem()
+        HierarchyNode *nodeOfInterest = dynamic_cast<HierarchyNode *>(
+            hierarchicalViewer->getNodeOfInterest()
         );
 
 #ifdef DEBUG
-        assert(currentItem != nullptr);
+        assert(nodeOfInterest != nullptr);
 #endif
 
         /* If the currently selected HierarchyNode's container wanted to keep its special
          * representation after being deselected, the QWidget will be deallocated in that
          * container's destructor. */
-        if (currentItem->keepSpecialRepresentation())
+        if (nodeOfInterest->keepSpecialRepresentation())
 
         /* The widget must be disconnected from the splitter, otherwise the splitter will
          * try to deallocate it too. Setting the parent to null is safe as the splitter will get
@@ -132,16 +132,11 @@ void ExecutableViewer::setRefreshable(bool refreshable)
     mainWindow->updateActions();
 }
 
-bool ExecutableViewer::refresh()
+bool ExecutableViewer::refresh(const std::string &fileName)
 {
-    /* Create a temporary copy of the modified file. */
-    std::string tmpName = fileUnit->getName() + ".tmp";
-    if (!hexViewer->saveFile(QString(tmpName.c_str())))
-    {
-        QMessageBox::critical(this, QString("Error"),
-            QString("Unable to create temporary file. Cannot refresh the view."));
+    /* Save the modified file. */
+    if (!hexViewer->saveFile(QString(fileName.c_str())))
         return false;
-    }
 
     HierarchyNode *nodeOfInterest = hierarchicalViewer->getNodeOfInterest();
     bool keepSpecialRepresentation = nodeOfInterest && nodeOfInterest->keepSpecialRepresentation();
@@ -151,7 +146,7 @@ bool ExecutableViewer::refresh()
     std::vector<Container *> oldRootContainers;
     oldRootContainers.swap(fileUnit->getTopLevelContainers());
 
-    if (!fileUnit->loadFile(tmpName))
+    if (!fileUnit->loadFile(fileName))
         QMessageBox::warning(this, QString("Warning"),
             QString("The file is not a valid %1 executable in the current form.\nWhile you can "
                 "keep editing using the hexadecimal editor, you will not be able to take advantage "
@@ -162,7 +157,6 @@ bool ExecutableViewer::refresh()
     std::vector<Container *> &rootContainers = fileUnit->getTopLevelContainers();
     for (unsigned int i = 0; i < rootContainers.size(); ++i)
         hierarchicalViewer->addRoot(rootContainers[i]);
-    hierarchicalViewer->reset();
 
     /* Identify new container graph with the old one. */
     std::unordered_map<Container *, Container *> counterparts;
@@ -269,6 +263,7 @@ bool ExecutableViewer::refresh()
     /* Update the current selection and special representation. */
     hierarchicalViewer->setHandleSelection(false);
     hierarchicalViewer->clearSelection();
+    hierarchicalViewer->reset();
     if (toBeSelected != nullptr)
         toBeSelected->setSelected(true);
     hierarchicalViewer->setHandleSelection(true);
@@ -286,5 +281,64 @@ bool ExecutableViewer::refresh()
     /* Delete all of the old containers. */
     Container::deleteGraph(oldRootContainers);
 
+    refreshable = false;
+
     return true;
+}
+
+bool ExecutableViewer::save()
+{
+    return saveFile(fileUnit->getName());
+}
+
+bool ExecutableViewer::saveAs()
+{
+    QString originalName = QFileDialog::getSaveFileName(this, QString("Save As"),
+        QString::fromStdString(fileUnit->getName()));
+    if (originalName == "")
+        return false;
+
+    std::string name = QFileInfo(originalName).canonicalFilePath().toStdString();
+    if (saveFile(name))
+    {
+        fileUnit->getName() = name;
+        setWindowTitle(QString(name.c_str()) + "[*]");
+        return true;
+    }
+
+    return false;
+}
+
+bool ExecutableViewer::saveFile(const std::string &fileName)
+{
+    if (!refresh(fileName))
+    {
+        QMessageBox::critical(this, QString("Error"),
+            QString("Unable to save file %1.").arg(fileName.c_str()));
+        return false;
+    }
+    setWindowModified(false);
+    return true;
+}
+
+void ExecutableViewer::closeEvent(QCloseEvent *event)
+{
+    bool accept;
+
+    if (!isWindowModified())
+        accept = true;
+    else
+    {
+        QMessageBox::StandardButton response = QMessageBox::warning(this, QString("Warning"),
+            QString("\"%1\" has been modified. Save changes before closing?").
+                arg(fileUnit->getName().c_str()),
+            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+
+        if (response == QMessageBox::Save)
+            accept = saveFile(fileUnit->getName());
+        else
+            accept = response == QMessageBox::Discard;
+    }
+
+    accept ? event->accept() : event->ignore();
 }

@@ -32,6 +32,7 @@
 #include <QVBoxLayout>
 #include <QFile>
 #include <QIODevice>
+#include <QCloseEvent>
 
 #include "hierarchical_viewer.hpp"
 #include "qhexedit.hpp"
@@ -50,20 +51,21 @@ public:
     ExecutableViewer(MainWindow *mainWindow, FileUnit *fileUnit, QWidget *parent = 0);
     MainWindow *getMainWindow();
     FileUnit *getFileUnit();
-    bool loadFile(const QString &fileName) {return true;}
-    bool save() {return true;}
-    bool saveAs() {return true;}
-    bool saveFile(const QString &fileName) {return true;}
-    QString userFriendlyCurrentFile() {return QString("a");}
-    QString currentFile() { return QString("current"); }
+    bool save();
+    bool saveAs();
+    bool saveFile(const std::string &fileName);
     bool isRefreshable();
     void setRefreshable(bool refreshable);
-    bool refresh();
+    bool refresh(const std::string &fileName);
     virtual ~ExecutableViewer();
 
 signals:
 
 public slots:
+
+protected:
+    void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
+
 private:
     MainWindow *mainWindow;
     QSplitter *split;

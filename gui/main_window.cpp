@@ -108,7 +108,7 @@ void MainWindow::createActions()
 
     exitAction = new QAction(QString("Exit"), this);
     exitAction->setIcon(QIcon::fromTheme("application-exit", QIcon(":/icons/exit.png")));
-    connect(exitAction, SIGNAL(triggered()), this, SLOT(exit()));
+    connect(exitAction, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
 
     /* View menu */
     refreshAction = new QAction(QString("Refresh"), this);
@@ -156,6 +156,16 @@ void MainWindow::createActions()
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(about()));
 
     updateActions();
+}
+
+ExecutableViewer *MainWindow::activeExecutableViewer()
+{
+    QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow();
+
+    if (!activeSubWindow)
+        return nullptr;
+
+    return qobject_cast<ExecutableViewer *>(activeSubWindow->widget());
 }
 
 void MainWindow::open()
@@ -216,21 +226,41 @@ void MainWindow::open(const QString &filename)
     viewer->showMaximized();
 }
 
-void MainWindow::save() {}
+void MainWindow::save()
+{
+    ExecutableViewer *executableViewer = activeExecutableViewer();
+#ifdef DEBUG
+    assert(executableViewer != nullptr);
+#endif
 
-void MainWindow::saveAs() {}
+    if (executableViewer->save())
+        refreshAction->setEnabled(false);
+}
 
-void MainWindow::exit() {}
+void MainWindow::saveAs()
+{
+    ExecutableViewer *executableViewer = activeExecutableViewer();
+#ifdef DEBUG
+    assert(executableViewer != nullptr);
+#endif
+
+    if (executableViewer->saveAs())
+        refreshAction->setEnabled(false);
+}
 
 void MainWindow::refresh()
 {
-    QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow();
+    ExecutableViewer *executableViewer = activeExecutableViewer();
 #ifdef DEBUG
-    assert(activeSubWindow != nullptr);
+    assert(executableViewer != nullptr);
 #endif
-    qobject_cast<ExecutableViewer *>(activeSubWindow->widget())->refresh();
 
-    refreshAction->setEnabled(false);
+    std::string tmpName = executableViewer->getFileUnit()->getName() + ".tmp";
+    if (executableViewer->refresh(tmpName))
+        refreshAction->setEnabled(false);
+    else
+        QMessageBox::critical(executableViewer, QString("Error"),
+            QString("Unable to create temporary file. Cannot refresh the view."));
 }
 
 void MainWindow::undo() {}
@@ -257,13 +287,7 @@ void MainWindow::updateActions()
     saveAsAction->setEnabled(hasActiveSubWindow);
 
     if (hasActiveSubWindow)
-    {
-        QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow();
-        if (qobject_cast<ExecutableViewer *>(activeSubWindow->widget())->isRefreshable())
-            refreshAction->setEnabled(true);
-        else
-            refreshAction->setEnabled(false);
-    }
+        refreshAction->setEnabled(activeExecutableViewer()->isRefreshable());
     else
         refreshAction->setEnabled(false);
 
@@ -318,15 +342,15 @@ void MainWindow::updateCheckableWindows()
         QAction *action = new QAction(QString::fromStdString(ev->getFileUnit()->getName()), this);
         action->setActionGroup(windowActionGroup);
         action->setCheckable(true);
-        QMdiSubWindow *activeSubWindow = mdiArea->activeSubWindow();
+        ExecutableViewer *activeViewer = activeExecutableViewer();
 
 #ifdef DEBUG
         /* Reaching this point supposes there is at least one subwindow. Therefore, we also have an
          * active subwindow. */
-        assert(activeSubWindow != nullptr);
+        assert(activeViewer != nullptr);
 #endif
 
-        action->setChecked(ev == qobject_cast<ExecutableViewer *>(activeSubWindow->widget()));
+        action->setChecked(ev == activeViewer);
         connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
         signalMapper->setMapping(action, window);
         windowMenu->addAction(action);
@@ -342,4 +366,10 @@ void MainWindow::selectWindow(QWidget *subWindow)
 #endif
 
     mdiArea->setActiveSubWindow(mdiSubWindow);
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    mdiArea->closeAllSubWindows();
+    mdiArea->currentSubWindow() ? event->ignore() : event->accept();
 }
