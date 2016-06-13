@@ -23,15 +23,42 @@
 
 #include "file_unit.hpp"
 #include "elfio/elfio.hpp"
+#include <QFile>
 
 FileUnit::FileUnit(const std::string &filename)
 {
     this->filename = filename;
 }
 
-std::string &FileUnit::getName()
+const std::string &FileUnit::getName()
 {
     return filename;
+}
+
+void FileUnit::setName(const std::string &filename)
+{
+    this->filename = filename;
+}
+
+void FileUnit::setTemporaryName(const std::string &temporaryFileName)
+{
+    this->temporaryFileName = temporaryFileName;
+}
+
+const std::string &FileUnit::getOpenFileName()
+{
+    if (temporaryFileName != "")
+        return temporaryFileName;
+    return filename;
+}
+
+bool FileUnit::deleteTemporaryFile()
+{
+    if (temporaryFileName == "")
+        return false;
+    bool ret = QFile::remove(QString(temporaryFileName.c_str()));
+    temporaryFileName = "";
+    return ret;
 }
 
 std::vector<Container *> &FileUnit::getTopLevelContainers()
@@ -42,4 +69,5 @@ std::vector<Container *> &FileUnit::getTopLevelContainers()
 FileUnit::~FileUnit()
 {
     Container::deleteGraph(topLevelContainers);
+    deleteTemporaryFile();
 }

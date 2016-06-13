@@ -255,8 +255,9 @@ void MainWindow::refresh()
     assert(executableViewer != nullptr);
 #endif
 
-    std::string tmpName = executableViewer->getFileUnit()->getName() + ".tmp";
-    if (executableViewer->refresh(tmpName))
+    QFileInfo fileInfo(executableViewer->getFileUnit()->getName().c_str());
+    std::string tmpName = (fileInfo.path() + "/." + fileInfo.fileName() + ".tmp").toStdString();
+    if (executableViewer->refresh(tmpName, true))
         refreshAction->setEnabled(false);
     else
         QMessageBox::critical(executableViewer, QString("Error"),

@@ -34,7 +34,7 @@ using namespace elf;
 ELFFile::ELFFile(const std::string &filename) : FileUnit(filename), formatName("ELF")
 {
     file = nullptr;
-    loadFile(filename);
+    loadFile();
 }
 
 const std::string &ELFFile::getFormatName()
@@ -59,7 +59,7 @@ ELFIO::elfio *ELFFile::getELFIO()
     return file;
 }
 
-bool ELFFile::loadFile(const std::string &filename)
+bool ELFFile::loadFile()
 {
     if (file)
         delete file;
@@ -67,7 +67,7 @@ bool ELFFile::loadFile(const std::string &filename)
     file = new ELFIO::elfio();
     try
     {
-        open = file->load(filename);
+        open = file->load(getOpenFileName());
     }
     catch (std::exception &e)
     {
