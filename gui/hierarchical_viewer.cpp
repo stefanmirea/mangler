@@ -120,6 +120,12 @@ void HierarchicalViewer::select()
         std::pair<int, int> interval = current->getInterval();
         if (Container::isValidInterval(interval))
             hexViewer->selectData(interval.first, interval.second - interval.first);
+        else
+        {
+            qint64 cursorPosition = hexViewer->cursorPosition();
+            hexViewer->selectData(cursorPosition / 2, 0);
+            hexViewer->setCursorPosition(cursorPosition);
+        }
     }
 
     previous = current;
