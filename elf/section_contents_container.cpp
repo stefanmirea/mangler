@@ -22,6 +22,7 @@
  */
 
 #include "section_contents_container.hpp"
+#include "elf_code_container.hpp"
 
 using namespace elf;
 
@@ -44,7 +45,12 @@ std::vector<Container *> &SectionContentsContainer::getInnerContainers()
             std::pair<int, int> entry_interval;
             entry_interval.first = elfData->sections[i]->get_offset();
             entry_interval.second = entry_interval.first + elfData->sections[i]->get_size();
-            container = new Container(getFile(), false, entry_interval);
+
+            if ((elfData->sections[i]->get_flags()) & SHF_EXECINSTR)
+                container = new ELFCodeContainer(elfHandler, entry_interval, i);
+
+            else
+                container = new Container(getFile(), false, entry_interval);
             container->setName(elfData->sections[i]->get_name());
             addInnerContainer(container);
         }
