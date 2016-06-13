@@ -51,7 +51,9 @@ SOURCES +=\
     util/util.cpp \
     elf/symbol_table_container.cpp \
     elf/symbol_table_entry_container.cpp \
-    elf/string_table_container.cpp
+    elf/string_table_container.cpp \
+    elf/note_container.cpp \
+    elf/note_entry_container.cpp
 
 HEADERS  += \
     core/code_container.hpp \
@@ -93,7 +95,9 @@ HEADERS  += \
     util/util.hpp \
     elf/symbol_table_container.hpp \
     elf/symbol_table_entry_container.hpp \
-    elf/string_table_container.hpp
+    elf/string_table_container.hpp \
+    elf/note_container.hpp \
+    elf/note_entry_container.hpp
 
 RESOURCES += \
     gui/mangler.qrc
