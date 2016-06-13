@@ -11,7 +11,11 @@ StringTableContainer::StringTableContainer(ELFFile *file, const std::pair<int, i
 
     if (entry)
     {
-        setName(entry->get_name());
+        std::string section_name(entry->get_name());
+        if (section_name != "")
+            setName(section_name);
+        else
+            setName("[unnamed]");
     }
 }
 
@@ -39,7 +43,10 @@ std::vector<Container *> &StringTableContainer::getInnerContainers()
             interval.first = entryOffset + pos;
             interval.second = interval.first + entry_string.size() + 1;
             Container *container = new Container(getFile(), false, interval);
-            container->setName(entry_string);
+            if (entry_string != "")
+                container->setName(entry_string);
+            else
+                container->setName("[blank]");
             addInnerContainer(container);
 
             pos += (entry_string.size() + 1);

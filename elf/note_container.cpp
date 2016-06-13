@@ -12,7 +12,11 @@ NoteContainer::NoteContainer(ELFFile *file, const std::pair<int, int> &interval,
 
     if (entry)
     {
-        setName(entry->get_name());
+        std::string section_name(entry->get_name());
+        if (section_name != "")
+            setName(section_name);
+        else
+            setName("[unnamed]");
     }
 }
 
