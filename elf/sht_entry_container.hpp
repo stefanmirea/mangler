@@ -1,5 +1,5 @@
-#ifndef SHT_ENTRY_CONTAINER_HPP
-#define SHT_ENTRY_CONTAINER_HPP
+#ifndef SHT_ENTRY_CONTAINER_HPP_
+#define SHT_ENTRY_CONTAINER_HPP_
 
 #include "container.hpp"
 #include "elf_file.hpp"
@@ -16,4 +16,4 @@ public:
     ~ShtEntryContainer();
 };
 }
-#endif // SHT_ENTRY_CONTAINER_HPP
+#endif // SHT_ENTRY_CONTAINER_HPP_

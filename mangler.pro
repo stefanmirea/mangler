@@ -48,7 +48,9 @@ SOURCES +=\
     gui/special_representation/code/do.cpp \
     gui/special_representation/default.cpp \
     elf/sht_entry_container.cpp \
-    util/util.cpp
+    util/util.cpp \
+    elf/symbol_table_container.cpp \
+    elf/symbol_table_entry_container.cpp
 
 HEADERS  += \
     core/code_container.hpp \
@@ -87,7 +89,9 @@ HEADERS  += \
     gui/special_representation/code/asm_viewer.hpp \
     gui/special_representation/code/modify_asmbar.hpp \
     elf/sht_entry_container.hpp \
-    util/util.hpp
+    util/util.hpp \
+    elf/symbol_table_container.hpp \
+    elf/symbol_table_entry_container.hpp
 
 RESOURCES += \
     gui/mangler.qrc

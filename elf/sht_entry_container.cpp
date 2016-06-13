@@ -98,7 +98,7 @@ std::vector<Container *> &ShtEntryContainer::getInnerContainers()
                 sh_type_string = "SHT_HIUSER";
                 break;
             default:
-                sh_type_string = std::to_string(sh_type);
+                sh_type_string = printHex(sh_type);
                 break;
         }
 
