@@ -59,7 +59,7 @@ class string_section_accessor
     Elf_Word
     add_string( const char* str )
     {
-        // Strings are addeded to the end of the current section data
+        // Strings are added to the end of the current section data
         Elf_Word current_position = (Elf_Word)string_section->get_size();
 
         if ( current_position == 0 ) {

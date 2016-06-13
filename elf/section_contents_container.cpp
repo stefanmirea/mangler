@@ -22,6 +22,10 @@
  */
 
 #include "section_contents_container.hpp"
+#include "elf_code_container.hpp"
+#include "symbol_table_container.hpp"
+#include "string_table_container.hpp"
+#include "note_container.hpp"
 
 using namespace elf;
 
@@ -36,12 +40,34 @@ std::vector<Container *> &SectionContentsContainer::getInnerContainers()
     {
         Container *container;
 
-        container = new Container(getFile(), false, std::make_pair(30, 40));
-        container->setName("[test] non-code section");
-        addInnerContainer(container);
+        ELFFile *elfHandler = dynamic_cast<ELFFile *>(getFile());
+        ELFIO::elfio *elfData = elfHandler->getELFIO();
 
-        container = getFile()->getTopLevelContainers()[3]->getInnerContainers()[0];
-        addInnerContainer(container);
+        for (unsigned int i = 0; i < elfData->get_sections_num(); i++)
+        {
+            std::pair<int, int> entry_interval;
+            entry_interval.first = elfData->sections[i]->get_offset();
+            entry_interval.second = entry_interval.first + elfData->sections[i]->get_size();
+
+            if ((elfData->sections[i]->get_flags()) & SHF_EXECINSTR)
+                container = new ELFCodeContainer(elfHandler, entry_interval, i);
+
+            else
+            if ((elfData->sections[i]->get_type() == SHT_SYMTAB || elfData->sections[i]->get_type() == SHT_DYNSYM))
+                container = new SymbolTableContainer(elfHandler, entry_interval, i);
+
+            else
+            if ((elfData->sections[i]->get_type() == SHT_STRTAB))
+                container = new StringTableContainer(elfHandler, entry_interval, i);
+
+            else
+                if ((elfData->sections[i]->get_type() == SHT_NOTE))
+                    container = new NoteContainer(elfHandler, entry_interval, i);
+            else
+                container = new Container(getFile(), false, entry_interval);
+            container->setName(elfData->sections[i]->get_name());
+            addInnerContainer(container);
+        }
     }
     return innerContainers;
 }

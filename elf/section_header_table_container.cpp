@@ -22,6 +22,7 @@
  */
 
 #include "section_header_table_container.hpp"
+#include "sht_entry_container.hpp"
 
 using namespace elf;
 
@@ -35,9 +36,18 @@ std::vector<Container *> &SectionHeaderTableContainer::getInnerContainers()
 {
     if (innerContainers.empty())
     {
-        Container *container = new Container(getFile(), false, std::make_pair(20, 30));
-        container->setName("Nothing here");
-        addInnerContainer(container);
+        ELFFile *elfHandler = dynamic_cast<ELFFile *>(getFile());
+        ELFIO::elfio *elfData = elfHandler->getELFIO();
+
+        for (unsigned int i = 0; i < elfData->get_sections_num(); i++)
+        {
+            std::pair<int, int> entry_interval;
+            entry_interval.first = elfData->get_sections_offset() + i * elfData->get_section_entry_size();
+            entry_interval.second = entry_interval.first + elfData->get_section_entry_size();
+            ShtEntryContainer *entry = new ShtEntryContainer(elfHandler, entry_interval, i);
+            addInnerContainer(entry);
+
+        }
     }
     return innerContainers;
 }
