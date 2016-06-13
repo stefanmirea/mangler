@@ -132,11 +132,22 @@ void ExecutableViewer::setRefreshable(bool refreshable)
     mainWindow->updateActions();
 }
 
-bool ExecutableViewer::refresh(const std::string &fileName)
+bool ExecutableViewer::refresh(const std::string &fileName, bool temporary)
 {
     /* Save the modified file. */
     if (!hexViewer->saveFile(QString(fileName.c_str())))
         return false;
+
+    /* Inform fileUnit of the new file name. */
+    std::string canonicalName = QFileInfo(QString(fileName.c_str())).canonicalFilePath().
+                                toStdString();
+    if (temporary)
+        fileUnit->setTemporaryName(canonicalName);
+    else
+    {
+        fileUnit->deleteTemporaryFile();
+        fileUnit->setName(canonicalName);
+    }
 
     HierarchyNode *nodeOfInterest = hierarchicalViewer->getNodeOfInterest();
     bool keepSpecialRepresentation = nodeOfInterest && nodeOfInterest->keepSpecialRepresentation();
@@ -146,7 +157,7 @@ bool ExecutableViewer::refresh(const std::string &fileName)
     std::vector<Container *> oldRootContainers;
     oldRootContainers.swap(fileUnit->getTopLevelContainers());
 
-    if (!fileUnit->loadFile(fileName))
+    if (!fileUnit->loadFile())
         QMessageBox::warning(this, QString("Warning"),
             QString("The file is not a valid %1 executable in the current form.\nWhile you can "
                 "keep editing using the hexadecimal editor, you will not be able to take advantage "
@@ -298,11 +309,9 @@ bool ExecutableViewer::saveAs()
     if (originalName == "")
         return false;
 
-    std::string name = QFileInfo(originalName).canonicalFilePath().toStdString();
-    if (saveFile(name))
+    if (saveFile(originalName.toStdString()))
     {
-        fileUnit->getName() = name;
-        setWindowTitle(QString(name.c_str()) + "[*]");
+        setWindowTitle(QString(fileUnit->getName().c_str()) + "[*]");
         return true;
     }
 
@@ -311,7 +320,7 @@ bool ExecutableViewer::saveAs()
 
 bool ExecutableViewer::saveFile(const std::string &fileName)
 {
-    if (!refresh(fileName))
+    if (!refresh(fileName, false))
     {
         QMessageBox::critical(this, QString("Error"),
             QString("Unable to save file %1.").arg(fileName.c_str()));

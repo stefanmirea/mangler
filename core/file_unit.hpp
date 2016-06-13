@@ -38,17 +38,21 @@ class FileUnit
 {
 public:
     FileUnit(const std::string &filename);
-    std::string &getName();
+    const std::string &getName();
+    void setName(const std::string &filename);
+    void setTemporaryName(const std::string &temporaryFileName);
+    const std::string &getOpenFileName();
+    bool deleteTemporaryFile();
     virtual const std::string &getFormatName() = 0;
     std::vector<Container *> &getTopLevelContainers();
 
     virtual bool getOpenStatus() = 0;
     virtual void modifyHex(size_t offset, std::string &newContent) = 0;
     virtual ~FileUnit();
-    virtual bool loadFile(const std::string &filename) = 0; /* Creates the top-level containers. */
+    virtual bool loadFile() = 0; /* Creates the top-level containers. */
 
 private:
-    std::string filename;
+    std::string filename, temporaryFileName;
     std::vector<Container *> topLevelContainers;
 };
 

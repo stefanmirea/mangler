@@ -256,7 +256,7 @@ void MainWindow::refresh()
 #endif
 
     std::string tmpName = executableViewer->getFileUnit()->getName() + ".tmp";
-    if (executableViewer->refresh(tmpName))
+    if (executableViewer->refresh(tmpName, true))
         refreshAction->setEnabled(false);
     else
         QMessageBox::critical(executableViewer, QString("Error"),

@@ -44,7 +44,7 @@ public:
     bool getOpenStatus();
     void modifyHex(size_t offset, std::string &newContent);
     ELFIO::elfio *getELFIO();
-    bool loadFile(const std::string &filename);
+    bool loadFile();
 
     virtual ~ELFFile();
 
