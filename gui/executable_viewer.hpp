@@ -56,12 +56,13 @@ public:
     bool saveFile(const std::string &fileName);
     bool isRefreshable();
     void setRefreshable(bool refreshable);
-    bool refresh(const std::string &fileName);
+    bool refresh(const std::string &fileName, bool temporary);
     virtual ~ExecutableViewer();
 
 signals:
 
 public slots:
+    void hexDataChanged();
 
 protected:
     void closeEvent(QCloseEvent *event) Q_DECL_OVERRIDE;
