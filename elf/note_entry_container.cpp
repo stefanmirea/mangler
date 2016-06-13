@@ -26,7 +26,10 @@ NoteEntryContainer::NoteEntryContainer(ELFFile *file,
 
     if (entry)
     {
-        setName(std::to_string(noteIndex) + ": " + name);
+        if (name != "")
+            setName(std::to_string(noteIndex) + ": " + name);
+        else
+            setName(std::to_string(noteIndex) + ": " + "[unnamed]");
     }
 }
 

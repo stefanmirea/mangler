@@ -11,7 +11,11 @@ ShtEntryContainer::ShtEntryContainer(ELFFile *file, const std::pair<int, int> &i
 
     if (entry)
     {
-        setName(entry->get_name() + " header");
+        std::string section_name(entry->get_name());
+        if (section_name != "")
+            setName(section_name + " header");
+        else
+            setName("[unnamed] header");
     }
 }
 
@@ -27,7 +31,7 @@ std::vector<Container *> &ShtEntryContainer::getInnerContainers()
         int offset = elfData->get_sections_offset() + index * elfData->get_section_entry_size();
 
         container = new Container(getFile(), false, std::make_pair(offset, offset + sizeof(ELFIO::Elf32_Word)));
-        container->setName("sh_name: " + std::to_string(entry->get_name_string_offset()));
+        container->setName("sh_name: " + ("\"" + std::string(entry->get_name())) + "\"");
         addInnerContainer(container);
         offset += sizeof(ELFIO::Elf32_Word);
 

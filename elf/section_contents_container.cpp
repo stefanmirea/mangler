@@ -65,7 +65,12 @@ std::vector<Container *> &SectionContentsContainer::getInnerContainers()
                     container = new NoteContainer(elfHandler, entry_interval, i);
             else
                 container = new Container(getFile(), false, entry_interval);
-            container->setName(elfData->sections[i]->get_name());
+
+            std::string containerName(elfData->sections[i]->get_name());
+            if (containerName != "")
+                container->setName(containerName);
+            else
+                container->setName("[unnamed]");
             addInnerContainer(container);
         }
     }

@@ -25,7 +25,10 @@ SymbolTableEntryContainer::SymbolTableEntryContainer(ELFFile *file,
 
     if (entry)
     {
-        setName(std::to_string(symbolIndex) + ": " + name);
+        if (name != "")
+            setName(std::to_string(symbolIndex) + ": " + name);
+        else
+            setName(std::to_string(symbolIndex) + ": [unnamed]");
     }
 }
 
@@ -53,10 +56,9 @@ std::vector<Container *> &SymbolTableEntryContainer::getInnerContainers()
 
         symbol.get_symbol(symbolIndex, name, value, size, bind, type, section_index, other);
 
-        /* TODO: Might have to get the string table index for the name, instead of the actual string */
         int offset = interval.first;
         container = new Container(getFile(), false, std::make_pair(offset, offset + sizeof(ELFIO::Elf32_Word)));
-        container->setName("st_name: " + name);
+        container->setName("st_name: " + ("\"" + name) + "\"");
         addInnerContainer(container);
         offset += sizeof(ELFIO::Elf32_Word);
 
