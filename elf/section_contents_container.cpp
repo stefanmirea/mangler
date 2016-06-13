@@ -23,6 +23,7 @@
 
 #include "section_contents_container.hpp"
 #include "elf_code_container.hpp"
+#include "symbol_table_container.hpp"
 
 using namespace elf;
 
@@ -48,6 +49,10 @@ std::vector<Container *> &SectionContentsContainer::getInnerContainers()
 
             if ((elfData->sections[i]->get_flags()) & SHF_EXECINSTR)
                 container = new ELFCodeContainer(elfHandler, entry_interval, i);
+
+            else
+            if ((elfData->sections[i]->get_type() == SHT_SYMTAB || elfData->sections[i]->get_type() == SHT_DYNSYM))
+                container = new SymbolTableContainer(elfHandler, entry_interval, i);
 
             else
                 container = new Container(getFile(), false, entry_interval);
