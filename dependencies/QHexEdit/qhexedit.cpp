@@ -46,6 +46,7 @@ QHexEdit::QHexEdit(ExecutableViewer *executableViewer, QWidget *parent) : QAbstr
 
     init();
 
+    connect(this, SIGNAL(dataChanged()), executableViewer, SLOT(hexDataChanged()));
 }
 
 QHexEdit::~QHexEdit()
@@ -673,9 +674,6 @@ void QHexEdit::keyPressEvent(QKeyEvent *event)
         {
             redo();
         }
-
-        executableViewer->setWindowModified(true);
-        executableViewer->setRefreshable(true);
     }
 
     /* Copy */

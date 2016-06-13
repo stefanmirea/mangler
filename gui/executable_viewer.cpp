@@ -34,7 +34,6 @@
 ExecutableViewer::ExecutableViewer(MainWindow *mainWindow, FileUnit *fileUnit, QWidget *parent) :
     QWidget(parent), mainWindow(mainWindow), fileUnit(fileUnit)
 {
-    setWindowModified(false);
     setWindowTitle(QString(fileUnit->getName().c_str()) + "[*]");
 
     QWidget *left = new QWidget(this);
@@ -80,6 +79,7 @@ ExecutableViewer::ExecutableViewer(MainWindow *mainWindow, FileUnit *fileUnit, Q
 
     setLayout(layout);
     refreshable = false;
+    setWindowModified(false);
 }
 
 MainWindow *ExecutableViewer::getMainWindow()
@@ -328,6 +328,12 @@ bool ExecutableViewer::saveFile(const std::string &fileName)
     }
     setWindowModified(false);
     return true;
+}
+
+void ExecutableViewer::hexDataChanged()
+{
+    setWindowModified(true);
+    setRefreshable(true);
 }
 
 void ExecutableViewer::closeEvent(QCloseEvent *event)
