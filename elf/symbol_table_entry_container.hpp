@@ -9,10 +9,13 @@ namespace elf
 class SymbolTableEntryContainer : public Container
 {
 public:
-	SymbolTableEntryContainer(ELFFile *file, const std::pair<int, int> &interval, unsigned int index);
+    SymbolTableEntryContainer(ELFFile *file, const std::pair<int, int> &interval,
+                                             unsigned int sectionIndex,
+                                             unsigned int symbolIndex);
     std::vector<Container *> &getInnerContainers();
 
-    unsigned int index;
+    unsigned int sectionIndex;
+    unsigned int symbolIndex;
     ~SymbolTableEntryContainer();
 };
 }
