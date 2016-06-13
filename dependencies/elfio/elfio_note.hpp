@@ -77,6 +77,40 @@ class note_section_accessor
         return true;
     }
 
+    bool
+    get_note( Elf_Word     index,
+              Elf_Word&    type,
+              std::string& name,
+              void*&       desc,
+              Elf_Word&    descSize,
+              Elf_Word&    namesz ) const
+    {
+        if ( index >= note_section->get_size() ) {
+            return false;
+        }
+
+        const char* pData = note_section->get_data() + note_start_positions[index];
+
+        const endianess_convertor& convertor = elf_file.get_convertor();
+        type = convertor( *(Elf_Word*)( pData + 2*sizeof( Elf_Word ) ) );
+        namesz = convertor( *(Elf_Word*)( pData ) );
+        name.assign( pData + 3*sizeof( Elf_Word ), namesz );
+        descSize = convertor( *(Elf_Word*)( pData + sizeof( namesz ) ) );
+        if ( 0 == descSize ) {
+            desc = 0;
+        }
+        else {
+            int align = sizeof( Elf_Xword );
+            if ( elf_file.get_class() == ELFCLASS32 ) {
+                align = sizeof( Elf_Word );
+            }
+            desc = const_cast<char*> ( pData + 3*sizeof( Elf_Word ) +
+                                       ( ( namesz + align - 1 ) / align ) * align );
+        }
+
+        return true;
+    }
+
 //------------------------------------------------------------------------------
     void add_note( Elf_Word           type,
                    const std::string& name,
@@ -149,6 +183,7 @@ class note_section_accessor
   private:
     const elfio&           elf_file;
     section*               note_section;
+  public:
     std::vector<Elf_Xword> note_start_positions;
 };
 
