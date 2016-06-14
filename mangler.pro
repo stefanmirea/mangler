@@ -45,6 +45,7 @@ SOURCES +=\
     gui/hierarchy_node.cpp \
     gui/special_representation/code/asm_viewer.cpp \
     gui/special_representation/code/modify_asmbar.cpp \
+    gui/special_representation/code/instruction_checker.cpp \
     gui/special_representation/code/do.cpp \
     gui/special_representation/default.cpp \
     elf/sht_entry_container.cpp \
@@ -91,6 +92,7 @@ HEADERS  += \
     gui/hierarchy_node.hpp \
     gui/special_representation/code/asm_viewer.hpp \
     gui/special_representation/code/modify_asmbar.hpp \
+    gui/special_representation/code/instruction_checker.hpp \
     elf/sht_entry_container.hpp \
     util/util.hpp \
     elf/symbol_table_container.hpp \

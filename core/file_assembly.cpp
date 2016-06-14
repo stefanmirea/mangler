@@ -174,7 +174,7 @@ void FileAssembly::disassembleSection(const std::string &filename, const std::st
     }
 }
 
-void assembleInstruction(const std::string &instruction, asmInstr &result)
+void FileAssembly::assembleInstruction(const std::string &instruction, asmInstr &result)
 {
     std::string filename = "tmpasm";
 
