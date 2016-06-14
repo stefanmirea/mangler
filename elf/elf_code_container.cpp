@@ -51,18 +51,10 @@ unsigned int ELFCodeContainer::addressToOffset(unsigned long long address)
 
 void ELFCodeContainer::getContent(std::vector<std::pair<unsigned long long, std::string>> &content)
 {
-    ELFFile *efile = dynamic_cast<ELFFile *>(getFile());
-#ifdef DEBUG
-    assert(efile != nullptr);
-#endif
-
-    ELFIO::elfio *elfReader = efile->getELFIO();
-    ELFIO::section *currentSection = elfReader->sections[index];
-
     std::map<std::string, unsigned long long> labels;
     std::vector<asmInstr> instructions;
 
-    FileAssembly::disassembleSection(efile->getOpenFileName(), currentSection->get_name(),
+    FileAssembly::disassembleSection(getFile()->getOpenFileName(), getSectionName(),
                                       labels, instructions);
 
     for (unsigned int i = 0; i < instructions.size(); i++)
@@ -104,6 +96,19 @@ void ELFCodeContainer::overwrite(unsigned long long address, std::string newMach
     {
         currentSection->set_data(newMachineCode.c_str(), address, newMachineCode.size());
     }
+}
+
+std::string ELFCodeContainer::getSectionName()
+{
+    ELFFile *efile = dynamic_cast<ELFFile *>(getFile());
+#ifdef DEBUG
+    assert(efile != nullptr);
+#endif
+
+    ELFIO::elfio *interpretor = efile->getELFIO();
+    ELFIO::section *currentSection = interpretor->sections[index];
+
+    return currentSection->get_name();
 }
 
 ELFCodeContainer::~ELFCodeContainer() {}

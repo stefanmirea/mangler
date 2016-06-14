@@ -60,6 +60,9 @@ public:
     virtual void getContent(std::vector<std::pair<unsigned long long, std::string>> &content) = 0;
     virtual void overwrite(unsigned long long address, std::string newMachineCode) = 0;
 
+    /* not really universal, but temporarily used for disassembling instructions in ELF files */
+    virtual std::string getSectionName() = 0;
+
 protected:
     bool injectionPossible;
 

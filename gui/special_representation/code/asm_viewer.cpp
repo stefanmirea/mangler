@@ -84,7 +84,6 @@ QString ASMViewer::bufferToHex(const std::string &buffer)
 void ASMViewer::splitInstruction(const std::string &instruction, std::string &assembled,
                                  std::string &opcode, std::string &arguments)
 {
-    //std::string instruction = FileAssembly::disassembleCode(binary);
     size_t caretPos = instruction.find('^');
     assembled = instruction.substr(0, caretPos);
 
