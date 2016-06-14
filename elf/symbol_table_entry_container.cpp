@@ -72,7 +72,6 @@ std::vector<Container *> &SymbolTableEntryContainer::getInnerContainers()
         addInnerContainer(container);
         offset += sizeof(ELFIO::Elf32_Addr);
 
-        container = new Container(getFile(), false, std::make_pair(offset, offset + sizeof(unsigned char)));
         std::string bind_string = "";
 
         switch(bind)
@@ -96,9 +95,6 @@ std::vector<Container *> &SymbolTableEntryContainer::getInnerContainers()
                 bind_string = printHex(bind);
                 break;
         }
-
-        container->setName("st_bind: " + bind_string);
-        addInnerContainer(container);
 
         container = new Container(getFile(), false, std::make_pair(offset, offset + sizeof(unsigned char)));
         std::string type_string = "";
@@ -131,7 +127,7 @@ std::vector<Container *> &SymbolTableEntryContainer::getInnerContainers()
                 break;
         }
 
-        container->setName("st_type: " + type_string);
+        container->setName("st_info: " + bind_string + " " + type_string);
         addInnerContainer(container);
         offset += sizeof(unsigned char);
 
