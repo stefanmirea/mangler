@@ -141,6 +141,9 @@ void ModifyASMBar::editInstruction()
                     {
                         tempFile.seek(container->addressToOffset(initialAddress));
                         tempFile.write(binaryCode.data(), binaryCode.size());
+                        char fill = 0x90;
+                        for (int i = 0; i < rest; ++i)
+                            tempFile.write(&fill, 1);
                         tempFile.close();
                     }
                 }
