@@ -32,11 +32,11 @@ Installation
 4. File > Open File or Project.
 Then, from the folder obtained from step 0, select mangler.pro.
 
-![Open Project]http://i.imgur.com/DOrdS4C.png
+![Open Project](http://i.imgur.com/DOrdS4C.png)
 
 5. Press "Configure Project".
 
-![Configure Project]http://i.imgur.com/lmDsIgs.png
+![Configure Project](http://i.imgur.com/lmDsIgs.png)
 
 6. Wait for QtCreator to scan / parse the source code files until the "Run" arrow is green.
 
