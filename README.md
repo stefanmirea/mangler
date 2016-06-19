@@ -64,7 +64,9 @@ Then, from the folder obtained from step 1, select mangler.pro.
     
 5. Navigate to the mangler/ folder from step 1.
 
-6. Create the Makefile using the following command: $QT\_PATH/gcc\_64/bin/qmake mangler.pro
+6. Create the Makefile using the following command:
+    * for 32-bit installations: $QT\_PATH/gcc/bin/qmake mangler.pro
+    * for 64-bit installations: $QT\_PATH/gcc\_64/bin/qmake mangler.pro
 
 7. make (and of, course wait for a bit)
 
