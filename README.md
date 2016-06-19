@@ -58,13 +58,15 @@ Then, from the folder obtained from step 1, select mangler.pro.
 ./qt-opensource-linux-x86-5.5.1.run or  ./qt-opensource-linux-x64-5.5.1.run
 
 4. Set up path to Qt directory.
-    * QT_PATH="/path/to/qt/version/"
-    * export QT_PATH
-    * example: QT_PATH="/home/adrian/Qt/5.5/"
+    * QT\_PATH="/path/to/qt/version/"
+    * export QT\_PATH
+    * example: QT\_PATH="/home/adrian/Qt/5.5/"
     
 5. Navigate to the mangler/ folder from step 1.
 
-6. Create the Makefile using the following command: $QT_PATH/gcc/bin/qmake mangler.pro
+6. Create the Makefile using the following command:
+    * for 32-bit installations: $QT\_PATH/gcc/bin/qmake mangler.pro
+    * for 64-bit installations: $QT\_PATH/gcc\_64/bin/qmake mangler.pro
 
 7. make (and of, course wait for a bit)
 
