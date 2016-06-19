@@ -16,30 +16,59 @@ For starters we will target Linux ELF x86 and x86\_64 executables, but we would 
 Installation
 =========
 
-#Easy way (Linux 32 bit and 64 bit)
+#1st method (Linux distro)
 
-0. TODO: Download the release of the project and unzip it.
+1. 
+	* a. TODO: Download the release of the project and unzip it.
+	* b. Make sure you have objdump installed. If not sudo apt-get install binutils-dev.
 
-1. Download the correct Qt installer for your architecture x86 or x64: https://download.qt.io/archive/qt/5.5/5.5.1/.
+2. Download the correct Qt installer for your architecture x86 or x64: https://download.qt.io/archive/qt/5.5/5.5.1/.
 ![What to download](http://i.imgur.com/hnrhyrA.png?1)
 
-2. Install the package.
+3. Install the package.
 ./qt-opensource-linux-x86-5.5.1.run or  ./qt-opensource-linux-x64-5.5.1.run
 
-3. Open QtCreator.
+4. Open QtCreator.
 ![QtCreator](http://i.imgur.com/5XNKcWo.png)
 
-4. File > Open File or Project.
-Then, from the folder obtained from step 0, select mangler.pro.
+5. File > Open File or Project.
+Then, from the folder obtained from step 1, select mangler.pro.
 ![Open Project](http://i.imgur.com/DOrdS4C.png)
 
-5. Press "Configure Project".
+6. Press "Configure Project".
 ![Configure Project](http://i.imgur.com/lmDsIgs.png)
 
-6. Wait for QtCreator to scan / parse the source code files until the "Run" arrow is green.
+7. Wait for QtCreator to scan / parse the source code files until the "Run" arrow is green.
 
-7. Press the "Run" arrow button.
+8. Press the "Run" arrow button.
 ![Run](http://i.imgur.com/F0oEIax.png)
 
-8. Wait for the program to build and run.
+9. Wait for the program to build and run.
+
+#2nd method (Linux distro)
+
+1. 
+	* a. TODO: Download the release of the project and unzip it.
+	* b. Make sure you have objdump installed. If not sudo apt-get install binutils-dev.
+
+2. Download the correct Qt installer for your architecture x86 or x64: https://download.qt.io/archive/qt/5.5/5.5.1/.
+![What to download](http://i.imgur.com/hnrhyrA.png?1)
+
+3. Install the package.
+./qt-opensource-linux-x86-5.5.1.run or  ./qt-opensource-linux-x64-5.5.1.run
+
+4. Set up path to Qt directory.
+    * QT_PATH="/path/to/qt/version/"
+    * export QT_PATH
+    * example: QT_PATH="/home/adrian/Qt/5.5/"
+    
+5. Navigate to the mangler/ folder from step 1.
+
+6. Create the Makefile using the following command: $QT_PATH/gcc/bin/qmake mangler.pro
+
+7. make (and of, course wait for a bit)
+
+8. Make sure that the new-created 'mangler' file has run permissions (chmod +x mangler)
+
+9. ./mangler
 
