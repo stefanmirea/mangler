@@ -12,3 +12,37 @@ For starters we will target Linux ELF x86 and x86\_64 executables, but we would 
 
 [1]: http://sourceforge.net/projects/machoview/
 [2]: https://www.hex-rays.com/products/ida/
+
+Installation
+=========
+
+#Easy way (Linux 32 bit and 64 bit)
+
+0. TODO: Download the release of the project and unzip it.
+
+1. Download the correct Qt installer for your architecture x86 or x64: https://download.qt.io/archive/qt/5.5/5.5.1/.
+![What to download](http://i.imgur.com/hnrhyrA.png?1)
+
+2. Install the package.
+./qt-opensource-linux-x86-5.5.1.run or  ./qt-opensource-linux-x64-5.5.1.run
+
+3. Open QtCreator.
+![QtCreator](http://i.imgur.com/5XNKcWo.png)
+
+4. File > Open File or Project.
+Then, from the folder obtained from step 0, select mangler.pro.
+
+![Open Project]http://i.imgur.com/DOrdS4C.png
+
+5. Press "Configure Project".
+
+![Configure Project]http://i.imgur.com/lmDsIgs.png
+
+6. Wait for QtCreator to scan / parse the source code files until the "Run" arrow is green.
+
+7. Press the "Run" arrow button.
+
+![Run](http://i.imgur.com/F0oEIax.png)
+
+8. Wait for the program to build and run.
+
