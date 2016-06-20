@@ -19,8 +19,11 @@ Installation
 
 1.
 	* a. Download the archive of the project and unzip it: https://github.com/stefanmirea/mangler.git
+	
 	* b. sudo apt-get install libgl1-mesa-dev libglu1-mesa-dev
+	
 	* c. Make sure you have objdump installed. If not sudo apt-get install binutils-dev.
+	
 	* d. Make sure you have g++ installed and that it is the lastest version. sudo apt-get install g++ in order to check.
 
 2. Download the correct Qt installer for your architecture x86 or x64: https://download.qt.io/archive/qt/5.5/5.5.1/.
@@ -51,8 +54,11 @@ Installation
 
 1.
 	* a. Download the archive of the project and unzip it: https://github.com/stefanmirea/mangler.git
+	
 	* b. sudo apt-get install libgl1-mesa-dev libglu1-mesa-dev
+	
 	* c. Make sure you have objdump installed. If not sudo apt-get install binutils-dev.
+	
 	* d. Make sure you have g++ installed and that it is the lastest version. sudo apt-get install g++ in order to check.
 
 2. Download the correct Qt installer for your architecture x86 or x64: https://download.qt.io/archive/qt/5.5/5.5.1/.
