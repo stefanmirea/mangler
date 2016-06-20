@@ -10,7 +10,7 @@ NoteEntryContainer::NoteEntryContainer(ELFFile *file,
                                        unsigned int noteStart,
                                        unsigned int noteSize) :
     Container(file, true, interval), sectionIndex(sectionIndex),
-    noteIndex(noteIndex), noteStart(noteStart), noteSize(noteSize)
+    noteIndex(noteIndex), noteSize(noteSize), noteStart(noteStart)
 {
     const ELFIO::elfio *elfData = file->getELFIO();
     ELFIO::section *entry = elfData->sections[sectionIndex];
