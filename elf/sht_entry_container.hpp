@@ -6,14 +6,14 @@
 
 namespace elf
 {
-class ShtEntryContainer : public Container
+class SHTEntryContainer : public Container
 {
 public:
-    ShtEntryContainer(ELFFile *file, const std::pair<int, int> &interval, unsigned int index);
+    SHTEntryContainer(ELFFile *file, const std::pair<int, int> &interval, unsigned int index);
     std::vector<Container *> &getInnerContainers();
-
+    ~SHTEntryContainer();
+private:
     unsigned int index;
-    ~ShtEntryContainer();
 };
 }
 #endif // SHT_ENTRY_CONTAINER_HPP_

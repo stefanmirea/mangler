@@ -3,7 +3,7 @@
 
 using namespace elf;
 
-ShtEntryContainer::ShtEntryContainer(ELFFile *file, const std::pair<int, int> &interval, unsigned int index) :
+SHTEntryContainer::SHTEntryContainer(ELFFile *file, const std::pair<int, int> &interval, unsigned int index) :
     Container(file, true, interval), index(index)
 {
     ELFIO::elfio *elfData = file->getELFIO();
@@ -19,7 +19,7 @@ ShtEntryContainer::ShtEntryContainer(ELFFile *file, const std::pair<int, int> &i
     }
 }
 
-std::vector<Container *> &ShtEntryContainer::getInnerContainers()
+std::vector<Container *> &SHTEntryContainer::getInnerContainers()
 {
     if (innerContainers.empty())
     {
@@ -182,7 +182,7 @@ std::vector<Container *> &ShtEntryContainer::getInnerContainers()
     return innerContainers;
 }
 
-ShtEntryContainer::~ShtEntryContainer()
+SHTEntryContainer::~SHTEntryContainer()
 {
 
 }
