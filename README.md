@@ -15,18 +15,51 @@ For starters we will target Linux ELF x86 and x86\_64 executables, but we would 
 
 Installation
 =========
-
 #1st method (Linux distro)
 
-1. 
-	* a. TODO: Download the release of the project and unzip it.
-	* b. Make sure you have objdump installed. If not sudo apt-get install binutils-dev.
+1.
+	* a. Download the archive of the project and unzip it: https://github.com/stefanmirea/mangler.git
+	* b. sudo apt-get install libgl1-mesa-dev libglu1-mesa-dev
+	* c. Make sure you have objdump installed. If not sudo apt-get install binutils-dev.
+	* d. Make sure you have g++ installed and that it is the lastest version. sudo apt-get install g++ in order to check.
 
 2. Download the correct Qt installer for your architecture x86 or x64: https://download.qt.io/archive/qt/5.5/5.5.1/.
 ![What to download](http://i.imgur.com/hnrhyrA.png?1)
 
-3. Install the package.
-./qt-opensource-linux-x86-5.5.1.run or  ./qt-opensource-linux-x64-5.5.1.run
+3. Install the package (chmod +x if it doesn't have execution rights).
+./qt-opensource-linux-x86-5.5.1.run or  ./qt-opensource-linux-x64-5.5.1.run (depending on platform, 32 bit or 64 bit)
+
+4. Set up path to Qt directory.
+    * QT\_PATH="/path/to/qt/version/"
+    * export QT\_PATH
+    * example: QT\_PATH="/home/adrian/Qt5.5.1/5.5/"
+    * cd $QT\_PATH and ls should show you a folder called "gcc"
+    
+5. Navigate to the mangler-master/ folder from step 1.
+
+6. Create the Makefile using the following command:
+    * for 32-bit installations: $QT\_PATH/gcc/bin/qmake mangler.pro
+    * for 64-bit installations: $QT\_PATH/gcc\_64/bin/qmake mangler.pro
+    * you have to be in the mangler-master/ folder! 
+7. make (and of, course wait for a bit)
+
+8. Make sure that the new-created 'mangler' file has run permissions (chmod +x mangler)
+
+9. ./mangler
+
+#2nd method (Linux distro)
+
+1.
+	* a. Download the archive of the project and unzip it: https://github.com/stefanmirea/mangler.git
+	* b. sudo apt-get install libgl1-mesa-dev libglu1-mesa-dev
+	* c. Make sure you have objdump installed. If not sudo apt-get install binutils-dev.
+	* d. Make sure you have g++ installed and that it is the lastest version. sudo apt-get install g++ in order to check.
+
+2. Download the correct Qt installer for your architecture x86 or x64: https://download.qt.io/archive/qt/5.5/5.5.1/.
+![What to download](http://i.imgur.com/hnrhyrA.png?1)
+
+3. Install the package (chmod +x if it doesn't have execution rights).
+./qt-opensource-linux-x86-5.5.1.run or  ./qt-opensource-linux-x64-5.5.1.run (depending on platform, 32 bit or 64 bit)
 
 4. Open QtCreator.
 ![QtCreator](http://i.imgur.com/5XNKcWo.png)
@@ -45,32 +78,4 @@ Then, from the folder obtained from step 1, select mangler.pro.
 
 9. Wait for the program to build and run.
 
-#2nd method (Linux distro)
-
-1. 
-	* a. TODO: Download the release of the project and unzip it.
-	* b. Make sure you have objdump installed. If not sudo apt-get install binutils-dev.
-
-2. Download the correct Qt installer for your architecture x86 or x64: https://download.qt.io/archive/qt/5.5/5.5.1/.
-![What to download](http://i.imgur.com/hnrhyrA.png?1)
-
-3. Install the package.
-./qt-opensource-linux-x86-5.5.1.run or  ./qt-opensource-linux-x64-5.5.1.run
-
-4. Set up path to Qt directory.
-    * QT\_PATH="/path/to/qt/version/"
-    * export QT\_PATH
-    * example: QT\_PATH="/home/adrian/Qt/5.5/"
-    
-5. Navigate to the mangler/ folder from step 1.
-
-6. Create the Makefile using the following command:
-    * for 32-bit installations: $QT\_PATH/gcc/bin/qmake mangler.pro
-    * for 64-bit installations: $QT\_PATH/gcc\_64/bin/qmake mangler.pro
-
-7. make (and of, course wait for a bit)
-
-8. Make sure that the new-created 'mangler' file has run permissions (chmod +x mangler)
-
-9. ./mangler
 
