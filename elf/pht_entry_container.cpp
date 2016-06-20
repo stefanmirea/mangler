@@ -1,54 +1,12 @@
 #include "pht_entry_container.hpp"
 #include "util.hpp"
-#include <iomanip>
-#include <sstream>
 
 using namespace elf;
 
 PHTEntryContainer::PHTEntryContainer(ELFFile *file, const std::pair<int, int> &interval,
     unsigned int index) : Container(file, true, interval), index(index)
 {
-    ELFIO::elfio *elfData = file->getELFIO();
-    ELFIO::segment *segment = elfData->segments[index];
-#ifdef DEBUG
-    assert(segment != nullptr);
-#endif
-    ELFIO::Elf_Half segments_num = elfData->get_segments_num();
-
-    int digits = 0;
-    do {
-        ++digits;
-        segments_num /= 10;
-    } while (segments_num);
-
-    std::stringstream ss;
-    ss << std::setfill('0') << std::setw(digits) << index << ": ";
-
-    ELFIO::Elf_Word p_type = segment->get_type();
-    bool found = false;
-    for (unsigned int i = 0; p_type_strings[i].string; ++i)
-        if (p_type == p_type_strings[i].value)
-        {
-            ss << p_type_strings[i].string;
-            found = true;
-            break;
-        }
-    if (!found)
-        ss << printHex(p_type);
-    ss << ", ";
-
-    bool first = true;
-    ELFIO::Elf_Word p_flags = segment->get_flags();
-    for (unsigned int i = 0; p_flags_strings[i].string; ++i)
-        if (p_flags & p_flags_strings[i].value)
-        {
-            if (!first)
-                ss << '+';
-            ss << p_flags_strings[i].string;
-            first = false;
-        }
-
-    setName(ss.str() + " header");
+    setName(ProgramHeaderTableContainer::getSegmentTitle(file, index) + " header");
 }
 
 std::vector<Container *> &PHTEntryContainer::getInnerContainers()

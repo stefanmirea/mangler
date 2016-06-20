@@ -42,6 +42,7 @@ SOURCES +=\
     elf/note_container.cpp \
     elf/note_entry_container.cpp \
     elf/pht_entry_container.cpp \
+    elf/segment_container.cpp \
     dependencies/QHexEdit/qhexedit.cpp \
     dependencies/QHexEdit/chunks.cpp \
     dependencies/QHexEdit/commands.cpp \
@@ -77,7 +78,8 @@ HEADERS  += \
     elf/string_table_container.hpp \
     elf/note_container.hpp \
     elf/note_entry_container.hpp \
-    elf/pht_entry_container.cpp \
+    elf/pht_entry_container.hpp \
+    elf/segment_container.hpp \
     dependencies/elfio/elf_types.hpp \
     dependencies/elfio/elfio_utils.hpp \
     dependencies/elfio/elfio_symbols.hpp \

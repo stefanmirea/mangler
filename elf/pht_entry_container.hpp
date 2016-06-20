@@ -4,6 +4,7 @@
 #include "container.hpp"
 #include "elf_file.hpp"
 #include "util.hpp"
+#include "program_header_table_container.hpp"
 
 namespace elf
 {
