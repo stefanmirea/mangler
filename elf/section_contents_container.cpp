@@ -47,7 +47,9 @@ std::vector<Container *> &SectionContentsContainer::getInnerContainers()
         {
             std::pair<int, int> entry_interval;
             entry_interval.first = elfData->sections[i]->get_offset();
-            entry_interval.second = entry_interval.first + elfData->sections[i]->get_size();
+            entry_interval.second = entry_interval.first;
+            if (elfData->sections[i]->get_type() != SHT_NOBITS)
+                entry_interval.second += elfData->sections[i]->get_size();
 
             if ((elfData->sections[i]->get_flags()) & SHF_EXECINSTR)
                 container = new ELFCodeContainer(elfHandler, entry_interval, i);
