@@ -22,6 +22,7 @@
  */
 
 #include "program_header_table_container.hpp"
+#include "pht_entry_container.hpp"
 
 using namespace elf;
 
@@ -35,9 +36,21 @@ std::vector<Container *> &ProgramHeaderTableContainer::getInnerContainers()
 {
     if (innerContainers.empty())
     {
-        Container *container = new Container(getFile(), false, std::make_pair(10, 20));
-        container->setName("Nothing here");
-        addInnerContainer(container);
+        ELFFile *file = dynamic_cast<ELFFile *>(getFile());
+#ifdef DEBUG
+        assert(file != nullptr);
+#endif
+        ELFIO::elfio *interpretor = file->getELFIO();
+
+        for (unsigned int i = 0; i < interpretor->get_segments_num(); ++i)
+        {
+            std::pair<int, int> entry_interval;
+            entry_interval.first = interpretor->get_segments_offset() +
+                                   i * interpretor->get_segment_entry_size();
+            entry_interval.second = entry_interval.first + interpretor->get_segment_entry_size();
+            PHTEntryContainer *entry = new PHTEntryContainer(file, entry_interval, i);
+            addInnerContainer(entry);
+        }
     }
     return innerContainers;
 }
