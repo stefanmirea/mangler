@@ -22,6 +22,8 @@
  */
 
 #include "segment_contents_container.hpp"
+#include "segment_container.hpp"
+#include "program_header_table_container.hpp"
 
 using namespace elf;
 
@@ -40,14 +42,23 @@ std::vector<Container *> &SegmentContentsContainer::getInnerContainers()
 #ifdef DEBUG
         assert(efile != nullptr);
 #endif
+        ELFIO::elfio *interpretor = efile->getELFIO();
 
-        container = new ELFCodeContainer(efile, std::make_pair(5, 15), 12);
-        container->setName("[test] code section 1");
-        addInnerContainer(container);
-
-        container = new ELFCodeContainer(efile, std::make_pair(15, 25), 13);
-        container->setName("[test] code section 2");
-        addInnerContainer(container);
+        for (unsigned int i = 0; i < interpretor->get_segments_num(); ++i)
+        {
+            ELFIO::segment *segment = interpretor->segments[i];
+            std::pair<int, int> interval;
+            interval.first = segment->get_offset();
+            interval.second = interval.first + segment->get_file_size();
+            if (segment->get_sections_num())
+                container = new SegmentContainer(efile, interval, i);
+            else
+            {
+                container = new Container(efile, false, interval);
+                container->setName(ProgramHeaderTableContainer::getSegmentTitle(efile, i));
+            }
+            addInnerContainer(container);
+        }
     }
     return innerContainers;
 }

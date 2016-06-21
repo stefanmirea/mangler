@@ -22,6 +22,9 @@
  */
 
 #include "program_header_table_container.hpp"
+#include "pht_entry_container.hpp"
+#include <iomanip>
+#include <sstream>
 
 using namespace elf;
 
@@ -35,11 +38,68 @@ std::vector<Container *> &ProgramHeaderTableContainer::getInnerContainers()
 {
     if (innerContainers.empty())
     {
-        Container *container = new Container(getFile(), false, std::make_pair(10, 20));
-        container->setName("Nothing here");
-        addInnerContainer(container);
+        ELFFile *file = dynamic_cast<ELFFile *>(getFile());
+#ifdef DEBUG
+        assert(file != nullptr);
+#endif
+        ELFIO::elfio *interpretor = file->getELFIO();
+
+        for (unsigned int i = 0; i < interpretor->get_segments_num(); ++i)
+        {
+            std::pair<int, int> entry_interval;
+            entry_interval.first = interpretor->get_segments_offset() +
+                                   i * interpretor->get_segment_entry_size();
+            entry_interval.second = entry_interval.first + interpretor->get_segment_entry_size();
+            PHTEntryContainer *entry = new PHTEntryContainer(file, entry_interval, i);
+            addInnerContainer(entry);
+        }
     }
     return innerContainers;
+}
+
+std::string ProgramHeaderTableContainer::getSegmentTitle(ELFFile *file, unsigned int index)
+{
+    ELFIO::elfio *elfData = file->getELFIO();
+    ELFIO::segment *segment = elfData->segments[index];
+#ifdef DEBUG
+    assert(segment != nullptr);
+#endif
+    ELFIO::Elf_Half segments_num = elfData->get_segments_num();
+
+    int digits = 0;
+    do {
+        ++digits;
+        segments_num /= 10;
+    } while (segments_num);
+
+    std::stringstream ss;
+    ss << std::setfill('0') << std::setw(digits) << index << ": ";
+
+    ELFIO::Elf_Word p_type = segment->get_type();
+    bool found = false;
+    for (unsigned int i = 0; p_type_strings[i].string; ++i)
+        if (p_type == p_type_strings[i].value)
+        {
+            ss << p_type_strings[i].string;
+            found = true;
+            break;
+        }
+    if (!found)
+        ss << printHex(p_type);
+    ss << ", ";
+
+    bool first = true;
+    ELFIO::Elf_Word p_flags = segment->get_flags();
+    for (unsigned int i = 0; p_flags_strings[i].string; ++i)
+        if (p_flags & p_flags_strings[i].value)
+        {
+            if (!first)
+                ss << '+';
+            ss << p_flags_strings[i].string;
+            first = false;
+        }
+
+    return ss.str();
 }
 
 ProgramHeaderTableContainer::~ProgramHeaderTableContainer() {}

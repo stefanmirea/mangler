@@ -26,6 +26,9 @@
 #include "symbol_table_container.hpp"
 #include "string_table_container.hpp"
 #include "note_container.hpp"
+#include "relocations_container.hpp"
+#include "dynamic_container.hpp"
+#include "data_container.hpp"
 
 using namespace elf;
 
@@ -47,7 +50,9 @@ std::vector<Container *> &SectionContentsContainer::getInnerContainers()
         {
             std::pair<int, int> entry_interval;
             entry_interval.first = elfData->sections[i]->get_offset();
-            entry_interval.second = entry_interval.first + elfData->sections[i]->get_size();
+            entry_interval.second = entry_interval.first;
+            if (elfData->sections[i]->get_type() != SHT_NOBITS)
+                entry_interval.second += elfData->sections[i]->get_size();
 
             if ((elfData->sections[i]->get_flags()) & SHF_EXECINSTR)
                 container = new ELFCodeContainer(elfHandler, entry_interval, i);
@@ -63,6 +68,19 @@ std::vector<Container *> &SectionContentsContainer::getInnerContainers()
             else
                 if ((elfData->sections[i]->get_type() == SHT_NOTE))
                     container = new NoteContainer(elfHandler, entry_interval, i);
+            else if (elfData->sections[i]->get_type() == SHT_REL)
+                container = new RelocationsContainer(elfHandler, entry_interval, i);
+            else if (elfData->sections[i]->get_type() == SHT_DYNAMIC)
+                container = new DynamicContainer(elfHandler, entry_interval, i);
+            else if (elfData->sections[i]->get_name() == ".bss" || /* it can have children too */
+                     elfData->sections[i]->get_name() == ".data" ||
+                     elfData->sections[i]->get_name() == ".data1" ||
+                     elfData->sections[i]->get_name() == ".rodata" ||
+                     elfData->sections[i]->get_name() == ".rodata1" ||
+                     elfData->sections[i]->get_name() == ".tbss" ||
+                     elfData->sections[i]->get_name() == ".tdata" ||
+                     elfData->sections[i]->get_name() == ".tdata1")
+                container = new DataContainer(elfHandler, entry_interval, i);
             else
                 container = new Container(getFile(), false, entry_interval);
 

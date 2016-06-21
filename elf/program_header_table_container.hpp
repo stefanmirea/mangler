@@ -37,6 +37,7 @@ class ProgramHeaderTableContainer : public Container
 public:
     ProgramHeaderTableContainer(ELFFile *file, const std::pair<int, int> &interval);
     std::vector<Container *> &getInnerContainers();
+    static std::string getSegmentTitle(ELFFile *file, unsigned int index);
     ~ProgramHeaderTableContainer();
 };
 }

@@ -44,7 +44,7 @@ std::vector<Container *> &SectionHeaderTableContainer::getInnerContainers()
             std::pair<int, int> entry_interval;
             entry_interval.first = elfData->get_sections_offset() + i * elfData->get_section_entry_size();
             entry_interval.second = entry_interval.first + elfData->get_section_entry_size();
-            ShtEntryContainer *entry = new ShtEntryContainer(elfHandler, entry_interval, i);
+            SHTEntryContainer *entry = new SHTEntryContainer(elfHandler, entry_interval, i);
             addInnerContainer(entry);
 
         }

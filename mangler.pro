@@ -35,6 +35,20 @@ SOURCES +=\
     elf/segment_contents_container.cpp \
     elf/section_contents_container.cpp \
     elf/elf_code_container.cpp \
+    elf/sht_entry_container.cpp \
+    elf/symbol_table_container.cpp \
+    elf/symbol_table_entry_container.cpp \
+    elf/string_table_container.cpp \
+    elf/note_container.cpp \
+    elf/note_entry_container.cpp \
+    elf/relocations_container.cpp \
+    elf/relocation_entry_container.cpp \
+    elf/relocation_info_container.cpp \
+    elf/dynamic_container.cpp \
+    elf/dynamic_entry_container.cpp \
+    elf/data_container.cpp \
+    elf/pht_entry_container.cpp \
+    elf/segment_container.cpp \
     dependencies/QHexEdit/qhexedit.cpp \
     dependencies/QHexEdit/chunks.cpp \
     dependencies/QHexEdit/commands.cpp \
@@ -48,13 +62,7 @@ SOURCES +=\
     gui/special_representation/code/instruction_checker.cpp \
     gui/special_representation/code/do.cpp \
     gui/special_representation/default.cpp \
-    elf/sht_entry_container.cpp \
-    util/util.cpp \
-    elf/symbol_table_container.cpp \
-    elf/symbol_table_entry_container.cpp \
-    elf/string_table_container.cpp \
-    elf/note_container.cpp \
-    elf/note_entry_container.cpp
+    util/util.cpp
 
 HEADERS  += \
     core/code_container.hpp \
@@ -70,6 +78,20 @@ HEADERS  += \
     elf/segment_contents_container.hpp \
     elf/section_contents_container.hpp \
     elf/elf_code_container.hpp \
+    elf/sht_entry_container.hpp \
+    elf/symbol_table_container.hpp \
+    elf/symbol_table_entry_container.hpp \
+    elf/string_table_container.hpp \
+    elf/note_container.hpp \
+    elf/note_entry_container.hpp \
+    elf/relocations_container.hpp \
+    elf/relocation_entry_container.hpp \
+    elf/relocation_info_container.hpp \
+    elf/dynamic_container.hpp \
+    elf/dynamic_entry_container.hpp \
+    elf/data_container.hpp \
+    elf/pht_entry_container.hpp \
+    elf/segment_container.hpp \
     dependencies/elfio/elf_types.hpp \
     dependencies/elfio/elfio_utils.hpp \
     dependencies/elfio/elfio_symbols.hpp \
@@ -93,13 +115,7 @@ HEADERS  += \
     gui/special_representation/code/asm_viewer.hpp \
     gui/special_representation/code/modify_asmbar.hpp \
     gui/special_representation/code/instruction_checker.hpp \
-    elf/sht_entry_container.hpp \
-    util/util.hpp \
-    elf/symbol_table_container.hpp \
-    elf/symbol_table_entry_container.hpp \
-    elf/string_table_container.hpp \
-    elf/note_container.hpp \
-    elf/note_entry_container.hpp
+    util/util.hpp
 
 RESOURCES += \
     gui/mangler.qrc

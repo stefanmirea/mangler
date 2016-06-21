@@ -3,7 +3,7 @@
 
 using namespace elf;
 
-ShtEntryContainer::ShtEntryContainer(ELFFile *file, const std::pair<int, int> &interval, unsigned int index) :
+SHTEntryContainer::SHTEntryContainer(ELFFile *file, const std::pair<int, int> &interval, unsigned int index) :
     Container(file, true, interval), index(index)
 {
     ELFIO::elfio *elfData = file->getELFIO();
@@ -19,7 +19,7 @@ ShtEntryContainer::ShtEntryContainer(ELFFile *file, const std::pair<int, int> &i
     }
 }
 
-std::vector<Container *> &ShtEntryContainer::getInnerContainers()
+std::vector<Container *> &SHTEntryContainer::getInnerContainers()
 {
     if (innerContainers.empty())
     {
@@ -56,8 +56,17 @@ std::vector<Container *> &ShtEntryContainer::getInnerContainers()
             case SHT_RELA:
                 sh_type_string = "SHT_RELA";
                 break;
+            case SHT_HASH:
+                sh_type_string = "SHT_HASH";
+                break;
+            case SHT_DYNAMIC:
+                sh_type_string = "SHT_DYNAMIC";
+                break;
             case SHT_NOTE :
                 sh_type_string = "SHT_NOTE";
+                break;
+            case SHT_NOBITS:
+                sh_type_string = "SHT_NOBITS";
                 break;
             case SHT_REL:
                 sh_type_string = "SHT_REL";
@@ -134,9 +143,11 @@ std::vector<Container *> &ShtEntryContainer::getInnerContainers()
             sh_flags_string += "SHF_GROUP ";
         if (flags & SHF_TLS)
             sh_flags_string += "SHF_TLS ";
-        if (flags & SHF_GROUP)
+        if (flags & SHF_COMPRESSED)
+            sh_flags_string += "SHF_COMPRESSED ";
+        if (flags & SHF_MASKOS)
             sh_flags_string += "SHF_MASKOS ";
-        if (flags & SHF_TLS)
+        if (flags & SHF_MASKPROC)
             sh_flags_string += "SHF_MASKPROC ";
 
         container->setName("sh_flags: " + sh_flags_string);
@@ -182,7 +193,7 @@ std::vector<Container *> &ShtEntryContainer::getInnerContainers()
     return innerContainers;
 }
 
-ShtEntryContainer::~ShtEntryContainer()
+SHTEntryContainer::~SHTEntryContainer()
 {
 
 }
