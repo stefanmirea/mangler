@@ -35,9 +35,23 @@
 #include "file_unit.hpp"
 #include "elf_file.hpp"
 #include "elfio/elfio.hpp"
+#include "segvcatch.h"
+
+void handle_segv()
+{
+    throw std::runtime_error("SIGSEGV");
+}
+
+void handle_fpe()
+{
+    throw std::runtime_error("SIGFPE");
+}
 
 int main(int argc, char *argv[])
 {
+    segvcatch::init_segv(&handle_segv);
+    segvcatch::init_fpe();
+
     QApplication app(argc, argv);
 
     MainWindow *wn = new MainWindow();

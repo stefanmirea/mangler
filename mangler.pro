@@ -7,6 +7,7 @@
 QT       += core gui
 QMAKE_CXXFLAGS += -std=gnu++0x
 DEFINES += DEBUG
+LIBS += -L/usr/local/lib -lsegvcatch
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = mangler
