@@ -19,15 +19,13 @@ Installation
   * c. Make sure you have objdump installed. If not, `sudo apt-get install binutils-dev`.
   * d. Make sure you have g++ installed and that it is the lastest version. `sudo apt-get install g++` in order to check.
 
-2. Download the latest version of [segvcatch][4] and install it.  
-`$ unzip segvcatch-0.9.1.zip`  
-`$ cd segvcatch-0.9.1`  
+2. Install segvcatch.  
+`$ cd mangler-master/dependencies/segvcatch-0.9.1`  
 `$ cmake .`  
 `$ make`  
 `$ sudo make install`  
-**Note**: If the compiler complains about `syscall` declaration missing after issuing `make`, you need to `#include <unistd.h>` in `lib/x86_64-signal.h` and / or `lib/i386-signal.h`.
 
-3. Download the correct [Qt installer][5] for your architecture x86 or x64.
+3. Download the correct [Qt installer][4] for your architecture x86 or x64.
 ![What to download](http://i.imgur.com/hnrhyrA.png?1)
 
 4. Install the package (`chmod +x` if it doesn't have execution rights).  
@@ -85,5 +83,4 @@ Usage
 [1]: http://sourceforge.net/projects/machoview/
 [2]: https://www.hex-rays.com/products/ida/
 [3]: https://github.com/stefanmirea/mangler/archive/master.zip
-[4]: https://code.google.com/archive/p/segvcatch/downloads
-[5]: https://download.qt.io/archive/qt/5.5/5.5.1/
+[4]: https://download.qt.io/archive/qt/5.5/5.5.1/
