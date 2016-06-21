@@ -991,7 +991,6 @@ void QHexEdit::loadFile(const char *fileName)
     QFile *file = new QFile();
     file->setFileName(fileName);
     file->open(QIODevice::ReadOnly);
-    std::cerr << "--- " << file->isReadable() << " \n" << file->size() << "\n";
 
     const QByteArray ba = file->readAll();
     file->close();
