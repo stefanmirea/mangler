@@ -88,6 +88,6 @@ Usage
 =========
 1. File > Open. Select a 32 bit executable (you can find some in the mangler-master/examples/).
 2. Explore the header, sections, segments contents in the left side.
-3. Select a section and try to modify in the hexdump some data from it.
-4. From the Section Contents, try to find the ".text" section and display its assembly representation.
+3. Select a section and try to modify in the hexdump some data from it. (center)
+4. From the Section Contents, try to find the ".text" section and display its assembly representation. (right side)
 5. Try to modify some of the instructions. Hint: `nop` will remove an instruction.
