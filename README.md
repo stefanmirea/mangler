@@ -13,14 +13,11 @@ For starters we will target Linux ELF x86 and x86\_64 executables, but we would 
 Installation
 =========
 
-1.
-	* a. Download the [archive][3] of the project and unzip it.
-	
-	* b. sudo apt-get install libgl1-mesa-dev libglu1-mesa-dev
-	
-	* c. Make sure you have objdump installed. If not sudo apt-get install binutils-dev.
-	
-	* d. Make sure you have g++ installed and that it is the lastest version. sudo apt-get install g++ in order to check.
+1.  
+  * a. Download the [archive][3] of the project and unzip it.
+  * b. `sudo apt-get install libgl1-mesa-dev libglu1-mesa-dev`
+  * c. Make sure you have objdump installed. If not, `sudo apt-get install binutils-dev`.
+  * d. Make sure you have g++ installed and that it is the lastest version. `sudo apt-get install g++` in order to check.
 
 2. Download the latest version of [segvcatch][4] and install it.  
 `$ unzip segvcatch-0.9.1.zip`  
@@ -28,7 +25,7 @@ Installation
 `$ cmake .`  
 `$ make`  
 `$ sudo make install`  
-Note: If the compiler complains about `syscall` declaration missing after issuing `make`, you need to `#include <unistd.h>` in `lib/x86_64-signal.h` and / or `lib/i386-signal.h`.
+**Note**: If the compiler complains about `syscall` declaration missing after issuing `make`, you need to `#include <unistd.h>` in `lib/x86_64-signal.h` and / or `lib/i386-signal.h`.
 
 3. Download the correct [Qt installer][5] for your architecture x86 or x64.
 ![What to download](http://i.imgur.com/hnrhyrA.png?1)
