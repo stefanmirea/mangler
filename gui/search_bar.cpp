@@ -93,7 +93,6 @@ QByteArray SearchBar::getInput()
             else
             {
                 input = QByteArray::fromHex(text->text().toLatin1());
-                std::cerr << "HEX\n";
             }
         }
         else if (dec->isChecked() == true)
@@ -126,7 +125,6 @@ QByteArray SearchBar::getInput()
         else if (string->isChecked() == true)
         {
             input = QByteArray(text->text().toUtf8());
-            std::cerr << "STR\n";
         }
     }
     else
@@ -148,7 +146,6 @@ void SearchBar::findNext()
     qint64 newPosition = -1;
 
     newPosition = hexedit->indexOf(searchInput, start);
-    std::cerr << "New pos: " << newPosition;
 
     if (newPosition == -1)
         QMessageBox::information(this, QString("Information"),
@@ -167,7 +164,6 @@ void SearchBar::findPrev()
     qint64 newPosition = -1;
 
     newPosition = hexedit->lastIndexOf(searchInput, start);
-    std::cerr << "New pos: " << newPosition;
 
     if (newPosition == -1)
         QMessageBox::information(this, QString("Information"),
