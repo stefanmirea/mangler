@@ -18,7 +18,7 @@ Installation
 #1st method (Linux distro)
 
 1.
-	* a. Download the archive of the project and unzip it: https://github.com/stefanmirea/mangler.git
+	* a. Download the archive of the project and unzip it: https://github.com/stefanmirea/mangler/archive/master.zip
 	
 	* b. sudo apt-get install libgl1-mesa-dev libglu1-mesa-dev
 	
@@ -36,7 +36,7 @@ Installation
     * QT\_PATH="/path/to/qt/version/"
     * export QT\_PATH
     * example: QT\_PATH="/home/adrian/Qt5.5.1/5.5/"
-    * cd $QT\_PATH and ls should show you a folder called "gcc"
+    * cd $QT\_PATH and ls should show you a folder called "gcc" or "gcc\_64"
     
 5. Navigate to the mangler-master/ folder from step 1.
 
@@ -53,7 +53,7 @@ Installation
 #2nd method (Linux distro)
 
 1.
-	* a. Download the archive of the project and unzip it: https://github.com/stefanmirea/mangler.git
+	* a. Download the archive of the project and unzip it: https://github.com/stefanmirea/mangler/archive/master.zip
 	
 	* b. sudo apt-get install libgl1-mesa-dev libglu1-mesa-dev
 	
