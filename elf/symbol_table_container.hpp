@@ -11,9 +11,9 @@ class SymbolTableContainer : public Container
 public:
 	SymbolTableContainer(ELFFile *file, const std::pair<int, int> &interval, unsigned int index);
     std::vector<Container *> &getInnerContainers();
-
-    unsigned int index;
     ~SymbolTableContainer();
+private:
+    unsigned int index;
 };
 }
 #endif // SYMBOL_TABLE_CONTAINER_HPP_

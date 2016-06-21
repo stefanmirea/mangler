@@ -11,9 +11,9 @@ class StringTableContainer : public Container
 public:
 	StringTableContainer(ELFFile *file, const std::pair<int, int> &interval, unsigned int index);
     std::vector<Container *> &getInnerContainers();
-
-    unsigned int index;
     ~StringTableContainer();
+private:
+    unsigned int index;
 };
 }
 #endif // STRING_TABLE_CONTAINER_HPP_

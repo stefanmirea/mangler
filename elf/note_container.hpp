@@ -11,9 +11,9 @@ class NoteContainer : public Container
 public:
     NoteContainer(ELFFile *file, const std::pair<int, int> &interval, unsigned int index);
     std::vector<Container *> &getInnerContainers();
-
-    unsigned int index;
     ~NoteContainer();
+private:
+    unsigned int index;
 };
 }
 #endif // NOTE_CONTAINER_HPP_
