@@ -27,6 +27,7 @@
 #include "string_table_container.hpp"
 #include "note_container.hpp"
 #include "relocations_container.hpp"
+#include "dynamic_container.hpp"
 
 using namespace elf;
 
@@ -68,6 +69,8 @@ std::vector<Container *> &SectionContentsContainer::getInnerContainers()
                     container = new NoteContainer(elfHandler, entry_interval, i);
             else if (elfData->sections[i]->get_type() == SHT_REL)
                 container = new RelocationsContainer(elfHandler, entry_interval, i);
+            else if (elfData->sections[i]->get_type() == SHT_DYNAMIC)
+                container = new DynamicContainer(elfHandler, entry_interval, i);
             else
                 container = new Container(getFile(), false, entry_interval);
 
