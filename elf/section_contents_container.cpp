@@ -28,6 +28,7 @@
 #include "note_container.hpp"
 #include "relocations_container.hpp"
 #include "dynamic_container.hpp"
+#include "data_container.hpp"
 
 using namespace elf;
 
@@ -71,6 +72,15 @@ std::vector<Container *> &SectionContentsContainer::getInnerContainers()
                 container = new RelocationsContainer(elfHandler, entry_interval, i);
             else if (elfData->sections[i]->get_type() == SHT_DYNAMIC)
                 container = new DynamicContainer(elfHandler, entry_interval, i);
+            else if (elfData->sections[i]->get_name() == ".bss" || /* it can have children too */
+                     elfData->sections[i]->get_name() == ".data" ||
+                     elfData->sections[i]->get_name() == ".data1" ||
+                     elfData->sections[i]->get_name() == ".rodata" ||
+                     elfData->sections[i]->get_name() == ".rodata1" ||
+                     elfData->sections[i]->get_name() == ".tbss" ||
+                     elfData->sections[i]->get_name() == ".tdata" ||
+                     elfData->sections[i]->get_name() == ".tdata1")
+                container = new DataContainer(elfHandler, entry_interval, i);
             else
                 container = new Container(getFile(), false, entry_interval);
 

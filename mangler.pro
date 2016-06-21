@@ -46,6 +46,7 @@ SOURCES +=\
     elf/relocation_info_container.cpp \
     elf/dynamic_container.cpp \
     elf/dynamic_entry_container.cpp \
+    elf/data_container.cpp \
     elf/pht_entry_container.cpp \
     elf/segment_container.cpp \
     dependencies/QHexEdit/qhexedit.cpp \
@@ -88,6 +89,7 @@ HEADERS  += \
     elf/relocation_info_container.hpp \
     elf/dynamic_container.hpp \
     elf/dynamic_entry_container.hpp \
+    elf/data_container.hpp \
     elf/pht_entry_container.hpp \
     elf/segment_container.hpp \
     dependencies/elfio/elf_types.hpp \
