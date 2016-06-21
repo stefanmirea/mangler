@@ -87,10 +87,6 @@ void ELFCodeContainer::overwrite(unsigned long long address, std::string newMach
     ELFIO::elfio *interpretor = efile->getELFIO();
     ELFIO::section *currentSection = interpretor->sections[index];
 
-    std::cerr << "Recv addr: " << address << " ELFIO addrbase: " << currentSection->get_address()
-              <<" Elfio last addr: "
-              << currentSection->get_address() + currentSection->get_size() << "\n";
-
     if (currentSection->get_address() <= address &&
                     currentSection->get_address() + currentSection->get_size() > address)
     {

@@ -168,8 +168,6 @@ class section_impl : public section
     void
     set_data( const char* raw_data, Elf64_Addr updateAddress, Elf_Word dataSize )
     {
-        std::cerr << "DataSize: " << dataSize << " base addr: " << get_address()
-                  << " sectionsize: " << get_size() <<" upd addr: " << updateAddress << "\n";
         if (dataSize <= (get_address() + get_size() - updateAddress))
         {
             std::copy(raw_data, raw_data + dataSize, data + (updateAddress - get_address()));
