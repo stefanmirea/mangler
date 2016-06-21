@@ -44,7 +44,7 @@ public:
     void overwrite(unsigned long long address, std::string newMachineCode);
     std::string getSectionName();
     virtual ~ELFCodeContainer();
-
+private:
     unsigned int index;
 };
 }
